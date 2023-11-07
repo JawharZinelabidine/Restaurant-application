@@ -14,34 +14,50 @@ import RestaurantCard from "../Component/RestaurantCard";
 import { useEffect } from "react";
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios'
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import HeaderBar from "./HeaderBar";
+import SearchBar from "../Component/SearchBar";
+import Categorys from "../Component/Categorys";
 
 export default function HomeScreen({ navigation, route }) {
-  const categories = ["Italian", "Tunisian", "Japanese", "Lebanese", "Steakhouse", "Breakfast", "Mexican", "French"];
+  const category = [
+    "Italian",
+    "Tunisian",
+    "Japanese",
+    "Lebanese",
+    "Steakhouse",
+    "Breakfast",
+    "Mexican",
+    "French",
+  ];
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
 
   const [restaurant, setRestaurant] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [filterData, setFilterData] = useState([]);
 
   const fetchData = async () => {
     try {
       const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`);
       setRestaurant(data);
-
+       const data = await response.json();
+        setRestaurant(data);
+        setFilterData(data);
+      } else {
+        console.error("Failed to fetch data");
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-
     if (isFocused) {
       fetchData()
     }
 
   }, [isFocused])
-
 
 
   const handleButtonPress = (restaurant) => {
@@ -56,49 +72,26 @@ export default function HomeScreen({ navigation, route }) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.scrollViewFlex}
     >
-      {/* Wrap the top section in a View with a white background */}
       <View style={styles.topSection}>
-        <View>
-          <Text style={styles.screenTitle}>
-            Find the best{"\n"}restaurant near you.
-          </Text>
-        </View>
-        <View style={styles.InputContainer}>
-          <TouchableOpacity onPress={() => { }}>
-            <AntDesign
-              name="search1"
-              size={24}
-              color={Colors.DEFAULT_RED}
-              style={styles.search}
-            />
-          </TouchableOpacity>
-          <TextInput
-            placeholder="Find a restaurant..."
-            placeholderTextColor={Colors.primaryLightGreyHex}
-            style={styles.TextInputContainer}
-          />
-        </View>
+        <HeaderBar />
+        <Text style={styles.screenTitle}>
+          Find the best{"\n"}restaurant near you.
+        </Text>
       </View>
-
-      <View>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.CategoryScrollViewStyle}
-        >
-          {categories.map((category, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.CategoryStyleView}
-              onPress={() => setSelectedCategory(category)}
-            >
-              <Text style={styles.CategoryText}>{category}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+      <View style={styles.categorySearchContainer}>
+        <SearchBar
+          restaurant={restaurant}
+          filterData={filterData}
+          setFilterData={setFilterData}
+        />
+        <Categorys
+          restaurant={restaurant}
+          filterData={filterData}
+          setFilterData={setFilterData}
+        />
       </View>
       <ScrollView vertical>
-        {restaurant.map((rest) => (
+        {filterData.map((rest) => (
           <View key={rest.id}>
             <RestaurantCard
               restaurant={rest}
@@ -107,48 +100,35 @@ export default function HomeScreen({ navigation, route }) {
           </View>
         ))}
       </ScrollView>
+      <View style={styles.topedite}></View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: "white",
   },
   topSection: {
-    backgroundColor: 'white',
-    paddingBottom: 2, // Adjust the height of the white section as needed
+    backgroundColor: "black",
+    paddingBottom: 100,
+    shadowColor: "black", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 0.7, // Shadow opacity
+    shadowRadius: 4, // Shadow radius
+    elevation: 2, // Android elevation (elevates the view)
   },
   screenTitle: {
     fontSize: 25,
-    color: "black",
+    color: "white",
     paddingLeft: 30,
-    top: 100,
+    top: 50,
   },
-  TextInputContainer: {
-    height: 20 * 2,
-    width: 300,
+  scrollViewFlex: {
+    marginBottom: -50,
   },
-  InputContainer: {
-    flexDirection: "row",
-    margin: 30,
-    borderRadius: 20,
-    backgroundColor: "white",
-    alignItems: "center",
-    top: 100,
-    marginBottom: 110,
-  },
-  search: {
-    marginHorizontal: 10,
-  },
-  scrollViewFlex: {},
-  CategoryScrollViewStyle: {
-    paddingHorizontal: 10,
-  },
-  ActiveCategory: {
-    flexDirection: "row",
-    marginBottom: 20,
+  categorySearchContainer: {
+    flexDirection: "column",
   },
   CategoryText: {
     color: "black",
@@ -166,5 +146,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 8,
     maxHeight: 40, // Add some spacing between categories
+  topedite: {
+    marginTop: 100,
+
   },
 });

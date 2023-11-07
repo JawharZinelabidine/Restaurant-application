@@ -5,6 +5,7 @@ import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen } from '
 import { AntDesign } from '@expo/vector-icons'
 import { Colors } from "../contants";
 import { BlurView } from '@react-native-community/blur'
+import { Provider } from 'react-redux';
 
 
 const Tab = createBottomTabNavigator()
@@ -15,6 +16,7 @@ const TabNavigator = () => {
 
 
     return (
+      
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,

@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import ToastMessage from "../Component/ToastMessage";
 import * as Device from 'expo-device';
+import * as Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import store from '../features/store'
 
@@ -70,10 +71,10 @@ export default function LoginScreen({ navigation }) {
 
     try {
       const token = (await Notifications.getExpoPushTokenAsync({
-        projectId: Constants.expoConfig.extra.eas.projectId,
+        projectId: "c7b31030-5842-4db5-bc82-2aeecdaf9fd1",
       })).data
-      const { data } = axios.put(`http://${apiUrl}:3000/api/customers/${customer.id}`, token)
-      console.log('token added successfully')
+      const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/${customer.id}`, token)
+      console.log('token added successfully', token)
       navigation.navigate('Home');
 
 

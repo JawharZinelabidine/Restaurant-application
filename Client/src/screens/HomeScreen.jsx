@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
 
-} from "react-native";
 import { Colors } from "../contants";
 import { AntDesign } from "@expo/vector-icons";
 import RestaurantCard from "../Component/RestaurantCard";
@@ -41,12 +33,8 @@ export default function HomeScreen({ navigation, route }) {
     try {
       const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`);
       setRestaurant(data);
-       const data = await response.json();
-        setRestaurant(data);
-        setFilterData(data);
-      } else {
-        console.error("Failed to fetch data");
-      }
+      setRestaurant(data);
+      setFilterData(data);
     } catch (error) {
       console.error(error);
     }
@@ -107,28 +95,42 @@ export default function HomeScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    flex: 1,
+    backgroundColor: 'black',
   },
   topSection: {
-    backgroundColor: "black",
-    paddingBottom: 100,
-    shadowColor: "black", // Shadow color
-    shadowOffset: { width: 0, height: 2 }, // Shadow offset
-    shadowOpacity: 0.7, // Shadow opacity
-    shadowRadius: 4, // Shadow radius
-    elevation: 2, // Android elevation (elevates the view)
+    backgroundColor: 'white',
+    paddingBottom: 2, // Adjust the height of the white section as needed
   },
   screenTitle: {
     fontSize: 25,
-    color: "white",
+    color: "black",
     paddingLeft: 30,
-    top: 50,
+    top: 100,
   },
-  scrollViewFlex: {
-    marginBottom: -50,
+  TextInputContainer: {
+    height: 20 * 2,
+    width: 300,
   },
-  categorySearchContainer: {
-    flexDirection: "column",
+  InputContainer: {
+    flexDirection: "row",
+    margin: 30,
+    borderRadius: 20,
+    backgroundColor: "white",
+    alignItems: "center",
+    top: 100,
+    marginBottom: 110,
+  },
+  search: {
+    marginHorizontal: 10,
+  },
+  scrollViewFlex: {},
+  CategoryScrollViewStyle: {
+    paddingHorizontal: 10,
+  },
+  ActiveCategory: {
+    flexDirection: "row",
+    marginBottom: 20,
   },
   CategoryText: {
     color: "black",
@@ -144,10 +146,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     backgroundColor: "white",
     borderRadius: 20,
-    marginTop: 8,
     maxHeight: 40, // Add some spacing between categories
-  topedite: {
-    marginTop: 100,
-
   },
 });

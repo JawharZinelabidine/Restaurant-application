@@ -31,16 +31,21 @@ export default function RestaurantCard({ restaurant, onPress }) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     margin: 10,
     padding: 10,
-    borderColor: 'black',
-    borderWidth: 2,
+    borderColor: "gray",
+
+    shadowColor: "black", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 0.6, // Shadow opacity
+    shadowRadius: 4, // Shadow radius
+    elevation: 2, // Android elevation (elevates the view)
   },
   cardImage: {
     height: Display.setHeight(30),
-    width: Display.setWidth(88),
+    width: Display.setWidth(90),
     borderRadius: 10,
     alignItems: 'center',
   },

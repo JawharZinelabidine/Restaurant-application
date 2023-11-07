@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    height: Display.setHeight(40),
+    height: Display.setHeight(30),
     width: Display.setWidth(100),
   },
   name: {

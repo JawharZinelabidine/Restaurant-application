@@ -60,9 +60,8 @@ export default function LoginScreen({ navigation }) {
         if (toastRef.current) {
           toastRef.current.show();
         }
-
-        navigation.navigate('Home')
-
+        navigation.navigate('Home');
+      
       } catch (error) {
         setShowToast(true);
         if (toastRef.current) {

@@ -30,7 +30,7 @@ const TabNavigator = () => {
 
             <Tab.Screen name="Home" component={Homescreen} options={{
                 tabBarIcon: ({ focused, color, size }) => (
-                    <AntDesign name="home" size={24} color={focused ? Colors.DEFAULT_RED : Colors.primaryLightGreyHex} />
+                    <AntDesign name="home" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
                 ),
 
             }}></Tab.Screen>
@@ -39,7 +39,7 @@ const TabNavigator = () => {
 
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
-                        <AntDesign name="calendar" size={24} color={focused ? Colors.DEFAULT_RED : Colors.primaryLightGreyHex} />
+                        <AntDesign name="calendar" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
                     ),
 
 
@@ -47,13 +47,13 @@ const TabNavigator = () => {
             <Tab.Screen name="Messages" component={MessagesScreen} options={{
 
                 tabBarIcon: ({ focused, color, size }) => (
-                    <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : Colors.primaryLightGreyHex} />
+                    <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
                 )
             }}></Tab.Screen>
             <Tab.Screen name={"LoginScreen"} component={LoginScreen} options={{
 
                 tabBarIcon: ({ focused, color, size }) => (
-                    <AntDesign name="login" size={24} color={focused ? Colors.DEFAULT_RED : Colors.primaryLightGreyHex} />
+                    <AntDesign name="login" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
 
                 )
             }} ></Tab.Screen>
@@ -66,12 +66,13 @@ export default TabNavigator
 
 const styles = StyleSheet.create({
     tabBarStyle: {
-        height: 90,
+        height: 70,
         position: 'absolute',
-        backgroundColor: Colors.primaryBlackRGBA,
-        borderTopWidth: 0,
-        elevation: 0,
-        borderTopColor: 'transparent',
+       backgroundColor: "white",
+       borderTopWidth: 1,
+       borderTopColor: Colors.DEFAULT_RED
+        // elevation: 0,
+        // borderTopColor: 'transparent',
     },
     BlurViewStyles: {
         position: 'absolute',

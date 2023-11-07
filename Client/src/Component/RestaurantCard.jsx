@@ -1,16 +1,17 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Display } from "../utils";
 
-export default function RestaurantCard({ restaurant, onPress }) {
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-  const { name, main_image, category, rating, status, City } = restaurant;
+export default function RestaurantCard({ restaurant, onPress }) {
+  const { name, main_image, category, opening_time, closing_time, rating, status, City } = restaurant;
+
   const handleButtonPress = () => {
-    onPress(restaurant)
-    console.log(restaurant)
+    onPress(restaurant);
   };
 
-  const spaced = category.toString().split(',').join('  ')
+  const spaced = category.toString().split(',').join('  ');
 
   return (
     <TouchableOpacity onPress={handleButtonPress}>
@@ -18,13 +19,13 @@ export default function RestaurantCard({ restaurant, onPress }) {
         <Image source={{ uri: main_image.trim() }} style={styles.cardImage} />
         <Text style={styles.cardName}>{name}</Text>
         <Text style={styles.cardCategory}>{spaced}</Text>
-        <Text style={styles.cardRating}>{`Rating: ${'4.0'}`}</Text>
-
-        <Text style={styles.cardStatus}>{'Open'}</Text>
-
-
+        <View style={styles.cardRating}>
+          <Icon name="star" size={15} color="#dea84a" />
+          <Text style={styles.cardRatingText}>4.5</Text>
+        </View>
+        <Text style={styles.cardStatus}>Open</Text>
       </View>
-    </TouchableOpacity  >
+    </TouchableOpacity>
   );
 }
 
@@ -34,28 +35,38 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 10,
     padding: 10,
+    borderColor: 'black',
+    borderWidth: 2,
   },
   cardImage: {
-    height: Display.setHeight(20),
-    width: Display.setWidth(90),
+    height: Display.setHeight(30),
+    width: Display.setWidth(88),
+    borderRadius: 10,
+    alignItems: 'center',
   },
   cardName: {
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  cardRating: {
-    color: 'gray',
-  },
-  cardCity: {
-    color: 'gray',
-  },
-  cardStatus: {
-    color: 'green',
-    marginLeft: 320,
-    flex: 1,
-    fontSize: 16,
+    marginTop: 10,
   },
   cardCategory: {
     color: 'gray',
+    fontSize: 14,
+  },
+  cardRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  cardRatingText: {
+    color: 'gray',
+    marginLeft: 5,
+  },
+  cardOpeningHours: {
+    color: 'gray',
+    fontSize: 14,
+  },
+  cardStatus: {
+    color: 'green',
+    fontSize: 16,
   },
 });

@@ -1,26 +1,29 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
-import { Colors } from "../contants";
-import { AntDesign } from "@expo/vector-icons";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import RestaurantCard from "../Component/RestaurantCard";
 import { useEffect } from "react";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
+import HeaderBar from "./HeaderBar";
+import SearchBar from "../Component/SearchBar";
+import Categorys from "../Component/Categorys";
 
 export default function HomeScreen({ navigation, route }) {
-  const categories = ["Italian", "Tunisian", "Japanese", "Lebanese", "Steakhouse", "Breakfast", "Mexican", "French"];
+  const category = [
+    "Italian",
+    "Tunisian",
+    "Japanese",
+    "Lebanese",
+    "Steakhouse",
+    "Breakfast",
+    "Mexican",
+    "French",
+  ];
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
 
   const [restaurant, setRestaurant] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [filterData, setFilterData] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -28,6 +31,7 @@ export default function HomeScreen({ navigation, route }) {
       if (response.ok) {
         const data = await response.json();
         setRestaurant(data);
+        setFilterData(data);
       } else {
         console.error("Failed to fetch data");
       }
@@ -37,22 +41,10 @@ export default function HomeScreen({ navigation, route }) {
   };
 
   useEffect(() => {
-
     if (isFocused) {
-      fetchData()
-
-
+      fetchData();
     }
-
-
-
-  }, [isFocused])
-
-
-
-
-
-
+  }, [isFocused]);
 
   const handleButtonPress = (restaurant) => {
     navigation.navigate("RestaurantDetails", { restaurant });
@@ -66,49 +58,26 @@ export default function HomeScreen({ navigation, route }) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.scrollViewFlex}
     >
-      {/* Wrap the top section in a View with a white background */}
       <View style={styles.topSection}>
-        <View>
-          <Text style={styles.screenTitle}>
-            Find the best{"\n"}restaurant near you.
-          </Text>
-        </View>
-        <View style={styles.InputContainer}>
-          <TouchableOpacity onPress={() => { }}>
-            <AntDesign
-              name="search1"
-              size={24}
-              color={Colors.DEFAULT_RED}
-              style={styles.search}
-            />
-          </TouchableOpacity>
-          <TextInput
-            placeholder="Find a restaurant..."
-            placeholderTextColor={Colors.primaryLightGreyHex}
-            style={styles.TextInputContainer}
-          />
-        </View>
+        <HeaderBar />
+        <Text style={styles.screenTitle}>
+          Find the best{"\n"}restaurant near you.
+        </Text>
       </View>
-
-      <View>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.CategoryScrollViewStyle}
-        >
-          {categories.map((category, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.CategoryStyleView}
-              onPress={() => setSelectedCategory(category)}
-            >
-              <Text style={styles.CategoryText}>{category}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+      <View style={styles.categorySearchContainer}>
+        <SearchBar
+          restaurant={restaurant}
+          filterData={filterData}
+          setFilterData={setFilterData}
+        />
+        <Categorys
+          restaurant={restaurant}
+          filterData={filterData}
+          setFilterData={setFilterData}
+        />
       </View>
       <ScrollView vertical>
-        {restaurant.map((rest) => (
+        {filterData.map((rest) => (
           <View key={rest.id}>
             <RestaurantCard
               restaurant={rest}
@@ -117,64 +86,37 @@ export default function HomeScreen({ navigation, route }) {
           </View>
         ))}
       </ScrollView>
+      <View style={styles.topedite}></View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: "white",
   },
   topSection: {
-    backgroundColor: 'white',
-    paddingBottom: 2, // Adjust the height of the white section as needed
+    backgroundColor: "black",
+    paddingBottom: 100,
+    shadowColor: "black", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 0.7, // Shadow opacity
+    shadowRadius: 4, // Shadow radius
+    elevation: 2, // Android elevation (elevates the view)
   },
   screenTitle: {
     fontSize: 25,
-    color: "black",
+    color: "white",
     paddingLeft: 30,
-    top: 100,
+    top: 50,
   },
-  TextInputContainer: {
-    height: 20 * 2,
-    width: 300,
+  scrollViewFlex: {
+    marginBottom: -50,
   },
-  InputContainer: {
-    flexDirection: "row",
-    margin: 30,
-    borderRadius: 20,
-    backgroundColor: "white",
-    alignItems: "center",
-    top: 100,
-    marginBottom: 110,
+  categorySearchContainer: {
+    flexDirection: "column",
   },
-  search: {
-    marginHorizontal: 10,
-  },
-  scrollViewFlex: {},
-  CategoryScrollViewStyle: {
-    paddingHorizontal: 10,
-  },
-  ActiveCategory: {
-    flexDirection: "row",
-    marginBottom: 20,
-  },
-  CategoryText: {
-    color: "black",
-    margin: 10,
-    padding: 3,
-    // Add border radius to make it round
-    textAlign: "center", // Center text horizontally
-  },
-  CategoryStyleView: {
-    flex: 1,
-    overflow: "hidden", // Clip content to stay within rounded border
-    borderWidth: 1, // Add a border for better visibility
-    borderColor: "white", // Color of the border
-    marginHorizontal: 10,
-    backgroundColor: "white",
-    borderRadius: 20,
-    maxHeight: 40, // Add some spacing between categories
+  topedite: {
+    marginTop: 100,
   },
 });

@@ -30,7 +30,7 @@ const TabNavigator = () => {
 
             <Tab.Screen name="Home" component={Homescreen} options={{
                 tabBarIcon: ({ focused, color, size }) => (
-                    <AntDesign name="home" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
+                    <AntDesign name="home" size={24} color={focused ? Colors.DEFAULT_RED : "black"}  style={styles.Home}/>
                 ),
 
             }}></Tab.Screen>
@@ -40,7 +40,7 @@ const TabNavigator = () => {
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
                         <AntDesign name="calendar" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
-                    ),
+                    )
 
 
                 }} ></Tab.Screen>
@@ -68,11 +68,11 @@ const styles = StyleSheet.create({
     tabBarStyle: {
         height: 70,
         position: 'absolute',
-       backgroundColor: "white",
+       backgroundColor: "#C3C6D1",
        borderTopWidth: 1,
-       borderTopColor: Colors.DEFAULT_RED
-        // elevation: 0,
-        // borderTopColor: 'transparent',
+       borderTopColor: "transparent",
+         elevation: 0,
+         borderTopColor: 'transparent'
     },
     BlurViewStyles: {
         position: 'absolute',
@@ -80,5 +80,5 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-    }
+    },
 })

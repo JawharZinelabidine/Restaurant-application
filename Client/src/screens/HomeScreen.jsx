@@ -38,17 +38,9 @@ export default function HomeScreen({ navigation, route }) {
 
     if (isFocused) {
       fetchData()
-
-
     }
 
-
-
   }, [isFocused])
-
-
-
-
 
 
 

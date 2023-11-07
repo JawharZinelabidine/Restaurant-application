@@ -5,6 +5,17 @@ import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen } from '
 import { AntDesign } from '@expo/vector-icons'
 import { Colors } from "../contants";
 import { BlurView } from '@react-native-community/blur'
+import * as Notifications from 'expo-notifications';
+
+
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: true,
+    }),
+});
 
 
 const Tab = createBottomTabNavigator()

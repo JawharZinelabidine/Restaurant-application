@@ -15,7 +15,9 @@ import ToastMessage from "../Component/ToastMessage";
 import * as Device from 'expo-device';
 import * as Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
 import store from '../features/store'
+import { compose } from "redux";
 
 export default function LoginScreen({ navigation }) {
 
@@ -49,11 +51,12 @@ export default function LoginScreen({ navigation }) {
     return true;
   };
 
-  async function registerForPushNotificationsAsync() {
+  async function registerForPushNotificationsAsync(customerID) {
     try {
       const { status } = await Notifications.requestPermissionsAsync()
+      console.log(status)
       if (status !== "granted") {
-        alert("Failed to get push token for push notification")
+        console.log("Failed to get permission")
         return null
       }
 
@@ -73,7 +76,8 @@ export default function LoginScreen({ navigation }) {
       const token = (await Notifications.getExpoPushTokenAsync({
         projectId: "c7b31030-5842-4db5-bc82-2aeecdaf9fd1",
       })).data
-      const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/${customer.id}`, token)
+      console.log(token)
+      const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/${customerID}`, { token: token })
       console.log('token added successfully', token)
       navigation.navigate('Home');
 
@@ -94,7 +98,7 @@ export default function LoginScreen({ navigation }) {
         dispatch(setId(data.customer.id));
         dispatch(setFullname(data.customer.fullname));
         dispatch(setEmail(data.customer.email));
-        registerForPushNotificationsAsync()
+        await registerForPushNotificationsAsync(data.customer.id)
 
 
         console.log('Customer logged successfully');

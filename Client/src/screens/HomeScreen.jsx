@@ -14,13 +14,15 @@ import { useEffect } from "react";
 import { useIsFocused } from '@react-navigation/native';
 
 export default function HomeScreen({ navigation, route }) {
-  const categories = ["Italian", "Tunisian", "Japanese", "Lebanese", "Steakhouse", "Breakfast", "Mexican", "French"];
+  const category = ["Italian", "Tunisian", "Japanese", "Lebanese", "Steakhouse", "Breakfast", "Mexican", "French"];
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
 
   const [restaurant, setRestaurant] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const[searchTerm,setSearchTerm]=useState("");
+  const[filterData,setFilterData]=useState([]);
 
   const fetchData = async () => {
     try {
@@ -28,6 +30,8 @@ export default function HomeScreen({ navigation, route }) {
       if (response.ok) {
         const data = await response.json();
         setRestaurant(data);
+		setFilterData(data)
+
       } else {
         console.error("Failed to fetch data");
       }
@@ -58,6 +62,51 @@ export default function HomeScreen({ navigation, route }) {
     navigation.navigate("RestaurantDetails", { restaurant });
     console.log(restaurant);
   };
+  const handleSearch=(val)=>setSearchTerm(val)
+  useEffect(()=>{
+    if(searchTerm && searchTerm !==''){
+      const newData=restaurant.filter(elem=>elem.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      console.log(searchTerm)
+     
+      setFilterData(newData)
+      console.log(newData)
+    }
+    else{
+      setFilterData(restaurant)
+    }
+  },[searchTerm])
+  const handleSelect = (val) => setSelectedCategory(val);
+  useEffect(() => {
+    console.log("Selected Category: ", selectedCategory);
+    console.log("Restaurant Data: ", restaurant);
+  
+    if (selectedCategory) {
+      const filteredList = restaurant.filter(elem => {
+        console.log("Current Restaurant: ", elem);
+  
+        // Check if elem has a category property and it's an array
+        if (Array.isArray(elem.category)) {
+          // Check if the selected category exists in the category array
+          const foundCategory = elem.category.find(
+            category => category && typeof category === 'string' && category.toLowerCase() === selectedCategory.toLowerCase()
+          );
+          return foundCategory !== undefined;
+        }
+  
+        return false;
+      });
+  
+      console.log("Filtered List: ", filteredList);
+  
+      setFilterData(filteredList);
+    } else {
+      console.log("No Category Selected. Displaying All Restaurants.");
+      // If no category is selected, display all restaurants
+      setFilterData(restaurant);
+    }
+  }, [selectedCategory, restaurant]);
+  
+  
 
   return (
     <ScrollView
@@ -80,12 +129,15 @@ export default function HomeScreen({ navigation, route }) {
               size={24}
               color={Colors.DEFAULT_RED}
               style={styles.search}
+
             />
           </TouchableOpacity>
           <TextInput
             placeholder="Find a restaurant..."
             placeholderTextColor={Colors.primaryLightGreyHex}
             style={styles.TextInputContainer}
+            value={searchTerm}
+            onChangeText={(text) => setSearchTerm(text)}
           />
         </View>
       </View>
@@ -96,7 +148,7 @@ export default function HomeScreen({ navigation, route }) {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.CategoryScrollViewStyle}
         >
-          {categories.map((category, index) => (
+          {category.map((category, index) => (
             <TouchableOpacity
               key={index}
               style={styles.CategoryStyleView}
@@ -108,14 +160,12 @@ export default function HomeScreen({ navigation, route }) {
         </ScrollView>
       </View>
       <ScrollView vertical>
-        {restaurant.map((rest) => (
-          <View key={rest.id}>
-            <RestaurantCard
-              restaurant={rest}
-              onPress={(restaurant) => handleButtonPress(restaurant)}
-            />
-          </View>
-        ))}
+        {
+          filterData.map((rest) => (
+            <View key={rest.id} >
+              <RestaurantCard restaurant={rest} onPress={(restaurant) => handleButtonPress(restaurant)}/>
+            </View>
+          ))}
       </ScrollView>
     </ScrollView>
   );
@@ -128,7 +178,7 @@ const styles = StyleSheet.create({
   },
   topSection: {
     backgroundColor: 'white',
-    paddingBottom: 2, // Adjust the height of the white section as needed
+    paddingBottom: 2, 
   },
   screenTitle: {
     fontSize: 25,

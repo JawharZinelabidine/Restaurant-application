@@ -5,6 +5,17 @@ import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen } from '
 import { AntDesign } from '@expo/vector-icons'
 import { Colors } from "../contants";
 import { BlurView } from '@react-native-community/blur'
+import * as Notifications from 'expo-notifications';
+
+
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: true,
+    }),
+});
 
 
 const Tab = createBottomTabNavigator()
@@ -30,7 +41,9 @@ const TabNavigator = () => {
 
             <Tab.Screen name="Home" component={Homescreen} options={{
                 tabBarIcon: ({ focused, color, size }) => (
+
                     <AntDesign name="home" size={24} color={focused ? Colors.DEFAULT_RED : "black"}  style={styles.Home}/>
+
                 ),
 
             }}></Tab.Screen>
@@ -39,21 +52,23 @@ const TabNavigator = () => {
 
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
+
                         <AntDesign name="calendar" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
                     )
+
 
 
                 }} ></Tab.Screen>
             <Tab.Screen name="Messages" component={MessagesScreen} options={{
 
                 tabBarIcon: ({ focused, color, size }) => (
-                    <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
+                    <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : "white"} />
                 )
             }}></Tab.Screen>
             <Tab.Screen name={"LoginScreen"} component={LoginScreen} options={{
 
                 tabBarIcon: ({ focused, color, size }) => (
-                    <AntDesign name="login" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
+                    <AntDesign name="login" size={24} color={focused ? Colors.DEFAULT_RED : "white"} />
 
                 )
             }} ></Tab.Screen>

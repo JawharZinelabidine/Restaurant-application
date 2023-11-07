@@ -5,6 +5,9 @@ import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen } from '
 import { AntDesign } from '@expo/vector-icons'
 import { Colors } from "../contants";
 import { BlurView } from '@react-native-community/blur'
+
+import { Provider } from 'react-redux';
+
 import * as Notifications from 'expo-notifications';
 
 
@@ -18,6 +21,7 @@ Notifications.setNotificationHandler({
 });
 
 
+
 const Tab = createBottomTabNavigator()
 
 const TabNavigator = () => {
@@ -26,6 +30,7 @@ const TabNavigator = () => {
 
 
     return (
+      
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,

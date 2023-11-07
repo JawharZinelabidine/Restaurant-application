@@ -1,38 +1,63 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
-# dependencies
-node_modules/
+# Prerequisites
+*.d
 package-lock.json
 
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
 # Expo
 .expo/
 dist/
 web-build/
 .env
 
-# Native
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
+# Linker output
+*.ilk
+*.map
+*.exp
 
-# Metro
-.metro-health-check*
+# Precompiled Headers
+*.gch
+*.pch
 
-# debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
 
-# macOS
-.DS_Store
-*.pem
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
 
-# local env files
-.env*.local
-# typescript
-*.tsbuildinfo
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+
 
 .env
+node_modules/

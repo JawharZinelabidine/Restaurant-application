@@ -12,6 +12,9 @@ import {
   TextInput,
 } from "react-native";
 import ToastMessage from "../Component/ToastMessage";
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import store from '../features/store'
 
 export default function LoginScreen({ navigation }) {
 
@@ -19,6 +22,7 @@ export default function LoginScreen({ navigation }) {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 
+  const customer = store.getState().customer
 
 
   const [inputs, setInputs] = useState({ email: '', password: '' });
@@ -44,6 +48,43 @@ export default function LoginScreen({ navigation }) {
     return true;
   };
 
+  async function registerForPushNotificationsAsync() {
+    try {
+      const { status } = await Notifications.requestPermissionsAsync()
+      if (status !== "granted") {
+        alert("Failed to get push token for push notification")
+        return null
+      }
+
+      if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
+      }
+    } catch (error) {
+      console.log('register error', error)
+    }
+
+    try {
+      const token = (await Notifications.getExpoPushTokenAsync({
+        projectId: Constants.expoConfig.extra.eas.projectId,
+      })).data
+      const { data } = axios.put(`http://${apiUrl}:3000/api/customers/${customer.id}`, token)
+      console.log('token added successfully')
+      navigation.navigate('Home');
+
+
+    }
+    catch (error) {
+      console.log('couldn"t get Expo token', error)
+    }
+
+  }
+
+
   const handleSubmit = async () => {
     if (validator()) {
       try {
@@ -52,6 +93,7 @@ export default function LoginScreen({ navigation }) {
         dispatch(setId(data.customer.id));
         dispatch(setFullname(data.customer.fullname));
         dispatch(setEmail(data.customer.email));
+        registerForPushNotificationsAsync()
 
 
         console.log('Customer logged successfully');
@@ -60,8 +102,6 @@ export default function LoginScreen({ navigation }) {
         if (toastRef.current) {
           toastRef.current.show();
         }
-
-        navigation.navigate('Home')
 
       } catch (error) {
         setShowToast(true);

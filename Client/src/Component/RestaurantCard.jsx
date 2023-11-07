@@ -57,10 +57,13 @@ const styles = StyleSheet.create({
   cardCategory: {
     color: 'gray',
     fontSize: 14,
+    top: 5
+
   },
   cardRating: {
     flexDirection: 'row',
     alignItems: 'center',
+    top: 20
   },
   cardRatingText: {
     color: 'gray',
@@ -73,5 +76,6 @@ const styles = StyleSheet.create({
   cardStatus: {
     color: 'green',
     fontSize: 16,
+    left: 320
   },
 });

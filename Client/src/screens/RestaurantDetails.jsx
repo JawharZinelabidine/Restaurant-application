@@ -354,8 +354,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     width: 50,
     height: 50,
-    top: -430,
-    left: 10,
+    top: -300,
+    left: 10
   },
   backText: {
     top: 15,
@@ -406,9 +406,11 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
 
+
   extraimage: {
     height:Display.setHeight(50),
     width:Display.setWidth(100),
+
   },
   name: {
     fontFamily: "Fakt Pro",

@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
        borderTopWidth: 1,
        borderTopColor: "transparent",
          elevation: 0,
-         borderTopColor: 'transparent',
+         borderTopColor: 'transparent'
     },
     BlurViewStyles: {
         position: 'absolute',

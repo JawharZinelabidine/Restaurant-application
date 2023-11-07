@@ -32,6 +32,7 @@ import moment from "moment";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
+import Swiper from 'react-native-swiper'
 
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
@@ -151,18 +152,17 @@ export default function RestaurantDetails({ route }) {
 
   return (
     <View style={styles.ScreenContainer}>
+            <Swiper showsButtons={false} showsPagination={true} style={styles.imageSwiper}> 
+  {extra_images.map((imageUri, index) => (
+    <Image
+      key={index}
+      source={{ uri: imageUri }}
+      style={styles.extraimage}
+    />
+  ))}
+</Swiper>
       <View>
-        <ScrollView horizontal={true}>
-          {extra_images.map((imageUri, index) => (
-            <Image
-              key={index}
-              source={{ uri: imageUri }}
-              style={styles.extraimage}
-            
-             
-            />
-          ))}
-        </ScrollView>
+
         
       <View style={styles.dotsContainer}>
         {extra_images.map((_, index) => (
@@ -177,10 +177,11 @@ export default function RestaurantDetails({ route }) {
             </Text>
         ))}
         </View>
-
+        
         <View style={styles.ratingContainer}>
           <Text style={styles.ratingText}>{`Rating: ${"4.0"}`}</Text>
         </View>
+        
       </View>
       <TouchableOpacity
         title="Go Back"
@@ -241,7 +242,6 @@ export default function RestaurantDetails({ route }) {
             <Text style={styles.menuText}>Make a Reservation</Text>
           </TouchableOpacity>
         </View>
-
         {isModalOpen && (
           <TouchableWithoutFeedback onPress={toggleForm}>
             <Modal transparent={true} visible={true} onPress={toggleForm}>
@@ -407,8 +407,8 @@ const styles = StyleSheet.create({
   },
 
   extraimage: {
-    width: Dimensions.get("window").width,
-    height: 480,
+    height:Display.setHeight(50),
+    width:Display.setWidth(100),
   },
   name: {
     fontFamily: "Fakt Pro",
@@ -541,4 +541,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     color: 'black', // Adjust the color of the dots
   },
+
 })

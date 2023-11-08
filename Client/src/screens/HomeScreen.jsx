@@ -1,23 +1,19 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-
-} from "react-native";
 import { Colors } from "../contants";
 import { AntDesign } from "@expo/vector-icons";
 import RestaurantCard from "../Component/RestaurantCard";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios'
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Modal } from "react-native";
 import HeaderBar from "./HeaderBar";
 import SearchBar from "../Component/SearchBar";
 import Categorys from "../Component/Categorys";
+import ToastMessage from "../Component/ToastMessage";
+import { useSelector } from 'react-redux';
+
+
+
 
 export default function HomeScreen({ navigation, route }) {
   const category = [
@@ -31,38 +27,50 @@ export default function HomeScreen({ navigation, route }) {
     "French",
   ];
 
+
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
+  const toastRef = useRef(null);
+  const { toast } = useSelector(state => state.notification);
 
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
+
+
 
   const fetchData = async () => {
     try {
       const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`);
       setRestaurant(data);
-       const data = await response.json();
-        setRestaurant(data);
-        setFilterData(data);
-      } else {
-        console.error("Failed to fetch data");
-      }
+      setRestaurant(data);
+      setFilterData(data);
     } catch (error) {
       console.error(error);
     }
   };
 
+
+
+  if (toast) {
+    if (toastRef.current) {
+      toastRef.current.show()
+    }
+  }
+
+
+
   useEffect(() => {
     if (isFocused) {
       fetchData()
+
     }
+
 
   }, [isFocused])
 
 
   const handleButtonPress = (restaurant) => {
     navigation.navigate("RestaurantDetails", { restaurant });
-    console.log(restaurant);
   };
 
   return (
@@ -72,8 +80,21 @@ export default function HomeScreen({ navigation, route }) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.scrollViewFlex}
     >
+
+
+
       <View style={styles.topSection}>
         <HeaderBar />
+        {toast && (
+
+          <ToastMessage
+            ref={toastRef}
+            type="info"
+            text='There has been an updated to one of your reservations!'
+            timeout={4000}
+          />
+        )}
+
         <Text style={styles.screenTitle}>
           Find the best{"\n"}restaurant near you.
         </Text>
@@ -84,6 +105,7 @@ export default function HomeScreen({ navigation, route }) {
           filterData={filterData}
           setFilterData={setFilterData}
         />
+
         <Categorys
           restaurant={restaurant}
           filterData={filterData}
@@ -103,6 +125,7 @@ export default function HomeScreen({ navigation, route }) {
       <View style={styles.topedite}></View>
     </ScrollView>
   );
+
 }
 
 const styles = StyleSheet.create({
@@ -145,7 +168,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     marginTop: 8,
-    maxHeight: 40, // Add some spacing between categories
+    maxHeight: 40
+  },// Add some spacing between categories
   topedite: {
     marginTop: 100,
 

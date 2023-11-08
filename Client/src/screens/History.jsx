@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 
 
+import { setNotificationBadge } from '../../src/features/notificationSlice';
 
 
 
@@ -57,7 +58,7 @@ const History = () => {
         if (isFocused) {
             fetchHistory()
             findRestaurantName()
-            console.log('a')
+            store.dispatch(setNotificationBadge(false))
         }
 
     }, [isFocused])

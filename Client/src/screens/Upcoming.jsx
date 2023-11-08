@@ -7,6 +7,7 @@ import { Display } from "../utils";
 import React, { useState, useEffect } from 'react';
 import UpcomingList from './UpcomingList.jsx'
 import { useIsFocused } from '@react-navigation/native';
+import { setNotificationBadge } from '../../src/features/notificationSlice';
 
 
 
@@ -57,6 +58,7 @@ const Upcoming = () => {
         if (isFocused) {
             fetchUpcoming()
             findRestaurantName()
+            store.dispatch(setNotificationBadge(false))
 
         }
 

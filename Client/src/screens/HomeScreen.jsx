@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-
 import { Colors } from "../contants";
 import { AntDesign } from "@expo/vector-icons";
 import RestaurantCard from "../Component/RestaurantCard";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios'
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Modal } from "react-native";
 import HeaderBar from "./HeaderBar";
 import SearchBar from "../Component/SearchBar";
 import Categorys from "../Component/Categorys";
+import ToastMessage from "../Component/ToastMessage";
+import { useSelector } from 'react-redux';
+
+
+
 
 export default function HomeScreen({ navigation, route }) {
   const category = [
@@ -23,11 +27,16 @@ export default function HomeScreen({ navigation, route }) {
     "French",
   ];
 
+
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
+  const toastRef = useRef(null);
+  const { toast } = useSelector(state => state.notification);
 
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
+
+
 
   const fetchData = async () => {
     try {
@@ -40,17 +49,28 @@ export default function HomeScreen({ navigation, route }) {
     }
   };
 
+
+
+  if (toast) {
+    if (toastRef.current) {
+      toastRef.current.show()
+    }
+  }
+
+
+
   useEffect(() => {
     if (isFocused) {
       fetchData()
+
     }
+
 
   }, [isFocused])
 
 
   const handleButtonPress = (restaurant) => {
     navigation.navigate("RestaurantDetails", { restaurant });
-    console.log(restaurant);
   };
 
   return (
@@ -60,8 +80,21 @@ export default function HomeScreen({ navigation, route }) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.scrollViewFlex}
     >
+
+
+
       <View style={styles.topSection}>
         <HeaderBar />
+        {toast && (
+
+          <ToastMessage
+            ref={toastRef}
+            type="info"
+            text='There has been an updated to one of your reservations!'
+            timeout={4000}
+          />
+        )}
+
         <Text style={styles.screenTitle}>
           Find the best{"\n"}restaurant near you.
         </Text>
@@ -72,6 +105,7 @@ export default function HomeScreen({ navigation, route }) {
           filterData={filterData}
           setFilterData={setFilterData}
         />
+
         <Categorys
           restaurant={restaurant}
           filterData={filterData}
@@ -91,46 +125,33 @@ export default function HomeScreen({ navigation, route }) {
       <View style={styles.topedite}></View>
     </ScrollView>
   );
+
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: "white",
   },
   topSection: {
-    backgroundColor: 'white',
-    paddingBottom: 2, // Adjust the height of the white section as needed
+    backgroundColor: "black",
+    paddingBottom: 100,
+    shadowColor: "black", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 0.7, // Shadow opacity
+    shadowRadius: 4, // Shadow radius
+    elevation: 2, // Android elevation (elevates the view)
   },
   screenTitle: {
     fontSize: 25,
-    color: "black",
+    color: "white",
     paddingLeft: 30,
-    top: 100,
+    top: 50,
   },
-  TextInputContainer: {
-    height: 20 * 2,
-    width: 300,
+  scrollViewFlex: {
+    marginBottom: -50,
   },
-  InputContainer: {
-    flexDirection: "row",
-    margin: 30,
-    borderRadius: 20,
-    backgroundColor: "white",
-    alignItems: "center",
-    top: 100,
-    marginBottom: 110,
-  },
-  search: {
-    marginHorizontal: 10,
-  },
-  scrollViewFlex: {},
-  CategoryScrollViewStyle: {
-    paddingHorizontal: 10,
-  },
-  ActiveCategory: {
-    flexDirection: "row",
-    marginBottom: 20,
+  categorySearchContainer: {
+    flexDirection: "column",
   },
   CategoryText: {
     color: "black",
@@ -146,6 +167,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     backgroundColor: "white",
     borderRadius: 20,
-    maxHeight: 40, // Add some spacing between categories
+    marginTop: 8,
+    maxHeight: 40
+  },// Add some spacing between categories
+  topedite: {
+    marginTop: 100,
+
   },
 });

@@ -83,7 +83,7 @@ const RegisterScreen = ({ navigation }) => {
       {showToast && (
         <ToastMessage
           ref={toastRef}
-          type="success"
+          type="warning"
           text="Invalid email format"
           timeout={3000}
         />

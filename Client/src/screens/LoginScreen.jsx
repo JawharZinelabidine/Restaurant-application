@@ -12,12 +12,8 @@ import {
   TextInput,
 } from "react-native";
 import ToastMessage from "../Component/ToastMessage";
-import * as Device from 'expo-device';
-import * as Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 import store from '../features/store'
-import { compose } from "redux";
 
 export default function LoginScreen({ navigation }) {
 
@@ -105,7 +101,7 @@ export default function LoginScreen({ navigation }) {
 
         setShowToast1(true);
         if (toastRef.current) {
-          toastRef.current.show();
+          toastRef.curraent.show();
         }
 
       } catch (error) {
@@ -120,7 +116,7 @@ export default function LoginScreen({ navigation }) {
 
   return (
 
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.DEFAULT_BLACK }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       {showToast && (
         <ToastMessage
           ref={toastRef}
@@ -142,11 +138,11 @@ export default function LoginScreen({ navigation }) {
 
         <View style={styles.header}>
           <Text style={styles.title}>
-            Sign in to <Text style={{ color: Colors.DEFAULT_RED }}>MyApp</Text>
+            Sign in to <Text style={{ color: Colors.DEFAULT_RED }}>Rezervi</Text>
           </Text>
 
           <Text style={styles.subtitle}>
-            Login so you can make a reservation.
+            Login so you can make a reservation at the to restaurants in your area
           </Text>
         </View>
         <View style={styles.form}>
@@ -202,6 +198,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 0,
+
   },
   header: {
     marginVertical: 36,
@@ -246,7 +243,7 @@ const styles = StyleSheet.create({
   },
   inputControl: {
     height: 44,
-    backgroundColor: Colors.DEFAULT_BLACK,
+    backgroundColor: "black",
     borderColor: Colors.DEFAULT_RED,
     borderWidth: 1,
     paddingHorizontal: 16,
@@ -254,6 +251,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
     color: Colors.DEFAULT_WHITE,
+
   },
   btn: {
     flexDirection: 'row',
@@ -263,6 +261,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: Colors.DEFAULT_RED,
+
   },
   btnText: {
     fontSize: 18,

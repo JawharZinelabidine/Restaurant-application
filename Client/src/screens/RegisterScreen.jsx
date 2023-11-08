@@ -79,11 +79,11 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.DEFAULT_BLACK }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       {showToast && (
         <ToastMessage
           ref={toastRef}
-          type="danger"
+          type="warning"
           text="Invalid email format"
           timeout={3000}
         />
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   },
   inputControl: {
     height: 44,
-    backgroundColor: Colors.DEFAULT_BLACK,
+    backgroundColor: "black",
     borderColor: Colors.DEFAULT_RED,
     borderWidth: 1,
     paddingHorizontal: 16,

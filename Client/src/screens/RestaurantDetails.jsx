@@ -34,8 +34,12 @@ import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
 import Swiper from 'react-native-swiper'
 
+
+
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
 
   const [showForm, setShowForm] = useState(false);
   const [reservation, setReservation] = useState({
@@ -53,6 +57,7 @@ export default function RestaurantDetails({ route }) {
 
 
   const {
+    id,
     name,
     description,
     menu_images,
@@ -62,7 +67,6 @@ export default function RestaurantDetails({ route }) {
     category,
     extra_images,
   } = route.params.restaurant;
-  console.log(route.params.restaurant);
   const navigation = useNavigation();
 
   const hideDateTime = () => {
@@ -75,7 +79,7 @@ export default function RestaurantDetails({ route }) {
         `http://${apiUrl}:3000/api/reservations/${customer.id}/${id}`,
         reservation
       );
-      console.log("Your reservation request was sent!", myReservation);
+      console.log("Your reservation request was sent!");
       setSpotsRemaining(`Your reservation request was sent!`);
       setShowToast2(true);
       if (toastRef.current) {
@@ -85,6 +89,7 @@ export default function RestaurantDetails({ route }) {
       setReservation({ date: "", time: "", guest_number: null });
       toggleForm();
     } catch (error) {
+      console.log(error)
       console.log("Couldn't send reservation request :(", error);
       if (error.response.status === 400) {
         if (error.response.data > 1) {
@@ -152,36 +157,44 @@ export default function RestaurantDetails({ route }) {
 
   return (
     <View style={styles.ScreenContainer}>
-            <Swiper showsButtons={false} showsPagination={true} style={styles.imageSwiper}> 
-  {extra_images.map((imageUri, index) => (
-    <Image
-      key={index}
-      source={{ uri: imageUri }}
-      style={styles.extraimage}
-    />
-  ))}
-</Swiper>
-      <View>
-
-        
-      <View style={styles.dotsContainer}>
-        {extra_images.map((_, index) => (
-          <Text
+      <Swiper showsButtons={false} showsPagination={true} style={styles.imageSwiper}>
+        {extra_images.map((imageUri, index) => (
+          <Image
             key={index}
-            style={[
-              styles.dot,
-             
-              
-            ]}
-          >
-            </Text>
+            source={{ uri: imageUri }}
+            style={styles.extraimage}
+          />
         ))}
+      </Swiper>
+      <View style={{ height: Display.setHeight(1) }}>
+
+
+        <View style={styles.dotsContainer}>
+          {extra_images.map((_, index) => (
+            <Text
+              key={index}
+              style={[
+                styles.dot,
+
+
+              ]}
+            >
+            </Text>
+          ))}
         </View>
-        
+        {showToast2 && (
+          <ToastMessage
+            ref={toastRef}
+            type="success"
+            text={spotsRemaining}
+            timeout={3000}
+          />
+        )}
+
         <View style={styles.ratingContainer}>
           <Text style={styles.ratingText}>{`Rating: ${"4.0"}`}</Text>
         </View>
-        
+
       </View>
       <TouchableOpacity
         title="Go Back"
@@ -256,6 +269,7 @@ export default function RestaurantDetails({ route }) {
                     text={spotsRemaining}
                     timeout={3000}
                   />
+
                 )}
 
                 <View
@@ -347,6 +361,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 24,
   },
+  imageSwiper: {
+    height: Display.setHeight(100),
+  },
   backButton: {
     borderRadius: 16,
     backgroundColor: "#F00",
@@ -354,7 +371,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     width: 50,
     height: 50,
-    top: -300,
+    top: -240,
     left: 10
   },
   backText: {
@@ -364,7 +381,6 @@ const styles = StyleSheet.create({
   menuText: {
     color: "#FFF",
     textAlign: "center",
-    fontFamily: "Inter",
     fontSize: 16,
     fontStyle: "normal",
     fontWeight: "700",
@@ -408,12 +424,11 @@ const styles = StyleSheet.create({
 
 
   extraimage: {
-    height:Display.setHeight(50),
-    width:Display.setWidth(100),
+    height: Display.setHeight(30),
+    width: Display.setWidth(100),
 
   },
   name: {
-    fontFamily: "Fakt Pro",
     fontSize: 32,
     fontWeight: "500",
     lineHeight: 40,
@@ -504,11 +519,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   confirm: {
-    fontSize: FontSize.paragraphIBMPlexSansRegular_size,
     letterSpacing: -0.2,
     lineHeight: 24,
     fontWeight: "700",
-    fontFamily: FontFamily.interBold,
     color: Colors.DEFAULT_WHITE,
     textAlign: "center",
     display: "flex",
@@ -518,7 +531,6 @@ const styles = StyleSheet.create({
     top: 340,
     left: 139,
     borderRadius: Border.br_base,
-    backgroundColor: Color.colorRed,
     width: 123,
     height: 55,
     flexDirection: "row",
@@ -537,6 +549,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 10,
+    height: Display.setHeight(100)
   },
   dot: {
     fontSize: 24,

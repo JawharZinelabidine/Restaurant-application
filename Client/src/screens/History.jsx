@@ -52,13 +52,25 @@ const History = () => {
         }
     }
 
+    const removeNotificationBadge = async () => {
+        try {
+            const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/notification/${customer.id}`)
+            store.dispatch(setNotificationBadge(data))
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
 
     useEffect(() => {
         if (isFocused) {
             fetchHistory()
             findRestaurantName()
-            store.dispatch(setNotificationBadge(false))
+            if (customer.id) {
+                removeNotificationBadge()
+            }
         }
 
     }, [isFocused])

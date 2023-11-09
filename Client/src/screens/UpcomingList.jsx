@@ -231,8 +231,8 @@ const styles = StyleSheet.create({
         fontSize: FontSize.paragraphIBMPlexSansRegular_size,
     },
     pm: {
-        top: 142,
-        left: 131,
+        top: 144,
+        left: 151,
         color: Colors.DEFAULT_WHITE,
         fontSize: FontSize.paragraphIBMPlexSansRegular_size,
     },

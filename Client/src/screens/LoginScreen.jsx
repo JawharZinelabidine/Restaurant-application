@@ -12,12 +12,8 @@ import {
   TextInput,
 } from "react-native";
 import ToastMessage from "../Component/ToastMessage";
-import * as Device from 'expo-device';
-import * as Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 import store from '../features/store'
-import { compose } from "redux";
 
 export default function LoginScreen({ navigation }) {
 
@@ -202,7 +198,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 0,
- 
+
   },
   header: {
     marginVertical: 36,
@@ -255,7 +251,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
     color: Colors.DEFAULT_WHITE,
-    
+
   },
   btn: {
     flexDirection: 'row',
@@ -265,7 +261,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: Colors.DEFAULT_RED,
-    
+
   },
   btnText: {
     fontSize: 18,

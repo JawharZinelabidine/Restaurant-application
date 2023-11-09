@@ -83,8 +83,10 @@ navigation.navigate('VerificationCodeScreen');
       {showToast && (
         <ToastMessage
           ref={toastRef}
-          type="success"
-          text=""
+
+          type="warning"
+          text="Invalid email format"
+
           timeout={3000}
         />
       )}

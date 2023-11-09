@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { StyleSheet, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -127,6 +128,7 @@ const TabNavigator = () => {
 export default TabNavigator
 
 const styles = StyleSheet.create({
+
     tabBarStyle: {
         height: 70,
         position: 'absolute',

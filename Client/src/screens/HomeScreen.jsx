@@ -16,17 +16,6 @@ import { useSelector } from 'react-redux';
 
 
 export default function HomeScreen({ navigation, route }) {
-  const category = [
-    "Italian",
-    "Tunisian",
-    "Japanese",
-    "Lebanese",
-    "Steakhouse",
-    "Breakfast",
-    "Mexican",
-    "French",
-  ];
-
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();

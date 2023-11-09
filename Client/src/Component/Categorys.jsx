@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 
 export default function Categorys({ restaurant, filterData, setFilterData }) {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const category = [
+    "All",
     "Italian",
     "Tunisian",
     "Japanese",
@@ -22,13 +17,12 @@ export default function Categorys({ restaurant, filterData, setFilterData }) {
   ];
 
   const handleSelect = (val) => setSelectedCategory(val);
+  
   useEffect(() => {
-    console.log("Selected Category: ", selectedCategory);
-    console.log("Restaurant Data: ", restaurant);
-
-    if (selectedCategory) {
+    if (selectedCategory === "All") {
+      setFilterData(restaurant);
+    } else {
       const filteredList = restaurant.filter((elem) => {
-        console.log("Current Restaurant: ", elem);
         if (Array.isArray(elem.category)) {
           const foundCategory = elem.category.find(
             (category) =>
@@ -40,11 +34,7 @@ export default function Categorys({ restaurant, filterData, setFilterData }) {
         }
         return false;
       });
-      console.log("Filtered List: ", filteredList);
       setFilterData(filteredList);
-    } else {
-      console.log("No Category Selected. Displaying All Restaurants.");
-      setFilterData(restaurant);
     }
   }, [selectedCategory, restaurant]);
 
@@ -54,13 +44,23 @@ export default function Categorys({ restaurant, filterData, setFilterData }) {
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.CategoryScrollViewStyle}
     >
-      {category.map((category, index) => (
+      {category.map((categoryName, index) => (
         <TouchableOpacity
           key={index}
-          style={styles.CategoryStyleView}
-          onPress={() => setSelectedCategory(category)}
+          style={[
+            styles.CategoryStyleView,
+            selectedCategory === categoryName && styles.ActiveCategory,
+          ]}
+          onPress={() => handleSelect(categoryName)}
         >
-          <Text style={styles.CategoryText}>{category}</Text>
+          <Text
+            style={[
+              styles.CategoryText,
+              selectedCategory === categoryName && styles.SelectedCategoryText,
+            ]}
+          >
+            {categoryName}
+          </Text>
         </TouchableOpacity>
       ))}
     </ScrollView>
@@ -80,12 +80,15 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   ActiveCategory: {
-    flexDirection: "row",
+    backgroundColor: "red",
   },
   CategoryText: {
     color: "black",
     margin: 10,
     textAlign: "center",
+  },
+  SelectedCategoryText: {
+    color: "white",
   },
   CategoryStyleView: {
     overflow: "hidden",

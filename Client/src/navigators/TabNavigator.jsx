@@ -1,9 +1,15 @@
 import React from "react";
-import { StyleSheet } from 'react-native'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen } from '../screens'
-import { AntDesign } from '@expo/vector-icons'
+import { StyleSheet } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  Homescreen,
+  ReservationListScreen,
+  MessagesScreen,
+  LoginScreen,
+} from "../screens";
+import { AntDesign } from "@expo/vector-icons";
 import { Colors } from "../contants";
+
 import { BlurView } from '@react-native-community/blur'
 
 import { Provider } from 'react-redux';
@@ -85,20 +91,20 @@ const TabNavigator = () => {
 export default TabNavigator
 
 const styles = StyleSheet.create({
-    tabBarStyle: {
-        height: 70,
-        position: 'absolute',
-       backgroundColor: "#C3C6D1",
-       borderTopWidth: 1,
-       borderTopColor: "transparent",
-         elevation: 0,
-         borderTopColor: 'transparent'
-    },
-    BlurViewStyles: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-    },
-})
+  tabBarStyle: {
+    height: 70,
+    position: "absolute",
+    backgroundColor: "#C3C6D1",
+    borderTopWidth: 1,
+    borderTopColor: "transparent",
+    elevation: 0,
+    borderTopColor: "transparent",
+  },
+  BlurViewStyles: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+});

@@ -1,7 +1,6 @@
 import { Colors } from '../contants';
 import React, { useState, useRef } from "react";
-import { Text, StyleSheet, View, TextInput, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
-import Toast from 'react-native-toast-message';
+import { Text, StyleSheet, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import axios from "axios";
 import ToastMessage from "../Component/ToastMessage";
 import { useDispatch } from 'react-redux';
@@ -56,7 +55,8 @@ const RegisterScreen = ({ navigation }) => {
       try {
 
         const { data } = await axios.post(`http://${apiUrl}:3000/api/customers/`, inputs);
-        navigation.navigate('LoginScreen');
+navigation.navigate('VerificationCodeScreen');
+
         console.log('User added successfully', data);
         setShowToast2(true);
         if (toastRef.current) {
@@ -84,7 +84,7 @@ const RegisterScreen = ({ navigation }) => {
         <ToastMessage
           ref={toastRef}
           type="success"
-          text="Invalid email format"
+          text=""
           timeout={3000}
         />
       )}
@@ -100,7 +100,7 @@ const RegisterScreen = ({ navigation }) => {
         <ToastMessage
           ref={toastRef}
           type="success"
-          text="Successfully Signed Up"
+          text="verification code was sent to your email"
           timeout={3000}
         />
       )}

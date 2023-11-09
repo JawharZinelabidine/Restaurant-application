@@ -1,8 +1,20 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+
+} from "react-native";
+import { Colors } from "../contants";
+import { AntDesign } from "@expo/vector-icons";
 import RestaurantCard from "../Component/RestaurantCard";
 import { useEffect } from "react";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from '@react-navigation/native';
+import axios from 'axios'
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import HeaderBar from "./HeaderBar";
 import SearchBar from "../Component/SearchBar";
 import Categorys from "../Component/Categorys";
@@ -16,9 +28,9 @@ export default function HomeScreen({ navigation, route }) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://${apiUrl}:3000/api/restaurants`);
-      if (response.ok) {
-        const data = await response.json();
+      const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`);
+      setRestaurant(data);
+       const data = await response.json();
         setRestaurant(data);
         setFilterData(data);
       } else {
@@ -31,9 +43,11 @@ export default function HomeScreen({ navigation, route }) {
 
   useEffect(() => {
     if (isFocused) {
-      fetchData();
+      fetchData()
     }
-  }, [isFocused]);
+
+  }, [isFocused])
+
 
   const handleButtonPress = (restaurant) => {
     navigation.navigate("RestaurantDetails", { restaurant });
@@ -105,7 +119,24 @@ const styles = StyleSheet.create({
   categorySearchContainer: {
     flexDirection: "column",
   },
+  CategoryText: {
+    color: "black",
+    margin: 10,
+    // Add border radius to make it round
+    textAlign: "center", // Center text horizontally
+  },
+  CategoryStyleView: {
+    flex: 1,
+    overflow: "hidden", // Clip content to stay within rounded border
+    borderWidth: 1, // Add a border for better visibility
+    borderColor: "white", // Color of the border
+    marginHorizontal: 10,
+    backgroundColor: "white",
+    borderRadius: 20,
+    marginTop: 8,
+    maxHeight: 40, // Add some spacing between categories
   topedite: {
     marginTop: 100,
+
   },
 });

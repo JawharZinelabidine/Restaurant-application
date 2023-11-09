@@ -9,88 +9,86 @@ import {
 } from "../screens";
 import { AntDesign } from "@expo/vector-icons";
 import { Colors } from "../contants";
-import { BlurView } from "@react-native-community/blur";
-import { Provider } from "react-redux";
 
-const Tab = createBottomTabNavigator();
+import { BlurView } from '@react-native-community/blur'
+
+import { Provider } from 'react-redux';
+
+import * as Notifications from 'expo-notifications';
+
+
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: true,
+    }),
+});
+
+
+
+const Tab = createBottomTabNavigator()
 
 const TabNavigator = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarHideOnKeyboard: true,
-        tabBarShowLabel: false,
-        tabBarStyle: styles.tabBarStyle,
 
-        topBarBackground: () => (
-          <BlurView
-            overlayColor=""
-            blurAmount={15}
-            style={styles.BlurViewStyles}
-          />
-        ),
-      }}
-    >
-      <Tab.Screen
-        name="Home"
-        component={Homescreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <AntDesign
-              name="home"
-              size={24}
-              color={focused ? Colors.DEFAULT_RED : "black"}
-              style={styles.Home}
-            />
-          ),
-        }}
-      ></Tab.Screen>
 
-      <Tab.Screen
-        name="Reservation"
-        component={ReservationListScreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <AntDesign
-              name="calendar"
-              size={24}
-              color={focused ? Colors.DEFAULT_RED : "black"}
-            />
-          ),
-        }}
-      ></Tab.Screen>
-      <Tab.Screen
-        name="Messages"
-        component={MessagesScreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <AntDesign
-              name="message1"
-              size={24}
-              color={focused ? Colors.DEFAULT_RED : "black"}
-            />
-          ),
-        }}
-      ></Tab.Screen>
-      <Tab.Screen
-        name={"LoginScreen"}
-        component={LoginScreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <AntDesign
-              name="login"
-              size={24}
-              color={focused ? Colors.DEFAULT_RED : "black"}
-            />
-          ),
-        }}
-      ></Tab.Screen>
-    </Tab.Navigator>
-  );
-};
 
-export default TabNavigator;
+
+    return (
+      
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false,
+                tabBarHideOnKeyboard: true,
+                tabBarShowLabel: false,
+                tabBarStyle: styles.tabBarStyle,
+
+
+                topBarBackground: () => (
+                    <BlurView overlayColor='' blurAmount={15} style={styles.BlurViewStyles} />
+                )
+            }}>
+
+            <Tab.Screen name="Home" component={Homescreen} options={{
+                tabBarIcon: ({ focused, color, size }) => (
+
+                    <AntDesign name="home" size={24} color={focused ? Colors.DEFAULT_RED : "black"}  style={styles.Home}/>
+
+                ),
+
+            }}></Tab.Screen>
+
+            <Tab.Screen name="Reservation" component={ReservationListScreen}
+
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+
+                        <AntDesign name="calendar" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
+                    )
+
+
+
+                }} ></Tab.Screen>
+            <Tab.Screen name="Messages" component={MessagesScreen} options={{
+
+                tabBarIcon: ({ focused, color, size }) => (
+                    <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : "white"} />
+                )
+            }}></Tab.Screen>
+            <Tab.Screen name={"LoginScreen"} component={LoginScreen} options={{
+
+                tabBarIcon: ({ focused, color, size }) => (
+                    <AntDesign name="login" size={24} color={focused ? Colors.DEFAULT_RED : "white"} />
+
+                )
+            }} ></Tab.Screen>
+
+        </Tab.Navigator>
+    )
+}
+
+export default TabNavigator
 
 const styles = StyleSheet.create({
   tabBarStyle: {

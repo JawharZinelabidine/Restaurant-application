@@ -56,14 +56,15 @@ const RegisterScreen = ({ navigation }) => {
 
         const { data } = await axios.post(`http://${apiUrl}:3000/api/customers/`, inputs);
 navigation.navigate('VerificationCodeScreen');
+
         console.log('User added successfully', data);
         setShowToast2(true);
         if (toastRef.current) {
           toastRef.current.show();
         }
 
-        dispatch(setOwnerId(data.owner));
-        
+
+
       } catch (error) {
         if (error.response && error.response.status === 400 && error.response.data.error === 'Email already exists') {
           setShowToast3(true);

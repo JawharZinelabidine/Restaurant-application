@@ -26,6 +26,8 @@ const MenuContainer = ({ route, navigation }) => {
     );
 };
 
+{ 'aaaa' }
+
 export default MenuContainer;
 
 const styles = StyleSheet.create({

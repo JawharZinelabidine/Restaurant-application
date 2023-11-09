@@ -1,7 +1,7 @@
 import { Colors } from "../contants";
 import axios from "axios";
-import { useDispatch } from 'react-redux';
-import { setId, setFullname, setEmail } from '../../src/features/customerSlice';
+import { useDispatch } from "react-redux";
+import { setId, setFullname, setEmail } from "../../src/features/customerSlice";
 import React, { useState, useRef } from "react";
 import {
   StyleSheet,
@@ -14,20 +14,17 @@ import {
 import ToastMessage from "../Component/ToastMessage";
 
 export default function LoginScreen({ navigation }) {
-
   const dispatch = useDispatch();
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-
-
-
-  const [inputs, setInputs] = useState({ email: '', password: '' });
+  const [inputs, setInputs] = useState({ email: "", password: "" });
   const [showToast, setShowToast] = useState(false);
   const [showToast1, setShowToast1] = useState(false);
+  const [showToast2, setShowToast2] = useState(false);
   const toastRef = useRef(null);
 
   const handleButtonPress = () => {
-    navigation.navigate('RegisterScreen');
+    navigation.navigate("RegisterScreen");
   };
 
   const handleChange = (name, value) => {
@@ -35,10 +32,8 @@ export default function LoginScreen({ navigation }) {
   };
 
   const validator = () => {
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputs.email)) {
-
       return false;
     }
     return true;
@@ -47,23 +42,29 @@ export default function LoginScreen({ navigation }) {
   const handleSubmit = async () => {
     if (validator()) {
       try {
-
-        const { data } = await axios.post(`http://${apiUrl}:3000/api/customers/signin`, inputs);
-        dispatch(setId(data.customer.id));
-        dispatch(setFullname(data.customer.fullname));
-        dispatch(setEmail(data.customer.email));
-
-
-        console.log('Customer logged successfully');
-
-        setShowToast1(true);
-        if (toastRef.current) {
-          toastRef.curraent.show();
+        const { data } = await axios.post(
+          `http://${apiUrl}:3000/api/customers/signin`,
+          inputs
+        );
+        if (data.customer.isVerified) {
+          dispatch(setId(data.customer.id));
+          dispatch(setFullname(data.customer.fullname));
+          dispatch(setEmail(data.customer.email));
+          console.log("Customer logged successfully");
+          setShowToast1(true);
+          if (toastRef.current) {
+            toastRef.current.show();
+          }
+          navigation.navigate("Home");
+        } else {
+          setShowToast(true);
+          if (toastRef.current) {
+            toastRef.current.show();
+          }
         }
-        navigation.navigate('Home');
-      
       } catch (error) {
-        setShowToast(true);
+        navigation.navigate("VerificationCodeScreen");
+        setShowToast2(true);
         if (toastRef.current) {
           toastRef.current.show();
         }
@@ -73,7 +74,6 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       {showToast && (
         <ToastMessage
@@ -83,7 +83,6 @@ export default function LoginScreen({ navigation }) {
           timeout={3000}
         />
       )}
-
       {showToast1 && (
         <ToastMessage
           ref={toastRef}
@@ -92,15 +91,24 @@ export default function LoginScreen({ navigation }) {
           timeout={3000}
         />
       )}
+      {showToast2 && (
+        <ToastMessage
+          ref={toastRef}
+          type="success"
+          text="verification code sent"
+          timeout={3000}
+        />
+      )}
       <View style={styles.container}>
-
         <View style={styles.header}>
           <Text style={styles.title}>
-            Sign in to <Text style={{ color: Colors.DEFAULT_RED }}>Rezervi</Text>
+            Sign in to{" "}
+            <Text style={{ color: Colors.DEFAULT_RED }}>Rezervi</Text>
           </Text>
 
           <Text style={styles.subtitle}>
-            Login so you can make a reservation at the to restaurants in your area
+            Login so you can make a reservation at the to restaurants in your
+            area
           </Text>
         </View>
         <View style={styles.form}>
@@ -110,7 +118,7 @@ export default function LoginScreen({ navigation }) {
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="email-address"
-              onChangeText={(text) => handleChange('email', text)}
+              onChangeText={(text) => handleChange("email", text)}
               placeholder="john@example.com"
               placeholderTextColor="#6b7280"
               style={styles.inputControl}
@@ -120,7 +128,7 @@ export default function LoginScreen({ navigation }) {
             <Text style={styles.inputLabel}>Password</Text>
             <TextInput
               autoCorrect={false}
-              onChangeText={(text) => handleChange('password', text)}
+              onChangeText={(text) => handleChange("password", text)}
               placeholder="********"
               placeholderTextColor="#6b7280"
               style={styles.inputControl}
@@ -137,15 +145,24 @@ export default function LoginScreen({ navigation }) {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={handleButtonPress} style={{ marginTop: 'auto' }}>
+          <TouchableOpacity
+            onPress={handleButtonPress}
+            style={{ marginTop: "auto" }}
+          >
             <Text style={styles.formFooter}>
-              Don't have an account?{' '}
-              <Text style={{ textDecorationLine: 'underline', color: Colors.DEFAULT_RED }}>Sign up</Text>
+              Don't have an account?{" "}
+              <Text
+                style={{
+                  textDecorationLine: "underline",
+                  color: Colors.DEFAULT_RED,
+                }}
+              >
+                Sign up
+              </Text>
             </Text>
           </TouchableOpacity>
         </View>
       </View>
-
     </SafeAreaView>
   );
 }
@@ -156,23 +173,22 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 0,
- 
   },
   header: {
     marginVertical: 36,
   },
   title: {
     fontSize: 27,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.DEFAULT_WHITE,
     marginBottom: 6,
-    textAlign: 'center',
+    textAlign: "center",
   },
   subtitle: {
     fontSize: 15,
-    fontWeight: '500',
-    color: '#929292',
-    textAlign: 'center',
+    fontWeight: "500",
+    color: "#929292",
+    textAlign: "center",
   },
   form: {
     marginBottom: 130,
@@ -185,9 +201,9 @@ const styles = StyleSheet.create({
   },
   formFooter: {
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.DEFAULT_WHITE,
-    textAlign: 'center',
+    textAlign: "center",
     letterSpacing: 0.15,
   },
   input: {
@@ -195,7 +211,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.DEFAULT_WHITE,
     marginBottom: 8,
   },
@@ -207,25 +223,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 12,
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Colors.DEFAULT_WHITE,
-    
   },
   btn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: Colors.DEFAULT_RED,
-    
   },
   btnText: {
     fontSize: 18,
     lineHeight: 26,
-    fontWeight: '600',
-    color: '#fff',
+    fontWeight: "600",
+    color: "#fff",
   },
-
 });

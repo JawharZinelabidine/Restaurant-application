@@ -88,6 +88,8 @@ const History = () => {
 
 
             </ScrollView>
+            <View style={styles.topedite}></View>
+
         </View>
 
     )
@@ -362,5 +364,9 @@ const styles = StyleSheet.create({
         height: 844,
         overflow: "hidden",
         backgroundColor: Color.colorWhite,
+    },
+    topedite: {
+        marginTop: 100,
+
     },
 })

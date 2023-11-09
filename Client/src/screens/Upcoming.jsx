@@ -94,6 +94,8 @@ const Upcoming = () => {
 
 
             </ScrollView>
+            <View style={styles.topedite}></View>
+
         </View>
 
     )
@@ -112,6 +114,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.DARK_ONE,
         marginTop: -150,
+
+    },
+    topedite: {
+        marginTop: 100,
 
     },
     scrollViewContent: {

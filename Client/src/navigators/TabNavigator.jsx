@@ -22,7 +22,6 @@ const checkNotification = async () => {
     try {
         const { data } = await axios.get(`http://${apiUrl}:3000/api/customers/notification/${id}`)
         store.dispatch(setNotificationBadge(data))
-        console.log('zz')
     } catch (error) {
         console.log(error)
     }

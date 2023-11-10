@@ -24,8 +24,12 @@ import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
 
 
+
+
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
 
   const [showForm, setShowForm] = useState(false);
   const [reservation, setReservation] = useState({
@@ -43,6 +47,7 @@ export default function RestaurantDetails({ route }) {
 
 
   const {
+    id,
     name,
     description,
     menu_images,
@@ -52,7 +57,6 @@ export default function RestaurantDetails({ route }) {
     category,
     extra_images,
   } = route.params.restaurant;
-  console.log(route.params.restaurant);
   const navigation = useNavigation();
 
   const hideDateTime = () => {
@@ -65,7 +69,7 @@ export default function RestaurantDetails({ route }) {
         `http://${apiUrl}:3000/api/reservations/${customer.id}/${id}`,
         reservation
       );
-      console.log("Your reservation request was sent!", myReservation);
+      console.log("Your reservation request was sent!");
       setSpotsRemaining(`Your reservation request was sent!`);
       setShowToast2(true);
       if (toastRef.current) {
@@ -75,6 +79,7 @@ export default function RestaurantDetails({ route }) {
       setReservation({ date: "", time: "", guest_number: null });
       toggleForm();
     } catch (error) {
+      console.log(error)
       console.log("Couldn't send reservation request :(", error);
       if (error.response.status === 400) {
         if (error.response.data > 1) {
@@ -195,7 +200,9 @@ export default function RestaurantDetails({ route }) {
       </ScrollView>
       {isModalOpen && (
           <TouchableWithoutFeedback onPress={toggleForm}>
+
             <Modal transparent={true} visible={true} onPress={toggleForm}>
+
               <Pressable
                 style={{ backgroundColor: "#000000aa", flex: 1 }}
                 onPress={toggleForm}
@@ -207,6 +214,7 @@ export default function RestaurantDetails({ route }) {
                     text={spotsRemaining}
                     timeout={3000}
                   />
+
                 )}
 
                 <View
@@ -274,6 +282,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
     padding: 0,
+  },
+  imageSwiper: {
+    height: Display.setHeight(100),
   },
   backButton: {
     borderRadius: 8,

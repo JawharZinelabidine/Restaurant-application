@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 
 
+import { setNotificationBadge } from '../../src/features/notificationSlice';
 
 
 
@@ -51,13 +52,25 @@ const History = () => {
         }
     }
 
+    const removeNotificationBadge = async () => {
+        try {
+            const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/notification/${customer.id}`)
+            store.dispatch(setNotificationBadge(data))
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
 
     useEffect(() => {
         if (isFocused) {
             fetchHistory()
             findRestaurantName()
-            console.log('a')
+            if (customer.id) {
+                removeNotificationBadge()
+            }
         }
 
     }, [isFocused])
@@ -75,6 +88,8 @@ const History = () => {
 
 
             </ScrollView>
+            <View style={styles.topedite}></View>
+
         </View>
 
     )
@@ -349,5 +364,9 @@ const styles = StyleSheet.create({
         height: 844,
         overflow: "hidden",
         backgroundColor: Color.colorWhite,
+    },
+    topedite: {
+        marginTop: 100,
+
     },
 })

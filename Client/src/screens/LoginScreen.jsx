@@ -1,8 +1,8 @@
 import { Colors } from "../contants";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setId, setFullname, setEmail } from "../../src/features/customerSlice";
-import React, { useState, useRef } from "react";
+import { useDispatch } from 'react-redux';
+import { setId, setFullname, setEmail } from '../../src/features/customerSlice';
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -10,14 +10,24 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Pressable
 } from "react-native";
 import ToastMessage from "../Component/ToastMessage";
+import * as Notifications from 'expo-notifications';
+import store from '../features/store'
+import { useSelector } from 'react-redux';
+import { setToast } from '../../src/features/notificationSlice';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+  const { toast } = useSelector(state => state.notification);
 
-  const [inputs, setInputs] = useState({ email: "", password: "" });
+
+  const customer = store.getState().customer
+
+
+  const [inputs, setInputs] = useState({ email: '', password: '' });
   const [showToast, setShowToast] = useState(false);
   const [showToast1, setShowToast1] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
@@ -38,6 +48,46 @@ export default function LoginScreen({ navigation }) {
     }
     return true;
   };
+
+
+  async function registerForPushNotificationsAsync(customerID) {
+    try {
+      const { status } = await Notifications.requestPermissionsAsync()
+      console.log(status)
+      if (status !== "granted") {
+        console.log("Failed to get permission")
+        return null
+      }
+
+      if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
+      }
+    } catch (error) {
+      console.log('register error', error)
+    }
+
+    try {
+      const token = (await Notifications.getExpoPushTokenAsync({
+        projectId: "c7b31030-5842-4db5-bc82-2aeecdaf9fd1",
+      })).data
+      console.log(token)
+      const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/${customerID}`, { token: token })
+      console.log('token added successfully', token)
+      navigation.navigate('Home');
+
+
+    }
+    catch (error) {
+      console.log('couldn"t get Expo token', error)
+    }
+
+  }
+
 
   const handleSubmit = async () => {
     if (validator()) {
@@ -77,6 +127,7 @@ export default function LoginScreen({ navigation }) {
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       {showToast && (
         <ToastMessage
+          style={styles.try}
           ref={toastRef}
           type="danger"
           text="Wrong information"
@@ -238,7 +289,8 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 18,
     lineHeight: 26,
-    fontWeight: "600",
-    color: "#fff",
-  },
+    fontWeight: '600',
+    color: '#fff',
+  }
+
 });

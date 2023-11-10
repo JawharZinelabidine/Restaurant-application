@@ -166,6 +166,15 @@ export default function RestaurantDetails({ route }) {
           />
         ))}
       </Swiper>
+      {showToast2 && (
+        <ToastMessage
+          style={{ position: 'absolute' }}
+          ref={toastRef}
+          type="success"
+          text={spotsRemaining}
+          timeout={3000}
+        />
+      )}
       <View style={{ height: Display.setHeight(1) }}>
 
 
@@ -182,14 +191,7 @@ export default function RestaurantDetails({ route }) {
             </Text>
           ))}
         </View>
-        {showToast2 && (
-          <ToastMessage
-            ref={toastRef}
-            type="success"
-            text={spotsRemaining}
-            timeout={3000}
-          />
-        )}
+
 
         <View style={styles.ratingContainer}>
           <Text style={styles.ratingText}>{`Rating: ${"4.0"}`}</Text>
@@ -256,8 +258,12 @@ export default function RestaurantDetails({ route }) {
           </TouchableOpacity>
         </View>
         {isModalOpen && (
+
+
           <TouchableWithoutFeedback onPress={toggleForm}>
+
             <Modal transparent={true} visible={true} onPress={toggleForm}>
+
               <Pressable
                 style={{ backgroundColor: "#000000aa", flex: 1 }}
                 onPress={toggleForm}

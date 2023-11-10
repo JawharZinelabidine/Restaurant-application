@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Display } from "../utils";
+import { Platform } from 'react-native';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { AntDesign } from '@expo/vector-icons';
+
+
+
 
 export default function RestaurantCard({ restaurant, onPress }) {
   const { name, main_image, category, opening_time, closing_time, rating, status, City } = restaurant;
@@ -10,6 +14,9 @@ export default function RestaurantCard({ restaurant, onPress }) {
   const handleButtonPress = () => {
     onPress(restaurant);
   };
+
+
+
 
   const spaced = category.toString().split(',').join('  ');
 
@@ -20,7 +27,7 @@ export default function RestaurantCard({ restaurant, onPress }) {
         <Text style={styles.cardName}>{name}</Text>
         <Text style={styles.cardCategory}>{spaced}</Text>
         <View style={styles.cardRating}>
-          <Icon name="star" size={15} color="#dea84a" />
+          <AntDesign name="star" size={20} color="gold" />
           <Text style={styles.cardRatingText}>4.5</Text>
         </View>
         <Text style={styles.cardStatus}>Open</Text>

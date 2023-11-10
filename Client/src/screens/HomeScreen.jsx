@@ -12,26 +12,17 @@ import Categorys from "../Component/Categorys";
 import ToastMessage from "../Component/ToastMessage";
 import { useSelector } from 'react-redux';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 
 export default function HomeScreen({ navigation, route }) {
-  const category = [
-    "Italian",
-    "Tunisian",
-    "Japanese",
-    "Lebanese",
-    "Steakhouse",
-    "Breakfast",
-    "Mexican",
-    "French",
-  ];
-
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
   const toastRef = useRef(null);
   const { toast } = useSelector(state => state.notification);
+  const { id } = useSelector(state => state.customer);
 
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -51,11 +42,14 @@ export default function HomeScreen({ navigation, route }) {
 
 
 
-  if (toast) {
+  if (toast && id) {
     if (toastRef.current) {
       toastRef.current.show()
     }
   }
+
+
+
 
 
 
@@ -90,7 +84,7 @@ export default function HomeScreen({ navigation, route }) {
           <ToastMessage
             ref={toastRef}
             type="info"
-            text='There has been an updated to one of your reservations!'
+            text='There has been an update to one of your reservations!'
             timeout={4000}
           />
         )}

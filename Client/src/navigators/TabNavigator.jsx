@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { StyleSheet, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -10,7 +11,21 @@ import { useSelector } from 'react-redux';
 import * as Notifications from 'expo-notifications';
 import store from "../features/store";
 import { setNotificationBadge, setNotificationBody, setToast } from '../../src/features/notificationSlice';
+import axios from "axios";
 
+
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
+const id = store.getState().customer.id;
+
+const checkNotification = async () => {
+    try {
+        const { data } = await axios.get(`http://${apiUrl}:3000/api/customers/notification/${id}`)
+        store.dispatch(setNotificationBadge(data))
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -21,12 +36,22 @@ Notifications.setNotificationHandler({
     }),
 });
 
-
 const notificationService = {
     handleNotification: (notification) => {
         console.log('Notification received');
         store.dispatch(setToast(true))
-        store.dispatch(setNotificationBadge(true))
+        checkNotification()
+
+    },
+};
+
+const notificationResponseService = {
+    handleNotificationResponse: (response, navigation) => {
+        console.log('Notification response received');
+
+        const route = response.notification.request.content.data.route
+
+        navigation.navigate(route);
 
     },
 };
@@ -35,27 +60,39 @@ const notificationService = {
 
 const Tab = createBottomTabNavigator()
 
-const TabNavigator = () => {
+const TabNavigator = ({ navigation }) => {
 
 
     const isFocused = useIsFocused();
 
     const { notificationBadge } = useSelector(state => state.notification);
 
+
+
+
+
     useEffect(() => {
         if (isFocused) {
-            const subscription = Notifications.addNotificationReceivedListener(
+            Notifications.addNotificationReceivedListener(
                 notificationService.handleNotification
 
+
+            );
+            checkNotification()
+
+            const notificationResponseSubscription = Notifications.addNotificationResponseReceivedListener(
+                (response) => notificationResponseService.handleNotificationResponse(response, navigation)
             );
 
             return () => {
-                subscription.remove();
+                notificationResponseSubscription.remove();
             };
 
         }
-    }, [isFocused])
+        checkNotification()
 
+
+    }, [isFocused])
 
     return (
 
@@ -94,7 +131,7 @@ const TabNavigator = () => {
 
                     tabBarBadge: false,
                     tabBarBadgeStyle: {
-                        backgroundColor: notificationBadge === true ? "red" : "transparent",
+                        backgroundColor: notificationBadge === true && id ? "red" : "transparent",
                         top: 19,
                         right: 7,
                         maxWidth: 15,
@@ -127,6 +164,7 @@ const TabNavigator = () => {
 export default TabNavigator
 
 const styles = StyleSheet.create({
+
     tabBarStyle: {
         height: 70,
         position: 'absolute',

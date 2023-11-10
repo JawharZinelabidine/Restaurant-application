@@ -1,5 +1,5 @@
 import { Colors } from '../contants';
-import React, { useState , useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Text, StyleSheet, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import ToastMessage from "../Component/ToastMessage";
@@ -15,8 +15,8 @@ const isObjValid = (obj) => {
 const VerificationCodeScreen = ({ navigation }) => {
   const inputRefs = inputs.map(() => useRef());
   const toastRef = useRef(null);
-  
-  const [OTP, setOTP] = useState({0:"",1:"",2:"",3:""});
+
+  const [OTP, setOTP] = useState({ 0: "", 1: "", 2: "", 3: "" });
   const [nextInputIndex, setNextInputIndex] = useState(0)
   const [showToast, setShowToast] = useState(false);
   const [showToast1, setShowToast1] = useState(false);
@@ -25,14 +25,14 @@ const VerificationCodeScreen = ({ navigation }) => {
 
 
   const handleChangeText = (text, index) => {
-    const newOTP = {...OTP};
+    const newOTP = { ...OTP };
     newOTP[index] = text;
     setOTP(newOTP);
 
     const lastInputIndex = inputs.length - 1;
-    if(!text) newInputIndex = index === 0 ? 0 : index - 1;
+    if (!text) newInputIndex = index === 0 ? 0 : index - 1;
     else newInputIndex = index === lastInputIndex ? lastInputIndex : index + 1;
-    
+
     setNextInputIndex(newInputIndex)
 
   }
@@ -41,35 +41,35 @@ const VerificationCodeScreen = ({ navigation }) => {
     inputRefs[nextInputIndex].current.focus();
   }, [nextInputIndex]);
 
-const verifyEmail = async () => {
-  const otp = Object.values(OTP).join('');
-  try {
-    const response = await axios.get(`http://${apiUrl}:3000/api/customers/verify/${otp}`);
+  const verifyEmail = async () => {
+    const otp = Object.values(OTP).join('');
+    try {
+      const response = await axios.get(`http://${apiUrl}:3000/api/customers/verify/${otp}`);
 
-    if (response.status === 200) {  
-      navigation.navigate('LoginScreen'); 
-      setShowToast(true);
-      if (toastRef.current) {
-        toastRef.current.show();
+      if (response.status === 200) {
+        navigation.navigate('LoginScreen');
+        setShowToast(true);
+        if (toastRef.current) {
+          toastRef.current.show();
+        }
+        return false
+      } else {
+        setShowToast1(true);
+        if (toastRef.current) {
+          toastRef.current.show();
+        }
+        return false;
       }
-      return false   
-    } else {
-      setShowToast1(true);
+    } catch (error) {
+      setShowToast2(true);
       if (toastRef.current) {
         toastRef.current.show();
       }
       return false;
     }
-  } catch (error) {
-    setShowToast2(true);
-    if (toastRef.current) {
-      toastRef.current.show();
-    }
-    return false;
-  }
-};
+  };
 
-  
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -106,7 +106,7 @@ const verifyEmail = async () => {
             {inputs.map((inp, index) => (
               <TextInput
                 key={index}
-                onChangeText={(text)=>handleChangeText(text, index)}
+                onChangeText={(text) => handleChangeText(text, index)}
                 value={OTP[index]}
                 placeholder="0"
                 placeholderTextColor="#c8c8c8"
@@ -120,7 +120,7 @@ const verifyEmail = async () => {
           </View>
         </View>
 
-        <TouchableOpacity  style={styles.loginButtonContainer} onPress={verifyEmail}>
+        <TouchableOpacity style={styles.loginButtonContainer} onPress={verifyEmail}>
           <Text style={styles.loginButtonText} >Verify Code</Text>
         </TouchableOpacity>
       </View>

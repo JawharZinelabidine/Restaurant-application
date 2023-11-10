@@ -4,7 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import RestaurantCard from "../Component/RestaurantCard";
 import { useEffect, useRef } from "react";
 import { useIsFocused } from '@react-navigation/native';
-import axios from 'axios'
+import axios from 'axios';
 import { View, Text, StyleSheet, ScrollView, Modal } from "react-native";
 import HeaderBar from "./HeaderBar";
 import SearchBar from "../Component/SearchBar";
@@ -22,7 +22,6 @@ export default function HomeScreen({ navigation, route }) {
   const isFocused = useIsFocused();
   const toastRef = useRef(null);
   const { toast } = useSelector(state => state.notification);
-  const { id } = useSelector(state => state.customer);
 
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -42,12 +41,11 @@ export default function HomeScreen({ navigation, route }) {
 
 
 
-  if (toast && id) {
+  if (toast) {
     if (toastRef.current) {
       toastRef.current.show()
     }
   }
-
 
 
 

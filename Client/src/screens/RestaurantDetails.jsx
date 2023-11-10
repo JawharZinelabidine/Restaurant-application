@@ -1,38 +1,28 @@
 import {
-  SafeAreaView,
   View,
   Text,
   Image,
   StyleSheet,
-  Button,
   TextInput,
-  Dimensions,
   Modal,
   Pressable,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import RestaurantDetailsSwiper from "../navigators/RestaurantDetailsSwiper";
 
 import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState, useRef } from "react";
 import { Colors, Images } from "../contants";
-import {
-  FontSize,
-  FontFamily,
-  Color,
-  Border,
-  Padding,
-} from "../../GlobalStyles";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import store from "../features/store";
-import axios from "axios";
+import axios from '../../services/axiosInterceptor.jsx';
 import ToastMessage from "../Component/ToastMessage";
 import moment from "moment";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
-import Swiper from 'react-native-swiper'
+
 
 
 
@@ -76,7 +66,7 @@ export default function RestaurantDetails({ route }) {
   const makeReservation = async () => {
     try {
       const myReservation = await axios.post(
-        `http://${apiUrl}:3000/api/reservations/${customer.id}/${id}`,
+        `http://${apiUrl}:3000/api/reservations/${id}`,
         reservation
       );
       console.log("Your reservation request was sent!");
@@ -116,7 +106,7 @@ export default function RestaurantDetails({ route }) {
           toastRef.current.show();
         }
       }
-      if (error.response.status === 404) {
+      if (error.response.status === 401) {
         setSpotsRemaining("You need to be logged in");
         setShowToast(true);
         if (toastRef.current) {
@@ -155,234 +145,249 @@ export default function RestaurantDetails({ route }) {
 
   const spaced = category.toString().split(",").join("  ");
 
+
   return (
-    <View style={styles.ScreenContainer}>
-      <Swiper showsButtons={false} showsPagination={true} style={styles.imageSwiper}>
-        {extra_images.map((imageUri, index) => (
-          <Image
-            key={index}
-            source={{ uri: imageUri }}
-            style={styles.extraimage}
-          />
-        ))}
-      </Swiper>
-      {showToast2 && (
-        <ToastMessage
-          style={{ position: 'absolute' }}
-          ref={toastRef}
-          type="success"
-          text={spotsRemaining}
-          timeout={3000}
-        />
-      )}
-      <View style={{ height: Display.setHeight(1) }}>
+    <View style={styles.container}>
+      <RestaurantDetailsSwiper extraImages={extra_images} />
 
-
-        <View style={styles.dotsContainer}>
-          {extra_images.map((_, index) => (
-            <Text
-              key={index}
-              style={[
-                styles.dot,
-
-
-              ]}
-            >
-            </Text>
-          ))}
-        </View>
-
-
-        <View style={styles.ratingContainer}>
-          <Text style={styles.ratingText}>{`Rating: ${"4.0"}`}</Text>
-        </View>
-
-      </View>
       <TouchableOpacity
-        title="Go Back"
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
         <Text style={styles.backText}>
-          <AntDesign name="left" size={24} color="white " />
+          <AntDesign name="left" size={24} color="white" />
         </Text>
       </TouchableOpacity>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.ScrollViewFlex}
+        contentContainerStyle={styles.scrollViewContent}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+        <View style={styles.detailsContainer}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.name}>{name}</Text>
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={() =>
+                navigation.navigate("MenuContainer", {
+                  menuImages: menu_images,
+                })
+              }
+            >
+              <Text style={styles.menuText}>Menu</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.openingHours}>{`${moment(opening_time).format(
+            "LT"
+          )} - ${moment(closing_time).format("LT")}`}</Text>
+          <View style={styles.categoryContainer}>
+            <Text style={styles.category}>{spaced}</Text>
+          </View>
+          <View style={styles.locationContainer}>
+            <Image source={Images.PINICON} style={styles.icon} />
+            <Text style={styles.openingHours}>{City}</Text>
+          </View>
+          <Text style={styles.description}>{description}</Text>
+        </View>
+
+        <TouchableOpacity
+          title="Make A reservation "
+          style={styles.menuButton}
+          onPress={toggleForm}
         >
-          <Text style={styles.name}>{name}</Text>
-          <TouchableOpacity
-            style={styles.menuButton}
-            onPress={() =>
-              navigation.navigate("MenuContainer", {
-                menuImages: menu_images,
-              })
-            }
-          >
-            <Text style={styles.menuText}>Menu</Text>
-          </TouchableOpacity>
-        </View>
+          <Text style={styles.menuText}>Make a Reservation</Text>
+        </TouchableOpacity>
 
-        <Text style={styles.openingHours}>{` ${moment(opening_time).format(
-          "LT"
-        )} - ${moment(closing_time).format("LT")}`}</Text>
-        <View style={styles.categoryContainer}>
-          <Text style={styles.category}>{spaced}</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 5,
-          }}
-        >
-          <Image source={Images.PINICON} style={styles.icon} />
-          <Text style={styles.openingHours}>{City}</Text>
-        </View>
-        <Text style={styles.description}>{description}</Text>
-        <View style={styles.reservationContainer}>
-          <TouchableOpacity
-            title="Make A reservation "
-            style={styles.menuButton}
-            onPress={toggleForm}
-          >
-            <Text style={styles.menuText}>Make a Reservation</Text>
-          </TouchableOpacity>
-        </View>
-        {isModalOpen && (
+      </ScrollView>
+      {isModalOpen && (
+        <TouchableWithoutFeedback onPress={toggleForm}>
 
+          <Modal transparent={true} visible={true} onPress={toggleForm}>
 
-          <TouchableWithoutFeedback onPress={toggleForm}>
+            <Pressable
+              style={{ backgroundColor: "#000000aa", flex: 1 }}
+              onPress={toggleForm}
+            >
+              {showToast && (
+                <ToastMessage
+                  ref={toastRef}
+                  type="danger"
+                  text={spotsRemaining}
+                  timeout={3000}
+                />
 
-            <Modal transparent={true} visible={true} onPress={toggleForm}>
+              )}
 
-              <Pressable
-                style={{ backgroundColor: "#000000aa", flex: 1 }}
-                onPress={toggleForm}
+              <View
+                style={{
+                  backgroundColor: Colors.DARK_ONE,
+                  margin: 20,
+                  padding: 40,
+                  borderRadius: 10,
+                  top: 250,
+                  height: 350,
+                  justifyContent: "space-between",
+                }}
               >
-                {showToast && (
-                  <ToastMessage
-                    ref={toastRef}
-                    type="danger"
-                    text={spotsRemaining}
-                    timeout={3000}
-                  />
-
-                )}
-
-                <View
-                  style={{
-                    backgroundColor: Colors.DARK_ONE,
-                    margin: 20,
-                    padding: 40,
-                    borderRadius: 10,
-                    top: 250,
-                    height: 350,
-                    justifyContent: "space-between",
+                <Pressable
+                  style={styles.btn}
+                  onPress={() => {
+                    toggleDateTime("date");
                   }}
                 >
-                  <Pressable
-                    style={styles.btn}
-                    onPress={() => {
-                      toggleDateTime("date");
-                    }}
-                  >
-                    <Text style={styles.btnText}>Date</Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.btn}
-                    onPress={() => {
-                      toggleDateTime("time");
-                    }}
-                  >
-                    <Text style={styles.btnText}>Time</Text>
-                  </Pressable>
+                  <Text style={styles.btnText}>Date</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.btn}
+                  onPress={() => {
+                    toggleDateTime("time");
+                  }}
+                >
+                  <Text style={styles.btnText}>Time</Text>
+                </Pressable>
 
-                  {showDateTime && (
-                    <DateTimePicker
-                      mode={mode}
-                      value={new Date(Date.now())}
-                      is24Hour={true}
-                      confirmBtnText="Confirm"
-                      display="default"
-                      minimumDate={new Date()}
-                      timeZoneName={"Africa/Tunis"}
-                      timeZoneOffsetInMinutes={0}
-                      onChange={handleDateChange}
-                    />
-                  )}
-                  <Text style={{ fontSize: 25, color: "#ffffff" }}>Guests</Text>
-                  <TextInput
-                    keyboardType="numeric"
-                    onChangeText={(text) => handleChange("guest_number", +text)}
-                    style={styles.inputControlGuest}
+                {showDateTime && (
+                  <DateTimePicker
+                    mode={mode}
+                    value={new Date(Date.now())}
+                    is24Hour={true}
+                    confirmBtnText="Confirm"
+                    display="default"
+                    minimumDate={new Date()}
+                    timeZoneName={"Africa/Tunis"}
+                    timeZoneOffsetInMinutes={0}
+                    onChange={handleDateChange}
                   />
+                )}
+                <Text style={{ fontSize: 25, color: "#ffffff" }}>Guests</Text>
+                <TextInput
+                  keyboardType="numeric"
+                  onChangeText={(text) => handleChange("guest_number", +text)}
+                  style={styles.inputControlGuest}
+                />
 
-                  <Pressable style={styles.btn} onPress={makeReservation}>
-                    <Text style={styles.btnText}>Submit</Text>
-                  </Pressable>
-                </View>
-              </Pressable>
-            </Modal>
-          </TouchableWithoutFeedback>
-        )}
-      </ScrollView>
+                <Pressable style={styles.btn} onPress={makeReservation}>
+                  <Text style={styles.btnText}>Submit</Text>
+                </Pressable>
+              </View>
+            </Pressable>
+          </Modal>
+        </TouchableWithoutFeedback>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    marginHorizontal: 150,
-    paddingVertical: 100,
-    alignItems: "center",
-    justifyContent: "center",
-    display: "flex",
+  container: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+    padding: 0,
   },
-  reservationContainer: {
-    alignItems: "center",
-    marginTop: 40,
+  imageSwiper: {
+    height: Display.setHeight(100),
   },
-  inputControl: {
-    height: 25,
-    backgroundColor: Colors.DEFAULT_WHITE,
-    borderColor: Colors.DEFAULT_RED,
+  backButton: {
+    borderRadius: 8,
+    backgroundColor: '#F00',
+    padding: 12,
+    width: 50,
+    height: 50,
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 1,
+  },
+  name: {
+    fontSize: 36,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 8,
+  },
+  categoryContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    marginBottom: 16,
+    alignSelf: 'flex-start',
+  },
+  category: {
+    color: '#333',
+    fontSize: 16,
+  },
+  description: {
+    color: '#666',
+    marginBottom: 16,
+  },
+  reservationButton: {
+    backgroundColor: "red",
+    alignItems: "center",
+  },
+  reservationButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  modalContainer: {
+    backgroundColor: '#333',
+    margin: 20,
+    padding: 24,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  btn: {
+    borderRadius: 8,
+    backgroundColor: '#F00',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+  },
+  btnText: {
+    fontSize: 18,
+    lineHeight: 26,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  inputControlGuest: {
+    height: 40,
+    backgroundColor: 'black',
+    borderColor: '#F00',
     borderWidth: 1,
     paddingHorizontal: 16,
     fontSize: 15,
-    fontWeight: "500",
-    color: Colors.DEFAULT_WHITE,
+    fontWeight: '500',
+    color: '#333',
+    marginBottom: 20,
+    borderRadius: 8,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+  },
+  detailsContainer: {
+    marginBottom: 20,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  locationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  reservationButtonText: {
+    color: "white",
+    fontWeight: "700",
   },
   menuButton: {
     borderRadius: 16,
     backgroundColor: "#F00",
     paddingVertical: 8,
     paddingHorizontal: 24,
-  },
-  imageSwiper: {
-    height: Display.setHeight(100),
-  },
-  backButton: {
-    borderRadius: 16,
-    backgroundColor: "#F00",
-    paddingVertical: -15,
-    paddingHorizontal: 12,
-    width: 50,
-    height: 50,
-    top: -240,
-    left: 10
-  },
-  backText: {
-    top: 15,
-    color: "#FFF",
   },
   menuText: {
     color: "#FFF",
@@ -392,175 +397,9 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 24,
   },
-  inputControlGuest: {
-    height: 25,
-    backgroundColor: Colors.DEFAULT_WHITE,
-    borderColor: Colors.DEFAULT_RED,
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    fontSize: 15,
-    fontWeight: "500",
-    color: Colors.DARK_ONE,
-  },
-  ScrollViewFlex: {
-    paddingHorizontal: 20,
-    paddingTop: 10,
-  },
-
-  btn: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: Colors.DEFAULT_RED,
-    margin: 5,
-  },
-  btnText: {
-    fontSize: 18,
-    lineHeight: 26,
-    fontWeight: "600",
-    color: "#fff",
-  },
-  ScreenContainer: {
-    flex: 1,
-    backgroundColor: "black",
-  },
-
-
-  extraimage: {
-    height: Display.setHeight(30),
-    width: Display.setWidth(100),
-
-  },
-  name: {
-    fontSize: 32,
-    fontWeight: "500",
-    lineHeight: 40,
-    color: "white",
-  },
-  category: {
-    color: "black",
-    paddingVertical: 6,
-    fontSize: 14,
-    display: "flex",
-  },
-  categoryContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    width: 150,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
-    display: "flex",
-  },
-  description: {
-    color: "gray",
-  },
-  menuImage: {
-    height: 200,
-    width: 200,
-  },
-  rating: {
-    color: "gray",
-  },
-  ratingText: {
-    color: "white",
-  },
-  ratingContainer: {
-    backgroundColor: "rgba(0,0,0,0.3)",
-    width: "100%",
-    paddingLeft: 8,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-  },
-  openingHours: {
-    color: "white",
-    paddingVertical: 4,
-    fontSize: 16,
-  },
-  iconContainer: {
-    height: 200,
-    width: 500,
-    margin: 30,
-    padding: 30,
-    display: "flex",
-    borderRadius: 80,
-  },
   icon: {
-    width: 24,
-    height: 24,
+    width: 40,
+    height: 40,
     marginTop: 8,
-    marginLeft: -8,
   },
-
-  selectValue: {
-    color: "#6f7482",
-    fontSize: 16,
-    fontFamily: "IBMPlexSans-Regular",
-  },
-  selectLayout: {
-    height: 68,
-    width: 318,
-    left: 44,
-    position: "absolute",
-  },
-  confirmFlexBox: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  textInput: {
-    top: 35,
-  },
-  textInput1: {
-    top: 131,
-    height: 73,
-    width: 318,
-    left: 44,
-    position: "absolute",
-  },
-  select: {
-    top: 231,
-    overflow: "hidden",
-  },
-  confirm: {
-    letterSpacing: -0.2,
-    lineHeight: 24,
-    fontWeight: "700",
-    color: Colors.DEFAULT_WHITE,
-    textAlign: "center",
-    display: "flex",
-    width: 87,
-  },
-  confirmWrapper: {
-    top: 340,
-    left: 139,
-    borderRadius: Border.br_base,
-    width: 123,
-    height: 55,
-    flexDirection: "row",
-    paddingHorizontal: Padding.p_119xl,
-    paddingVertical: Padding.p_base,
-    position: "absolute",
-    alignItems: "center",
-  },
-  framePop: {
-    backgroundColor: "#131313",
-    width: 402,
-    height: 423,
-    overflow: "hidden",
-  },
-  dotsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10,
-    height: Display.setHeight(100)
-  },
-  dot: {
-    fontSize: 24,
-    marginHorizontal: 5,
-    color: 'black', // Adjust the color of the dots
-  },
-
-})
+});

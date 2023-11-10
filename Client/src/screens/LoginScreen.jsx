@@ -10,13 +10,12 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  Pressable
 } from "react-native";
 import ToastMessage from "../Component/ToastMessage";
 import * as Notifications from 'expo-notifications';
 import store from '../features/store'
 import { useSelector } from 'react-redux';
-import { setToast } from '../../src/features/notificationSlice';
+import * as SecureStore from 'expo-secure-store';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -76,7 +75,7 @@ export default function LoginScreen({ navigation }) {
         projectId: "c7b31030-5842-4db5-bc82-2aeecdaf9fd1",
       })).data
       console.log(token)
-      const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/${customerID}`, { token: token })
+      await axios.put(`http://${apiUrl}:3000/api/customers/expo`, { token: token })
       console.log('token added successfully', token)
       navigation.navigate('Home');
 
@@ -96,29 +95,38 @@ export default function LoginScreen({ navigation }) {
           `http://${apiUrl}:3000/api/customers/signin`,
           inputs
         );
-        if (data.customer.isVerified) {
-          dispatch(setId(data.customer.id));
-          dispatch(setFullname(data.customer.fullname));
-          dispatch(setEmail(data.customer.email));
-          console.log("Customer logged successfully");
-          setShowToast1(true);
+
+        await SecureStore.setItemAsync('token', data.token)
+        await registerForPushNotificationsAsync()
+
+        console.log("Customer logged successfully");
+        setShowToast1(true);
+        if (toastRef.current) {
+          toastRef.current.show();
+        }
+        navigation.navigate("Home");
+
+
+
+      } catch (error) {
+        console.log(error);
+
+        if (error.response.status === 412) {
+          setShowToast2(true);
           if (toastRef.current) {
             toastRef.current.show();
           }
-          navigation.navigate("Home");
-        } else {
+          navigation.navigate("VerificationCodeScreen");
+        }
+
+        if (error.response.status === 410 || error.response.status === 411) {
           setShowToast(true);
           if (toastRef.current) {
             toastRef.current.show();
           }
+
         }
-      } catch (error) {
-        navigation.navigate("VerificationCodeScreen");
-        setShowToast2(true);
-        if (toastRef.current) {
-          toastRef.current.show();
-        }
-        console.log(error);
+
       }
     }
   };

@@ -4,7 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import RestaurantCard from "../Component/RestaurantCard";
 import { useEffect, useRef } from "react";
 import { useIsFocused } from '@react-navigation/native';
-import axios from 'axios'
+import axios from 'axios';
 import { View, Text, StyleSheet, ScrollView, Modal } from "react-native";
 import HeaderBar from "./HeaderBar";
 import SearchBar from "../Component/SearchBar";

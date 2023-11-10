@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import * as Notifications from 'expo-notifications';
 import store from "../features/store";
 import { setNotificationBadge, setNotificationBody, setToast } from '../../src/features/notificationSlice';
-import axios from "axios";
+import axios from '../../services/axiosInterceptor.jsx';
 
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -20,7 +20,7 @@ const id = store.getState().customer.id;
 
 const checkNotification = async () => {
     try {
-        const { data } = await axios.get(`http://${apiUrl}:3000/api/customers/notification/${id}`)
+        const { data } = await axios.get(`http://${apiUrl}:3000/api/customers/notification`)
         store.dispatch(setNotificationBadge(data))
     } catch (error) {
         console.log(error)

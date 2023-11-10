@@ -27,8 +27,8 @@ const HistoryList = ({ reservation, restaurants }) => {
                 locations={[0, 1]}
                 colors={["#000", "rgba(0, 0, 0, 0)"]}
             />
-            <View style={[reservation.status === 'Pending' ? styles.rectangleViewPending : reservation.status === 'Declined' ? styles.rectangleViewRejected : null, styles.iphone131412ChildLayout1]} />
-            <Text style={[reservation.status === 'Pending' ? styles.pending : reservation.status === 'Declined' ? styles.rejected : null, styles.rosemarysTypo]}>{reservation.status}</Text>
+            <View style={[reservation.status === 'Pending' ? styles.rectangleViewPending : reservation.status === 'Declined' ? styles.rectangleViewRejected : reservation.status === 'Approved' ? styles.rectangleViewApproved : null, styles.iphone131412ChildLayout1]} />
+            <Text style={[reservation.status === 'Pending' ? styles.pending : reservation.status === 'Declined' ? styles.rejected : reservation.status === 'Approved' ? styles.accepted : null, styles.rosemarysTypo]}>{reservation.status}</Text>
             <Text style={[styles.rosemarys, styles.rosemarysLayout]}>{restaurantName?.name}</Text>
             <Text style={[styles.text, styles.textPosition]}>{moment(reservation.date).calendar()}</Text>
             <Text style={[styles.pm, styles.rosemarysTypo]}>{moment(reservation.time).utcOffset('-000').format('LT')}</Text>
@@ -183,6 +183,12 @@ const styles = StyleSheet.create({
         left: 1,
         position: "absolute",
     },
+    rectangleViewApproved: {
+        top: 114,
+        backgroundColor: "#4bc06c",
+        left: 1,
+        position: "absolute",
+    },
     iphone131412Child1: {
         top: 292,
         left: 1,
@@ -203,6 +209,12 @@ const styles = StyleSheet.create({
     rejected: {
         top: 120,
         color: "#c04b4b",
+        left: 290,
+        lineHeight: 20,
+    },
+    accepted: {
+        top: 120,
+        color: "#4bc06c",
         left: 290,
         lineHeight: 20,
     },
@@ -228,8 +240,8 @@ const styles = StyleSheet.create({
         fontSize: FontSize.paragraphIBMPlexSansRegular_size,
     },
     pm: {
-        top: 142,
-        left: 131,
+        top: 144,
+        left: 151,
         color: Colors.DEFAULT_WHITE,
         fontSize: FontSize.paragraphIBMPlexSansRegular_size,
     },

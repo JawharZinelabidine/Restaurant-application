@@ -2,7 +2,7 @@ import { Colors } from "../contants";
 import axios from "axios";
 import { useDispatch } from 'react-redux';
 import { setId, setFullname, setEmail } from '../../src/features/customerSlice';
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -10,15 +10,19 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Pressable
 } from "react-native";
 import ToastMessage from "../Component/ToastMessage";
 import * as Notifications from 'expo-notifications';
 import store from '../features/store'
+import { useSelector } from 'react-redux';
+import { setToast } from '../../src/features/notificationSlice';
 
 export default function LoginScreen({ navigation }) {
 
   const dispatch = useDispatch();
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+  const { toast } = useSelector(state => state.notification);
 
 
   const customer = store.getState().customer
@@ -46,6 +50,7 @@ export default function LoginScreen({ navigation }) {
     }
     return true;
   };
+
 
   async function registerForPushNotificationsAsync(customerID) {
     try {
@@ -101,11 +106,11 @@ export default function LoginScreen({ navigation }) {
 
         setShowToast1(true);
         if (toastRef.current) {
-          toastRef.curraent.show();
+          toastRef.current.show();
         }
 
       } catch (error) {
-        setShowToast(true);
+        store.dispatch(setToast(true))
         if (toastRef.current) {
           toastRef.current.show();
         }
@@ -115,80 +120,81 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
+    <>
 
-    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
-      {showToast && (
+
+      <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
+
+        <View style={styles.container}>
+
+          <View style={styles.header}>
+            <Text style={styles.title}>
+              Sign in to <Text style={{ color: Colors.DEFAULT_RED }}>Rezervi</Text>
+            </Text>
+
+            <Text style={styles.subtitle}>
+              Login so you can make a reservation at the to restaurants in your area
+            </Text>
+          </View>
+          <View style={styles.form}>
+            <View style={styles.input}>
+              <Text style={styles.inputLabel}>Email address</Text>
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                onChangeText={(text) => handleChange('email', text)}
+                placeholder="john@example.com"
+                placeholderTextColor="#6b7280"
+                style={styles.inputControl}
+              />
+            </View>
+            <View style={styles.input}>
+              <Text style={styles.inputLabel}>Password</Text>
+              <TextInput
+                autoCorrect={false}
+                onChangeText={(text) => handleChange('password', text)}
+                placeholder="********"
+                placeholderTextColor="#6b7280"
+                style={styles.inputControl}
+                secureTextEntry={true}
+              />
+
+            </View>
+            <TouchableOpacity>
+              <Text style={{ color: Colors.DEFAULT_RED }}>Forgot Password?</Text>
+            </TouchableOpacity>
+            <View style={styles.formAction}>
+              <TouchableOpacity onPress={handleSubmit}>
+                <View style={styles.btn}>
+                  <Text style={styles.btnText}>Sign in</Text>
+                </View>
+
+
+
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={handleButtonPress} style={{ marginTop: 'auto' }}>
+              <Text style={styles.formFooter}>
+                Don't have an account?{' '}
+                <Text style={{ textDecorationLine: 'underline', color: Colors.DEFAULT_RED }}>Sign up</Text>
+              </Text>
+            </TouchableOpacity>
+
+          </View>
+        </View>
+
+      </SafeAreaView>
+      {toast && (
         <ToastMessage
+          style={styles.try}
           ref={toastRef}
           type="danger"
           text="Wrong information"
           timeout={3000}
         />
       )}
-
-      {showToast1 && (
-        <ToastMessage
-          ref={toastRef}
-          type="success"
-          text="logged in successfully"
-          timeout={3000}
-        />
-      )}
-      <View style={styles.container}>
-
-        <View style={styles.header}>
-          <Text style={styles.title}>
-            Sign in to <Text style={{ color: Colors.DEFAULT_RED }}>Rezervi</Text>
-          </Text>
-
-          <Text style={styles.subtitle}>
-            Login so you can make a reservation at the to restaurants in your area
-          </Text>
-        </View>
-        <View style={styles.form}>
-          <View style={styles.input}>
-            <Text style={styles.inputLabel}>Email address</Text>
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="email-address"
-              onChangeText={(text) => handleChange('email', text)}
-              placeholder="john@example.com"
-              placeholderTextColor="#6b7280"
-              style={styles.inputControl}
-            />
-          </View>
-          <View style={styles.input}>
-            <Text style={styles.inputLabel}>Password</Text>
-            <TextInput
-              autoCorrect={false}
-              onChangeText={(text) => handleChange('password', text)}
-              placeholder="********"
-              placeholderTextColor="#6b7280"
-              style={styles.inputControl}
-              secureTextEntry={true}
-            />
-          </View>
-          <TouchableOpacity>
-            <Text style={{ color: Colors.DEFAULT_RED }}>Forgot Password?</Text>
-          </TouchableOpacity>
-          <View style={styles.formAction}>
-            <TouchableOpacity onPress={handleSubmit}>
-              <View style={styles.btn}>
-                <Text style={styles.btnText}>Sign in</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity onPress={handleButtonPress} style={{ marginTop: 'auto' }}>
-            <Text style={styles.formFooter}>
-              Don't have an account?{' '}
-              <Text style={{ textDecorationLine: 'underline', color: Colors.DEFAULT_RED }}>Sign up</Text>
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-    </SafeAreaView>
+    </>
   );
 }
 
@@ -268,6 +274,6 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     fontWeight: '600',
     color: '#fff',
-  },
+  }
 
 });

@@ -10,8 +10,9 @@ import { useIsFocused } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import * as Notifications from 'expo-notifications';
 import store from "../features/store";
-import { setNotificationBadge, setNotificationBody, setToast } from '../../src/features/notificationSlice';
+import { setNotificationBadge, setToast } from '../../src/features/notificationSlice';
 import axios from '../../services/axiosInterceptor.jsx';
+import * as SecureStore from 'expo-secure-store';
 
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -66,7 +67,6 @@ const TabNavigator = ({ navigation }) => {
     const isFocused = useIsFocused();
 
     const { notificationBadge } = useSelector(state => state.notification);
-
 
 
 

@@ -1,5 +1,6 @@
 import { Colors } from "../contants";
 import axios from "axios";
+import axiosInt from '../../services/axiosInterceptor.jsx';
 import { useDispatch } from 'react-redux';
 import { setId, setFullname, setEmail } from '../../src/features/customerSlice';
 import React, { useState, useRef, useEffect } from "react";
@@ -49,7 +50,7 @@ export default function LoginScreen({ navigation }) {
   };
 
 
-  async function registerForPushNotificationsAsync(customerID) {
+  async function registerForPushNotificationsAsync() {
     try {
       const { status } = await Notifications.requestPermissionsAsync()
       console.log(status)
@@ -75,7 +76,7 @@ export default function LoginScreen({ navigation }) {
         projectId: "c7b31030-5842-4db5-bc82-2aeecdaf9fd1",
       })).data
       console.log(token)
-      await axios.put(`http://${apiUrl}:3000/api/customers/expo`, { token: token })
+      await axiosInt.put(`http://${apiUrl}:3000/api/customers/expo`, { token: token })
       console.log('token added successfully', token)
       navigation.navigate('Home');
 
@@ -86,6 +87,14 @@ export default function LoginScreen({ navigation }) {
     }
 
   }
+  const emptyStorage = async () => {
+    try {
+      await SecureStore.deleteItemAsync('token')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
 
   const handleSubmit = async () => {
@@ -130,6 +139,13 @@ export default function LoginScreen({ navigation }) {
       }
     }
   };
+
+
+  useEffect(() => {
+
+    emptyStorage()
+
+  }, [])
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>

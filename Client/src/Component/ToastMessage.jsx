@@ -50,11 +50,12 @@ const ToastMessage = forwardRef(({ type, text, description, timeout = 1000 }, re
         <>
             {isVisible && (
                 <Animated.View style={{
+                    flex: 1,
                     marginTop: 30,
                     position: 'absolute',
                     // Center the toast vertically
                     width: '100%',
-                    height: 70, // Smaller height
+                    height: 90, // Smaller height
                     backgroundColor: backgroundColor,
                     borderRadius: 10,
                     padding: 12,
@@ -75,7 +76,7 @@ const ToastMessage = forwardRef(({ type, text, description, timeout = 1000 }, re
                 >
                     <FontAwesome5 name={icon} size={30} color="#FFF" />
 
-                    <View style={{ marginLeft: 90 }}>
+                    <View style={{ marginLeft: 50 }}>
                         <Text style={{ fontSize: 14, fontWeight: '600', color: '#FFF', textAlign: 'center' }}>{text}</Text>
                         <Text style={{ fontSize: 12, fontWeight: '400', color: '#FFF', textAlign: 'center' }}>{description}</Text>
                     </View>

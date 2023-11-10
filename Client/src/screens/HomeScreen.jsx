@@ -22,7 +22,6 @@ export default function HomeScreen({ navigation, route }) {
   const isFocused = useIsFocused();
   const toastRef = useRef(null);
   const { toast } = useSelector(state => state.notification);
-  const { id } = useSelector(state => state.customer);
 
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -42,12 +41,11 @@ export default function HomeScreen({ navigation, route }) {
 
 
 
-  if (toast && id) {
+  if (toast) {
     if (toastRef.current) {
       toastRef.current.show()
     }
   }
-
 
 
 

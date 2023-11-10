@@ -32,6 +32,7 @@ export default function LoginScreen({ navigation }) {
   const [showToast, setShowToast] = useState(false);
   const [showToast1, setShowToast1] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
+  const [showToast3, setShowToast3] = useState(false);
   const toastRef = useRef(null);
   const isFocused = useIsFocused();
 
@@ -137,6 +138,13 @@ export default function LoginScreen({ navigation }) {
           }
 
         }
+        if (error.response.status === 403) {
+          setShowToast3(true);
+          if (toastRef.current) {
+            toastRef.current.show();
+          }
+
+        }
 
       }
     }
@@ -174,6 +182,14 @@ export default function LoginScreen({ navigation }) {
           ref={toastRef}
           type="success"
           text="verification code sent"
+          timeout={3000}
+        />
+      )}
+      {showToast3 && (
+        <ToastMessage
+          ref={toastRef}
+          type="danger"
+          text="This account type is invalid"
           timeout={3000}
         />
       )}

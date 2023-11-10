@@ -17,12 +17,14 @@ import * as SecureStore from 'expo-secure-store';
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-const id = store.getState().customer.id;
 
 const checkNotification = async () => {
     try {
-        const { data } = await axios.get(`http://${apiUrl}:3000/api/customers/notification`)
-        store.dispatch(setNotificationBadge(data))
+        const token = await SecureStore.getItemAsync('token')
+        if (token) {
+            const { data } = await axios.get(`http://${apiUrl}:3000/api/customers/notification`)
+            store.dispatch(setNotificationBadge(data))
+        }
     } catch (error) {
         console.log(error)
     }
@@ -131,7 +133,7 @@ const TabNavigator = ({ navigation }) => {
 
                     tabBarBadge: false,
                     tabBarBadgeStyle: {
-                        backgroundColor: notificationBadge === true && id ? "red" : "transparent",
+                        backgroundColor: notificationBadge === true ? "red" : "transparent",
                         top: 19,
                         right: 7,
                         maxWidth: 15,

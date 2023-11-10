@@ -69,9 +69,9 @@ const Upcoming = () => {
         if (isFocused) {
             fetchUpcoming()
             findRestaurantName()
-            if (customer.id) {
-                removeNotificationBadge()
-            }
+
+            removeNotificationBadge()
+
 
 
         }

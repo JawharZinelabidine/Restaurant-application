@@ -17,6 +17,7 @@ import * as Notifications from 'expo-notifications';
 import store from '../features/store'
 import { useSelector } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ export default function LoginScreen({ navigation }) {
   const [showToast1, setShowToast1] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
   const toastRef = useRef(null);
+  const isFocused = useIsFocused();
 
   const handleButtonPress = () => {
     navigation.navigate("RegisterScreen");
@@ -142,10 +144,11 @@ export default function LoginScreen({ navigation }) {
 
 
   useEffect(() => {
+    if (isFocused) {
+      emptyStorage()
+    }
 
-    emptyStorage()
-
-  }, [])
+  }, [isFocused])
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>

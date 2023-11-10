@@ -33,7 +33,7 @@ const UpcomingList = ({ reservation, restaurants }) => {
             <View style={[reservation.status === 'Pending' ? styles.rectangleViewPending : reservation.status === 'Approved' ? styles.rectangleViewApproved : null, styles.iphone131412ChildLayout1]} />
             <Text style={[reservation.status === 'Pending' ? styles.pending : reservation.status === 'Approved' ? styles.accepted : null, styles.rosemarysTypo]}>{reservation.status}</Text>
             <Text style={[styles.rosemarys, styles.rosemarysLayout]}>{restaurantName?.name}</Text>
-            <Text style={[styles.text, styles.textPosition]}>{moment(reservation.date).calendar()}</Text>
+            <Text style={[styles.text, styles.textPosition]}>{moment(reservation.date).format("MMM Do YY")}</Text>
             <Text style={[styles.pm, styles.rosemarysTypo]}>{moment(reservation.time).utcOffset('-000').format('LT')}</Text>
 
 

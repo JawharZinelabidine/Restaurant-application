@@ -1,5 +1,6 @@
 import { Colors } from "../contants";
 import axios from "axios";
+import axiosInt from '../../services/axiosInterceptor.jsx';
 import { useDispatch } from 'react-redux';
 import { setId, setFullname, setEmail } from '../../src/features/customerSlice';
 import React, { useState, useRef, useEffect } from "react";
@@ -10,13 +11,13 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  Pressable
 } from "react-native";
 import ToastMessage from "../Component/ToastMessage";
 import * as Notifications from 'expo-notifications';
 import store from '../features/store'
 import { useSelector } from 'react-redux';
-import { setToast } from '../../src/features/notificationSlice';
+import * as SecureStore from 'expo-secure-store';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -31,7 +32,9 @@ export default function LoginScreen({ navigation }) {
   const [showToast, setShowToast] = useState(false);
   const [showToast1, setShowToast1] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
+  const [showToast3, setShowToast3] = useState(false);
   const toastRef = useRef(null);
+  const isFocused = useIsFocused();
 
   const handleButtonPress = () => {
     navigation.navigate("RegisterScreen");
@@ -50,7 +53,7 @@ export default function LoginScreen({ navigation }) {
   };
 
 
-  async function registerForPushNotificationsAsync(customerID) {
+  async function registerForPushNotificationsAsync() {
     try {
       const { status } = await Notifications.requestPermissionsAsync()
       console.log(status)
@@ -76,7 +79,7 @@ export default function LoginScreen({ navigation }) {
         projectId: "c7b31030-5842-4db5-bc82-2aeecdaf9fd1",
       })).data
       console.log(token)
-      const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/${customerID}`, { token: token })
+      await axiosInt.put(`http://${apiUrl}:3000/api/customers/expo`, { token: token })
       console.log('token added successfully', token)
       navigation.navigate('Home');
 
@@ -87,6 +90,14 @@ export default function LoginScreen({ navigation }) {
     }
 
   }
+  const emptyStorage = async () => {
+    try {
+      await SecureStore.deleteItemAsync('token')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
 
   const handleSubmit = async () => {
@@ -96,32 +107,56 @@ export default function LoginScreen({ navigation }) {
           `http://${apiUrl}:3000/api/customers/signin`,
           inputs
         );
-        if (data.customer.isVerified) {
-          dispatch(setId(data.customer.id));
-          dispatch(setFullname(data.customer.fullname));
-          dispatch(setEmail(data.customer.email));
-          console.log("Customer logged successfully");
-          setShowToast1(true);
+
+        await SecureStore.setItemAsync('token', data.token)
+        await registerForPushNotificationsAsync()
+
+        console.log("Customer logged successfully");
+        setShowToast1(true);
+        if (toastRef.current) {
+          toastRef.current.show();
+        }
+        navigation.navigate("Home");
+
+
+
+      } catch (error) {
+        console.log(error);
+
+        if (error.response.status === 412) {
+          setShowToast2(true);
           if (toastRef.current) {
             toastRef.current.show();
           }
-          navigation.navigate("Home");
-        } else {
+          navigation.navigate("VerificationCodeScreen");
+        }
+
+        if (error.response.status === 410 || error.response.status === 411) {
           setShowToast(true);
           if (toastRef.current) {
             toastRef.current.show();
           }
+
         }
-      } catch (error) {
-        navigation.navigate("VerificationCodeScreen");
-        setShowToast2(true);
-        if (toastRef.current) {
-          toastRef.current.show();
+        if (error.response.status === 403) {
+          setShowToast3(true);
+          if (toastRef.current) {
+            toastRef.current.show();
+          }
+
         }
-        console.log(error);
+
       }
     }
   };
+
+
+  useEffect(() => {
+    if (isFocused) {
+      emptyStorage()
+    }
+
+  }, [isFocused])
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
@@ -147,6 +182,14 @@ export default function LoginScreen({ navigation }) {
           ref={toastRef}
           type="success"
           text="verification code sent"
+          timeout={3000}
+        />
+      )}
+      {showToast3 && (
+        <ToastMessage
+          ref={toastRef}
+          type="danger"
+          text="This account type is invalid"
           timeout={3000}
         />
       )}

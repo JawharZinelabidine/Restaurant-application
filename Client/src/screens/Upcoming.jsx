@@ -22,7 +22,6 @@ const Upcoming = () => {
 
     const isFocused = useIsFocused();
 
-    const customer = store.getState().customer
 
     const fetchUpcoming = async () => {
 

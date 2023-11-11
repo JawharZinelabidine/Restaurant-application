@@ -1,7 +1,7 @@
-import { StyleSheet, View, ScrollView } from 'react-native'
+import { StyleSheet, View, ScrollView, Text } from 'react-native'
 import { Colors } from "../contants";
 import { Color, FontSize, Border } from "../../GlobalStyles";
-import axios from 'axios';
+import axios from '../../services/axiosInterceptor.jsx';
 import store from '../features/store'
 import { Display } from "../utils";
 import HistoryList from './HistoryList.jsx'
@@ -19,6 +19,7 @@ const History = () => {
 
     const [expiredReservations, setExpiredReservations] = useState([])
     const [restaurants, setRestaurants] = useState([])
+    const [logInMessage, setLogInMessage] = useState(false)
 
 
     const isFocused = useIsFocused();
@@ -32,10 +33,13 @@ const History = () => {
     const fetchHistory = async () => {
 
         try {
-            const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/expired/${customer.id}`)
+            const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/expired`)
             setExpiredReservations(data)
         } catch (error) {
             console.log(error)
+            if (error.response.status === 401) {
+                setExpiredReservations([])
+            }
         }
     }
 
@@ -54,7 +58,7 @@ const History = () => {
 
     const removeNotificationBadge = async () => {
         try {
-            const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/notification/${customer.id}`)
+            const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/notification`)
             store.dispatch(setNotificationBadge(data))
 
         } catch (error) {
@@ -68,9 +72,7 @@ const History = () => {
         if (isFocused) {
             fetchHistory()
             findRestaurantName()
-            if (customer.id) {
-                removeNotificationBadge()
-            }
+
         }
 
     }, [isFocused])
@@ -85,6 +87,12 @@ const History = () => {
                         <HistoryList reservation={reserv} restaurants={restaurants}></HistoryList>
                     </View>
                 ))}
+
+                {
+                    logInMessage && (
+                        <Text style={{ color: '#ffffff' }}>Log in to see your upcoming reservations!</Text>
+                    )
+                }
 
 
             </ScrollView>

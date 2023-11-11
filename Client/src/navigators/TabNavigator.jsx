@@ -41,7 +41,6 @@ Notifications.setNotificationHandler({
 
 const notificationService = {
     handleNotification: (notification) => {
-        console.log('Notification received');
         store.dispatch(setToast(true))
         checkNotification()
 
@@ -151,6 +150,13 @@ const TabNavigator = ({ navigation }) => {
                     <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
                 )
             }}></Tab.Screen>
+            <Tab.Screen name={"Reviews"} component={LoginScreen} options={{
+
+                tabBarIcon: ({ focused, color, size }) => (
+                    <AntDesign name="staro" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
+
+                )
+            }} ></Tab.Screen>
             <Tab.Screen name={"LoginScreen"} component={LoginScreen} options={{
 
                 tabBarIcon: ({ focused, color, size }) => (

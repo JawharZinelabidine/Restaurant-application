@@ -51,6 +51,9 @@ export default function LoginScreen({ navigation }) {
     }
     return true;
   };
+  const forgetPassword = () => {
+    navigation.navigate("EnterEmailForReset");
+  }
 
 
   async function registerForPushNotificationsAsync() {
@@ -212,6 +215,7 @@ export default function LoginScreen({ navigation }) {
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="email-address"
+              returnKeyType="done"
               onChangeText={(text) => handleChange("email", text)}
               placeholder="john@example.com"
               placeholderTextColor="#6b7280"
@@ -225,11 +229,12 @@ export default function LoginScreen({ navigation }) {
               onChangeText={(text) => handleChange("password", text)}
               placeholder="********"
               placeholderTextColor="#6b7280"
+              returnKeyType="done"
               style={styles.inputControl}
               secureTextEntry={true}
             />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={forgetPassword}>
             <Text style={{ color: Colors.DEFAULT_RED }}>Forgot Password?</Text>
           </TouchableOpacity>
           <View style={styles.formAction}>

@@ -1,13 +1,23 @@
-import { Colors } from '../contants';
+import { Colors } from "../contants";
 import React, { useState, useRef } from "react";
-import { Text, StyleSheet, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import axios from "axios";
 import ToastMessage from "../Component/ToastMessage";
-import { useDispatch } from 'react-redux';
-
+import { useDispatch } from "react-redux";
 
 const RegisterScreen = ({ navigation }) => {
-  const [inputs, setInputs] = useState({ fullname: '', email: '', password: '' });
+  const [inputs, setInputs] = useState({
+    fullname: "",
+    email: "",
+    password: "",
+  });
   const [showToast, setShowToast] = useState(false);
   const [showToast1, setShowToast1] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
@@ -17,16 +27,22 @@ const RegisterScreen = ({ navigation }) => {
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-
   const handleButtonPress = () => {
-    navigation.navigate('LoginScreen');
+    navigation.navigate("LoginScreen");
   };
 
   const handleChange = (name, value) => {
     setInputs((values) => ({ ...values, [name]: value }));
 
-    if ((name === 'firstName' || name === 'lastName') && inputs.firstName && inputs.lastName) {
-      setInputs((values) => ({ ...values, fullname: `${values.firstName} ${values.lastName}` }));
+    if (
+      (name === "firstName" || name === "lastName") &&
+      inputs.firstName &&
+      inputs.lastName
+    ) {
+      setInputs((values) => ({
+        ...values,
+        fullname: `${values.firstName} ${values.lastName}`,
+      }));
     }
   };
 
@@ -53,20 +69,23 @@ const RegisterScreen = ({ navigation }) => {
   const handleSubmit = async () => {
     if (validator()) {
       try {
+        const { data } = await axios.post(
+          `http://${apiUrl}:3000/api/customers/`,
+          inputs
+        );
+        navigation.navigate("VerificationCodeScreen");
 
-        const { data } = await axios.post(`http://${apiUrl}:3000/api/customers/`, inputs);
-        navigation.navigate('VerificationCodeScreen');
-
-        console.log('User added successfully', data);
+        console.log("User added successfully", data);
         setShowToast2(true);
         if (toastRef.current) {
           toastRef.current.show();
         }
-
-
-
       } catch (error) {
-        if (error.response && error.response.status === 400 && error.response.data.error === 'Email already exists') {
+        if (
+          error.response &&
+          error.response.status === 400 &&
+          error.response.data.error === "Email already exists"
+        ) {
           setShowToast3(true);
           if (toastRef.current) {
             toastRef.current.show();
@@ -83,10 +102,8 @@ const RegisterScreen = ({ navigation }) => {
       {showToast && (
         <ToastMessage
           ref={toastRef}
-
           type="warning"
           text="Invalid email format"
-
           timeout={3000}
         />
       )}
@@ -131,7 +148,8 @@ const RegisterScreen = ({ navigation }) => {
               <TextInput
                 autoCapitalize="words"
                 placeholder="John"
-                onChangeText={(text) => handleChange('firstName', text)}
+                returnKeyType="done"
+                onChangeText={(text) => handleChange("firstName", text)}
                 placeholderTextColor="#6b7280"
                 style={styles.inputControl}
               />
@@ -142,7 +160,8 @@ const RegisterScreen = ({ navigation }) => {
               <TextInput
                 autoCapitalize="words"
                 placeholder="Doe"
-                onChangeText={(text) => handleChange('lastName', text)}
+                returnKeyType="done"
+                onChangeText={(text) => handleChange("lastName", text)}
                 placeholderTextColor="#6b7280"
                 style={styles.inputControl}
               />
@@ -155,7 +174,8 @@ const RegisterScreen = ({ navigation }) => {
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="email-address"
-              onChangeText={(text) => handleChange('email', text)}
+              returnKeyType="done"
+              onChangeText={(text) => handleChange("email", text)}
               placeholder="john@example.com"
               placeholderTextColor="#6b7280"
               style={styles.inputControl}
@@ -167,7 +187,8 @@ const RegisterScreen = ({ navigation }) => {
             <TextInput
               autoCorrect={false}
               placeholder="********"
-              onChangeText={(text) => handleChange('password', text)}
+              returnKeyType="done"
+              onChangeText={(text) => handleChange("password", text)}
               placeholderTextColor="#6b7280"
               style={styles.inputControl}
               secureTextEntry={true}
@@ -179,14 +200,21 @@ const RegisterScreen = ({ navigation }) => {
               <View style={styles.btn}>
                 <Text style={styles.btnText}>Sign up</Text>
               </View>
-
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={{ marginTop: 'auto' }} onPress={handleButtonPress}>
+          <TouchableOpacity
+            style={{ marginTop: "auto" }}
+            onPress={handleButtonPress}
+          >
             <Text style={styles.formFooter}>
-              Already have an account?{' '}
-              <Text style={{ textDecorationLine: 'underline', color: Colors.DEFAULT_RED }}>
+              Already have an account?{" "}
+              <Text
+                style={{
+                  textDecorationLine: "underline",
+                  color: Colors.DEFAULT_RED,
+                }}
+              >
                 Sign in
               </Text>
             </Text>
@@ -195,7 +223,7 @@ const RegisterScreen = ({ navigation }) => {
       </View>
     </SafeAreaView>
   );
-}
+};
 const styles = StyleSheet.create({
   container: {
     padding: 24,
@@ -204,11 +232,11 @@ const styles = StyleSheet.create({
     flexBasis: 0,
   },
   nameInputs: {
-    flexDirection: 'row', // Place first name and last name inputs side by side
-    justifyContent: 'space-between', // Add some space between the inputs
+    flexDirection: "row",
+    justifyContent: "space-between", 
   },
   largeInput: {
-    width: 150, // Adjust the height as needed
+    width: 150, 
   },
   header: {
     marginVertical: 36,
@@ -216,21 +244,21 @@ const styles = StyleSheet.create({
   headerImg: {
     width: 80,
     height: 80,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginBottom: 36,
   },
   title: {
     fontSize: 27,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.DEFAULT_WHITE,
     marginBottom: 6,
-    textAlign: 'center',
+    textAlign: "center",
   },
   subtitle: {
     fontSize: 15,
-    fontWeight: '500',
-    color: '#929292',
-    textAlign: 'center',
+    fontWeight: "500",
+    color: "#929292",
+    textAlign: "center",
   },
   form: {
     marginBottom: 130,
@@ -243,9 +271,9 @@ const styles = StyleSheet.create({
   },
   formFooter: {
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.DEFAULT_WHITE,
-    textAlign: 'center',
+    textAlign: "center",
     letterSpacing: 0.15,
   },
   input: {
@@ -253,7 +281,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.DEFAULT_WHITE,
     marginBottom: 8,
   },
@@ -265,13 +293,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 12,
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Colors.DEFAULT_WHITE,
   },
   btn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -282,8 +310,8 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 18,
     lineHeight: 26,
-    fontWeight: '600',
-    color: '#fff',
+    fontWeight: "600",
+    color: "#fff",
   },
 });
 export default RegisterScreen;

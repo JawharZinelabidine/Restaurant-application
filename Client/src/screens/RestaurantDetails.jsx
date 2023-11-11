@@ -16,20 +16,16 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState, useRef } from "react";
 import { Colors, Images } from "../contants";
 import store from "../features/store";
-import axios from '../../services/axiosInterceptor.jsx';
+import axios from "../../services/axiosInterceptor.jsx";
 import ToastMessage from "../Component/ToastMessage";
 import moment from "moment";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
 
-
-
-
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
 
   const [showForm, setShowForm] = useState(false);
   const [reservation, setReservation] = useState({
@@ -44,7 +40,6 @@ export default function RestaurantDetails({ route }) {
   const [spotsRemaining, setSpotsRemaining] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toastRef = useRef(null);
-
 
   const {
     id,
@@ -79,7 +74,7 @@ export default function RestaurantDetails({ route }) {
       setReservation({ date: "", time: "", guest_number: null });
       toggleForm();
     } catch (error) {
-      console.log(error)
+      console.log(error);
       console.log("Couldn't send reservation request :(", error);
       if (error.response.status === 400) {
         if (error.response.data > 1) {
@@ -145,7 +140,6 @@ export default function RestaurantDetails({ route }) {
 
   const spaced = category.toString().split(",").join("  ");
 
-
   return (
     <View style={styles.container}>
       <RestaurantDetailsSwiper extraImages={extra_images} />
@@ -198,13 +192,10 @@ export default function RestaurantDetails({ route }) {
         >
           <Text style={styles.menuText}>Make a Reservation</Text>
         </TouchableOpacity>
-
       </ScrollView>
       {isModalOpen && (
         <TouchableWithoutFeedback onPress={toggleForm}>
-
           <Modal transparent={true} visible={true} onPress={toggleForm}>
-
             <Pressable
               style={{ backgroundColor: "#000000aa", flex: 1 }}
               onPress={toggleForm}
@@ -216,7 +207,6 @@ export default function RestaurantDetails({ route }) {
                   text={spotsRemaining}
                   timeout={3000}
                 />
-
               )}
 
               <View
@@ -282,7 +272,7 @@ export default function RestaurantDetails({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     padding: 0,
   },
   imageSwiper: {
@@ -290,35 +280,35 @@ const styles = StyleSheet.create({
   },
   backButton: {
     borderRadius: 8,
-    backgroundColor: '#F00',
+    backgroundColor: "#F00",
     padding: 12,
     width: 50,
     height: 50,
-    position: 'absolute',
+    position: "absolute",
     top: 50,
     left: 20,
     zIndex: 1,
   },
   name: {
     fontSize: 36,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700",
+    color: "#333",
     marginBottom: 8,
   },
   categoryContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
     marginBottom: 16,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   category: {
-    color: '#333',
+    color: "#333",
     fontSize: 16,
   },
   description: {
-    color: '#666',
+    color: "#666",
     marginBottom: 16,
   },
   reservationButton: {
@@ -326,20 +316,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   reservationButtonText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   modalContainer: {
-    backgroundColor: '#333',
+    backgroundColor: "#333",
     margin: 20,
     padding: 24,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   btn: {
     borderRadius: 8,
-    backgroundColor: '#F00',
+    backgroundColor: "#F00",
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginVertical: 10,
@@ -347,18 +337,18 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 18,
     lineHeight: 26,
-    fontWeight: '600',
-    color: '#fff',
+    fontWeight: "600",
+    color: "#fff",
   },
   inputControlGuest: {
     height: 40,
-    backgroundColor: 'black',
-    borderColor: '#F00',
+    backgroundColor: "black",
+    borderColor: "#F00",
     borderWidth: 1,
     paddingHorizontal: 16,
     fontSize: 15,
-    fontWeight: '500',
-    color: '#333',
+    fontWeight: "500",
+    color: "#333",
     marginBottom: 20,
     borderRadius: 8,
   },

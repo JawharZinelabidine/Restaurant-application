@@ -192,87 +192,90 @@ export default function RestaurantDetails({ route }) {
         </View>
 
         <TouchableOpacity
-          style={styles.reservationButton}
+          title="Make A reservation "
+          style={styles.menuButton}
           onPress={toggleForm}
         >
-          <Text style={styles.reservationButtonText}>Make a Reservation</Text>
+          <Text style={styles.menuText}>Make a Reservation</Text>
         </TouchableOpacity>
+
       </ScrollView>
       {isModalOpen && (
-          <TouchableWithoutFeedback onPress={toggleForm}>
+        <TouchableWithoutFeedback onPress={toggleForm}>
 
-            <Modal transparent={true} visible={true} onPress={toggleForm}>
+          <Modal transparent={true} visible={true} onPress={toggleForm}>
 
-              <Pressable
-                style={{ backgroundColor: "#000000aa", flex: 1 }}
-                onPress={toggleForm}
+            <Pressable
+              style={{ backgroundColor: "#000000aa", flex: 1 }}
+              onPress={toggleForm}
+            >
+              {showToast && (
+                <ToastMessage
+                  ref={toastRef}
+                  type="danger"
+                  text={spotsRemaining}
+                  timeout={3000}
+                />
+
+              )}
+
+              <View
+                style={{
+                  backgroundColor: Colors.DARK_ONE,
+                  margin: 20,
+                  padding: 40,
+                  borderRadius: 10,
+                  top: 250,
+                  height: 350,
+                  justifyContent: "space-between",
+                }}
               >
-                {showToast && (
-                  <ToastMessage
-                    ref={toastRef}
-                    type="danger"
-                    text={spotsRemaining}
-                    timeout={3000}
-                  />
-
-                )}
-
-                <View
-                  style={{
-                    backgroundColor: Colors.DARK_ONE,
-                    margin: 20,
-                    padding: 40,
-                    borderRadius: 10,
-                    top: 250,
-                    height: 350,
-                    justifyContent: "space-between",
+                <Pressable
+                  style={styles.btn}
+                  onPress={() => {
+                    toggleDateTime("date");
                   }}
                 >
-                  <Pressable
-                    style={styles.btn}
-                    onPress={() => {
-                      toggleDateTime("date");
-                    }}
-                  >
-                    <Text style={styles.btnText}>Date</Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.btn}
-                    onPress={() => {
-                      toggleDateTime("time");
-                    }}
-                  >
-                    <Text style={styles.btnText}>Time</Text>
-                  </Pressable>
+                  <Text style={styles.btnText}>Date</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.btn}
+                  onPress={() => {
+                    toggleDateTime("time");
+                  }}
+                >
+                  <Text style={styles.btnText}>Time</Text>
+                </Pressable>
 
-                  {showDateTime && (
-                    <DateTimePicker
-                      mode={mode}
-                      value={new Date(Date.now())}
-                      is24Hour={true}
-                      confirmBtnText="Confirm"
-                      display="default"
-                      minimumDate={new Date()}
-                      timeZoneName={"Africa/Tunis"}
-                      timeZoneOffsetInMinutes={0}
-                      onChange={handleDateChange}
-                    />
-                  )}
-                  <Text style={{ fontSize: 25, color: "#ffffff" }}>Guests</Text>
-                  <TextInput
-                    keyboardType="numeric"
-                    onChangeText={(text) => handleChange("guest_number", +text)}
-                    style={styles.inputControlGuest}
+                {showDateTime && (
+                  <DateTimePicker
+                    mode={mode}
+                    value={new Date(Date.now())}
+                    is24Hour={true}
+                    confirmBtnText="Confirm"
+                    display="default"
+                    minimumDate={new Date()}
+                    timeZoneName={"Africa/Tunis"}
+                    timeZoneOffsetInMinutes={0}
+                    onChange={handleDateChange}
                   />
+                )}
+                <Text style={{ fontSize: 25, color: "#ffffff" }}>Guests</Text>
+                <TextInput
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  onChangeText={(text) => handleChange("guest_number", +text)}
+                  style={styles.inputControlGuest}
+                />
 
-                  <Pressable style={styles.btn} onPress={makeReservation}>
-                    <Text style={styles.btnText}>Submit</Text>
-                  </Pressable>
-                </View>
-              </Pressable>
-            </Modal>
-          </TouchableWithoutFeedback>
-        )}
+                <Pressable style={styles.btn} onPress={makeReservation}>
+                  <Text style={styles.btnText}>Submit</Text>
+                </Pressable>
+              </View>
+            </Pressable>
+          </Modal>
+        </TouchableWithoutFeedback>
+      )}
     </View>
   );
 }
@@ -288,12 +291,12 @@ const styles = StyleSheet.create({
   },
   backButton: {
     borderRadius: 8,
-    backgroundColor: '#FF6347',
+    backgroundColor: '#F00',
     padding: 12,
     width: 50,
     height: 50,
     position: 'absolute',
-    top: 20,
+    top: 50,
     left: 20,
     zIndex: 1,
   },
@@ -338,7 +341,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     borderRadius: 8,
-    backgroundColor: '#FF6347',
+    backgroundColor: '#F00',
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginVertical: 10,
@@ -352,7 +355,7 @@ const styles = StyleSheet.create({
   inputControlGuest: {
     height: 40,
     backgroundColor: 'black',
-    borderColor: '#FF6347',
+    borderColor: '#F00',
     borderWidth: 1,
     paddingHorizontal: 16,
     fontSize: 15,
@@ -383,6 +386,22 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   menuButton: {
-    backgroundColor: "red",
+    borderRadius: 16,
+    backgroundColor: "#F00",
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+  },
+  menuText: {
+    color: "#FFF",
+    textAlign: "center",
+    fontSize: 16,
+    fontStyle: "normal",
+    fontWeight: "700",
+    lineHeight: 24,
+  },
+  icon: {
+    width: 40,
+    height: 40,
+    marginTop: 8,
   },
 });

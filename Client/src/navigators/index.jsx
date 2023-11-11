@@ -13,6 +13,7 @@ import {
     NewPasswordScreen,
     RegisterScreen,
     MenuContainer,
+    EnterEmailForReset
 } from "../screens";
 
 
@@ -44,6 +45,10 @@ const Navigators = () => {
                     <Stack.Screen
                         name="VerificationCodeScreen"
                         component={VerificationCodeScreen}
+                    />
+                    <Stack.Screen
+                        name="EnterEmailForReset"
+                        component={EnterEmailForReset}
                     />
                     <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
 

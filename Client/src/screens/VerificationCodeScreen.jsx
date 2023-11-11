@@ -97,11 +97,11 @@ const verifyEmail = async () => {
           timeout={3000}
         />
       )}
-      <View style={styles.loginParent}>
+     <View style={styles.loginParent}>
         <Text style={styles.login1}>Verification Code</Text>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Verification Code</Text>
+          <Text style={styles.label}>Enter your Code</Text>
           <View style={styles.codeInputContainer}>
             {inputs.map((inp, index) => (
               <TextInput
@@ -111,17 +111,17 @@ const verifyEmail = async () => {
                 placeholder="0"
                 placeholderTextColor="#c8c8c8"
                 keyboardType="numeric"
+                returnKeyType="done"
                 maxLength={1}
                 style={styles.codeInput}
                 ref={inputRefs[index]}
-
               />
             ))}
           </View>
         </View>
 
-        <TouchableOpacity  style={styles.loginButtonContainer} onPress={verifyEmail}>
-          <Text style={styles.loginButtonText} >Verify Code</Text>
+        <TouchableOpacity style={styles.verifyButtonContainer} onPress={verifyEmail}>
+          <Text style={styles.verifyButtonText}>Verify Code</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginParent: {
-    marginTop: 16,
+    marginTop: 5,
     padding: 20,
     width: '100%',
     height: '70%',
@@ -146,19 +146,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 30,
     textAlign: 'center',
-    paddingTop: 35,
+    marginBottom: 50,
   },
   inputContainer: {
-    marginBottom: 16,
+    marginBottom: 30,
   },
   label: {
     color: Colors.DEFAULT_WHITE,
-    fontSize: 20,
-    marginBottom: 8,
+    fontSize: 18,
+    marginBottom: 10,
+    textAlign: 'center',
   },
   codeInputContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   codeInput: {
     flex: 1,
@@ -169,16 +170,17 @@ const styles = StyleSheet.create({
     color: Colors.DEFAULT_WHITE,
     fontSize: 18,
     textAlign: 'center',
+    marginRight: 10,
   },
-  loginButtonContainer: {
+  verifyButtonContainer: {
     backgroundColor: Colors.DEFAULT_RED,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
-    padding: 10,
-    marginTop: 48,
+    padding: 15,
+    marginTop: 20,
   },
-  loginButtonText: {
+  verifyButtonText: {
     color: Colors.DEFAULT_WHITE,
     fontWeight: 'bold',
     fontSize: 20,

@@ -48,6 +48,9 @@ export default function LoginScreen({ navigation }) {
     }
     return true;
   };
+  const forgetPassword = () => {
+    navigation.navigate("EnterEmailForReset");
+  }
 
 
   async function registerForPushNotificationsAsync(customerID) {
@@ -100,6 +103,7 @@ export default function LoginScreen({ navigation }) {
           dispatch(setId(data.customer.id));
           dispatch(setFullname(data.customer.fullname));
           dispatch(setEmail(data.customer.email));
+          await registerForPushNotificationsAsync(data.customer.id);
           console.log("Customer logged successfully");
           setShowToast1(true);
           if (toastRef.current) {
@@ -186,7 +190,7 @@ export default function LoginScreen({ navigation }) {
               secureTextEntry={true}
             />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={forgetPassword}>
             <Text style={{ color: Colors.DEFAULT_RED }}>Forgot Password?</Text>
           </TouchableOpacity>
           <View style={styles.formAction}>

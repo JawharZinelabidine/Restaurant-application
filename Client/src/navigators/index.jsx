@@ -13,6 +13,7 @@ import {
     NewPasswordScreen,
     RegisterScreen,
     MenuContainer,
+    ReviewForm
 } from "../screens";
 
 
@@ -46,6 +47,7 @@ const Navigators = () => {
                         component={VerificationCodeScreen}
                     />
                     <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
+                    <Stack.Screen name="ReviewForm" component={ReviewForm} />
 
                     <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
                     <Stack.Screen name="MenuContainer" component={MenuContainer} options={{ presentation: "transparentModal" }} />

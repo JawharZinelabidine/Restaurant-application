@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 
 
-import { setNotificationBadge } from '../../src/features/notificationSlice';
+import { setNotificationBadge, setReviewNotificationBadge } from '../../src/features/notificationSlice';
 
 
 

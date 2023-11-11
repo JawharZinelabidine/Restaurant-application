@@ -14,6 +14,7 @@ import RegisterScreen from "./RegisterScreen.jsx";
 import MenuContainer from "./MenuContainer";
 import Upcoming from './Upcoming.jsx'
 import History from './History.jsx'
+import ReviewForm from './ReviewForm.jsx'
 
 
 
@@ -35,5 +36,6 @@ export {
   Upcoming,
   History,
   MenuContainer,
+  ReviewForm
 
 };

@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen } from '../screens'
+import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen, ReviewForm } from '../screens'
 import { AntDesign } from '@expo/vector-icons'
 import { Colors } from "../contants";
 import { BlurView } from '@react-native-community/blur'
@@ -10,7 +10,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import * as Notifications from 'expo-notifications';
 import store from "../features/store";
-import { setNotificationBadge, setToast } from '../../src/features/notificationSlice';
+import { setNotificationBadge, setToast, setReviewNotificationBadge } from '../../src/features/notificationSlice';
 import axios from '../../services/axiosInterceptor.jsx';
 import * as SecureStore from 'expo-secure-store';
 
@@ -30,6 +30,19 @@ const checkNotification = async () => {
     }
 }
 
+const checkReview = async () => {
+    try {
+        const token = await SecureStore.getItemAsync('token')
+        if (token) {
+            const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/notification`)
+            console.log('review:', data)
+            store.dispatch(setReviewNotificationBadge(data))
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
         shouldShowAlert: true,
@@ -42,7 +55,15 @@ Notifications.setNotificationHandler({
 const notificationService = {
     handleNotification: (notification) => {
         store.dispatch(setToast(true))
-        checkNotification()
+
+        if (notification.request.content.data.route === 'Review') {
+            console.log('here')
+            checkReview()
+        }
+        if (notification.request.content.data.route === 'Reservation' || notification.request.content.data.route === 'History') {
+            checkNotification()
+        }
+
 
     },
 };
@@ -67,7 +88,7 @@ const TabNavigator = ({ navigation }) => {
 
     const isFocused = useIsFocused();
 
-    const { notificationBadge } = useSelector(state => state.notification);
+    const { notificationBadge, reviewNotificationBadge } = useSelector(state => state.notification);
 
 
 
@@ -79,7 +100,8 @@ const TabNavigator = ({ navigation }) => {
 
 
             );
-            checkNotification()
+            // checkNotification()
+            // checkReview()
 
             const notificationResponseSubscription = Notifications.addNotificationResponseReceivedListener(
                 (response) => notificationResponseService.handleNotificationResponse(response, navigation)
@@ -90,7 +112,8 @@ const TabNavigator = ({ navigation }) => {
             };
 
         }
-        checkNotification()
+        // checkNotification()
+        // checkReview()
 
 
     }, [isFocused])
@@ -150,12 +173,23 @@ const TabNavigator = ({ navigation }) => {
                     <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
                 )
             }}></Tab.Screen>
-            <Tab.Screen name={"Reviews"} component={LoginScreen} options={{
+            <Tab.Screen name={"Reviews"} component={ReviewForm} options={{
 
                 tabBarIcon: ({ focused, color, size }) => (
                     <AntDesign name="staro" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
 
-                )
+                ),
+                tabBarBadge: false,
+                tabBarBadgeStyle: {
+                    backgroundColor: reviewNotificationBadge === true ? "red" : "transparent",
+                    top: 19,
+                    right: 7,
+                    maxWidth: 15,
+                    maxHeight: 15,
+                    fontSize: 8,
+                    lineHeight: 9,
+                    alignSelf: undefined,
+                }
             }} ></Tab.Screen>
             <Tab.Screen name={"LoginScreen"} component={LoginScreen} options={{
 

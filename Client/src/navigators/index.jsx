@@ -13,7 +13,8 @@ import {
     NewPasswordScreen,
     RegisterScreen,
     MenuContainer,
-    ReviewForm
+    ReviewForm,
+    ReservationReviews
 } from "../screens";
 
 
@@ -48,6 +49,7 @@ const Navigators = () => {
                     />
                     <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
                     <Stack.Screen name="ReviewForm" component={ReviewForm} />
+                    <Stack.Screen name="ReservationReviews" component={ReservationReviews} />
 
                     <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
                     <Stack.Screen name="MenuContainer" component={MenuContainer} options={{ presentation: "transparentModal" }} />

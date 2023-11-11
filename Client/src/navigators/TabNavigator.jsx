@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen, ReviewForm } from '../screens'
+import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen, ReviewForm, ReservationReviews } from '../screens'
 import { AntDesign } from '@expo/vector-icons'
 import { Colors } from "../contants";
 import { BlurView } from '@react-native-community/blur'
@@ -173,7 +173,7 @@ const TabNavigator = ({ navigation }) => {
                     <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
                 )
             }}></Tab.Screen>
-            <Tab.Screen name={"Reviews"} component={ReviewForm} options={{
+            <Tab.Screen name={"Reviews"} component={ReservationReviews} options={{
 
                 tabBarIcon: ({ focused, color, size }) => (
                     <AntDesign name="staro" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />

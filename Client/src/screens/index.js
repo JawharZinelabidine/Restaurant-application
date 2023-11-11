@@ -15,6 +15,7 @@ import MenuContainer from "./MenuContainer";
 import Upcoming from './Upcoming.jsx'
 import History from './History.jsx'
 import ReviewForm from './ReviewForm.jsx'
+import ReservationReviews from './ReservationReviews.jsx'
 
 
 
@@ -36,6 +37,7 @@ export {
   Upcoming,
   History,
   MenuContainer,
-  ReviewForm
+  ReviewForm,
+  ReservationReviews
 
 };

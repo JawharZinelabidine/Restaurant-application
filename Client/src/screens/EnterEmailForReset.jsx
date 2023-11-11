@@ -14,6 +14,9 @@ import ToastMessage from '../Component/ToastMessage';
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const EnterEmailForReset = ({ navigation }) => {
+
+
+
     const emailRef = useRef();
     const toastRef = useRef(null);
   
@@ -23,10 +26,10 @@ const EnterEmailForReset = ({ navigation }) => {
     const handleChangeEmail = (text) => {
       setEmail(text);
     };
-  
     const sendResetEmail = async () => {
         try {
-            const response = await axios.post(`http://${apiUrl}:3000/api/customers/forgotpassword`,  email );
+          const response = await axios.post(`http://${apiUrl}:3000/api/customers/forgotpassword`,  {email} );
+          navigation.navigate("EnterCodeForReset" , { email })
           if (response.status === 200) {
             setShowToast(true);
             if (toastRef.current) {
@@ -36,14 +39,14 @@ const EnterEmailForReset = ({ navigation }) => {
             console.log('Error sending reset email:', response.status);
           }
         } catch (error) {
-            console.error('Error sending reset email:', error);
-            if (error.response && error.response.status === 404) {
-              console.log('Email not found. Please double-check your email address.');
-            } else {
-              console.log('Unexpected error:', error.message);
-            }
+          console.error('Error sending reset email:', error);
+          if (error.response && error.response.status === 404) {
+            console.log('Email not found. Please double-check your email address.');
+          } else {
+            console.log('Unexpected error:', error.message);
           }
-        };
+        }
+      };
 
  
     return (

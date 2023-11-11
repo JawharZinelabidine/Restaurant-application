@@ -11,12 +11,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Colors, Images, Fonts } from "../contants";
 import { Display } from "../utils";
 
-export default function Splashscreen({navigation}) {
+export default function Splashscreen({ navigation }) {
   const [buttonPressed, setButtonPressed] = useState(false);
 
   const handleButtonPress = () => {
     setButtonPressed(true);
-    navigation.navigate("TabNav")
+    navigation.navigate("TabNav");
   };
 
   return (
@@ -40,14 +40,14 @@ export default function Splashscreen({navigation}) {
           <Text style={styles.mainText}>
             Food so good, it's a hug for your taste buds.
           </Text>
-          <Text style={styles.secondText}>"Reserve the moment, savor the experience."</Text>
+          <Text style={styles.secondText}>
+            "Reserve the moment, savor the experience."
+          </Text>
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableHighlight
-            style={
-              styles.button
-            }
+            style={styles.button}
             onPress={handleButtonPress}
             underlayColor="red"
           >
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageContainer: {
-    height:Display.setHeight(60),
-    width:Display.setWidth(60),
+    height: Display.setHeight(60),
+    width: Display.setWidth(60),
   },
   linearGradient: {
     position: "absolute",

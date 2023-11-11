@@ -22,12 +22,14 @@ import moment from "moment";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
+import ReviewDisplay from "./ReviewDisplay.jsx";
 
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
   const [showForm, setShowForm] = useState(false);
+
   const [reservation, setReservation] = useState({
     date: "",
     time: "",
@@ -191,7 +193,16 @@ export default function RestaurantDetails({ route }) {
           onPress={toggleForm}
         >
           <Text style={styles.menuText}>Make a Reservation</Text>
+
         </TouchableOpacity>
+        <ReviewDisplay
+          review={{
+            title: "Great Experience",
+            name: "John Doe",
+            body: "I had a wonderful time at this restaurant. The food was delicious, and the service was excellent!"
+          }}
+        />
+
       </ScrollView>
       {isModalOpen && (
         <TouchableWithoutFeedback onPress={toggleForm}>
@@ -263,6 +274,7 @@ export default function RestaurantDetails({ route }) {
               </View>
             </Pressable>
           </Modal>
+
         </TouchableWithoutFeedback>
       )}
     </View>
@@ -391,5 +403,5 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     marginTop: 8,
-  },
+  }
 });

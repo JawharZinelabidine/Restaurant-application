@@ -1,18 +1,75 @@
 import { Rating, AirbnbRating, TapRatingProps } from 'react-native-ratings';
-
 import { View, Text, StyleSheet, ScrollView, Modal, TextInput, TouchableOpacity } from "react-native";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import axios from '../../services/axiosInterceptor'
 
 
 
+export default function ReviewForm({ route, navigation }) {
+    const {
+        id,
+        date,
+        time,
+        customerId,
+        restaurantId,
+        notification,
+        canReview,
+        status,
+    } = route.params.reservation;
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+    const toastRef = useRef(null);
 
-export default function ReviewForm({ navigation }) {
+    const [showToast, setShowToast] = useState(false);
+    const [showToast2, setShowToast2] = useState(false);
+    const [rating, setRating] = useState(null)
+    const [review, setReview] = useState({ review_title: '', review_body: '', rating: null })
 
-    const [rating, setRating] = useState()
+    const ratingCompleted = (Rating) => {
+        setRating(Rating)
+        console.log(rating)
+    }
 
-    const ratingCompleted = (rating) => {
-        console.log("rating is: " + rating)
-        setRating(rating)
+
+    const handleChange = (name, value) => {
+        setReview((values) => ({ ...values, [name]: value, rating: rating }));
+    };
+
+    const handleSubmit = async () => {
+        if (review.review_title && review.review_body) {
+            try {
+                await axios.post(`http://${apiUrl}:3000/api/reviews/${restaurantId}`, review)
+
+            } catch (error) {
+                console.log(error)
+                if (error.response.status === 401) {
+                    setShowToast(true);
+                    if (toastRef.current) {
+                        toastRef.current.show();
+                    }
+                }
+            }
+        }
+
+        try {
+            console.log(rating)
+            await axios.put(`http://${apiUrl}:3000/api/restaurants/${restaurantId}/${id}`, { rating: rating })
+            setShowToast2(true)
+            if (toastRef.current) {
+                toastRef.current.show();
+            }
+            navigation.navigate("Home")
+        } catch (error) {
+            console.log(error)
+            if (error.response.status === 401) {
+                setSpotsRemaining("You need to be logged in");
+                setShowToast(true);
+                if (toastRef.current) {
+                    toastRef.current.show();
+                }
+            }
+
+        }
+
     }
 
 
@@ -20,7 +77,22 @@ export default function ReviewForm({ navigation }) {
     return (
 
         <View style={styles.container} >
-
+            {showToast && (
+                <ToastMessage
+                    ref={toastRef}
+                    type="danger"
+                    text="You need to be logged in"
+                    timeout={3000}
+                />
+            )}
+            {showToast && (
+                <ToastMessage
+                    ref={toastRef}
+                    type="success"
+                    text='Rating submitted!'
+                    timeout={3000}
+                />
+            )}
 
 
             <Text>Restaurant_name would love your feedback!</Text>
@@ -38,17 +110,20 @@ export default function ReviewForm({ navigation }) {
 
                     style={styles.title}
                     placeholder='Write your review title'
+                    onChangeText={(text) => handleChange("review_title", text)}
+
                 />
 
                 <TextInput
 
                     style={styles.body}
                     placeholder='How was your experience?'
+                    onChangeText={(text) => handleChange("review_body", text)}
 
                 />
 
                 <TouchableOpacity style={styles.btn} >
-                    <Text style={styles.btnText}>Submit</Text>
+                    <Text style={styles.btnText} onPress={handleSubmit}>Submit</Text>
 
                 </TouchableOpacity>
             </View>)}

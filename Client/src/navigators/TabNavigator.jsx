@@ -24,19 +24,19 @@ const checkNotification = async () => {
     if (token) {
       const { data } = await axios.get(`http://${apiUrl}:3000/api/customers/notification`)
       store.dispatch(setNotificationBadge(data))
+
     }
   } catch (error) {
     console.log(error)
   }
 }
 
-const checkReview = async () => {
+const checkReview = async (id) => {
   try {
     const token = await SecureStore.getItemAsync('token')
     if (token) {
-      const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/notification`)
-      console.log('review:', data)
-      store.dispatch(setReviewNotificationBadge(data))
+      const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/notification/${id}`)
+      store.dispatch(setReviewNotificationBadge(data.notification))
     }
   } catch (error) {
     console.log(error)
@@ -56,11 +56,12 @@ const notificationService = {
   handleNotification: (notification) => {
     store.dispatch(setToast(true))
 
-    if (notification.request.content.data.route === 'Review') {
-      console.log('here')
-      checkReview()
+    if (notification.request.content.data.route === 'ReservationReviews') {
+      const id = notification.request.content.data.id
+      checkReview(id)
     }
     if (notification.request.content.data.route === 'Reservation' || notification.request.content.data.route === 'History') {
+
       checkNotification()
     }
 
@@ -94,25 +95,26 @@ const TabNavigator = ({ navigation }) => {
 
 
   useEffect(() => {
-    if (isFocused) {
-      Notifications.addNotificationReceivedListener(
-        notificationService.handleNotification
 
 
-      );
-
-      const notificationResponseSubscription = Notifications.addNotificationResponseReceivedListener(
-        (response) => notificationResponseService.handleNotificationResponse(response, navigation)
-      );
-
-      return () => {
-        notificationResponseSubscription.remove();
-      };
-
-    }
+    Notifications.addNotificationReceivedListener(
+      notificationService.handleNotification
 
 
-  }, [isFocused])
+    );
+
+    const notificationResponseSubscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => notificationResponseService.handleNotificationResponse(response, navigation)
+    );
+
+    return () => {
+      notificationResponseSubscription.remove();
+    };
+
+
+
+
+  }, [])
 
   return (
 
@@ -169,7 +171,7 @@ const TabNavigator = ({ navigation }) => {
           <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
         )
       }}></Tab.Screen>
-      <Tab.Screen name={"Reviews"} component={ReservationReviews} options={{
+      <Tab.Screen name={"ReservationReviews"} component={ReservationReviews} options={{
 
         tabBarIcon: ({ focused, color, size }) => (
           <AntDesign name="staro" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />

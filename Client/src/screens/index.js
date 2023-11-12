@@ -9,11 +9,15 @@ import RestaurantCard from "../Component/RestaurantCard";
 import RestaurantDetails from "./RestaurantDetails";
 import ForgetPasswordEmail from "./ForgetPasswordEmail";
 import VerificationCodeScreen from "./VerificationCodeScreen";
-import NewPasswordScreen from "./NewPasswordScreen.jsx";
 import RegisterScreen from "./RegisterScreen.jsx";
 import MenuContainer from "./MenuContainer";
 import Upcoming from './Upcoming.jsx'
 import History from './History.jsx'
+import ReviewForm from './ReviewForm.jsx'
+import ReservationReviews from './ReservationReviews.jsx'
+import EnterEmailForReset from "./EnterEmailForReset.jsx";
+import EnterCodeForReset from "./EnterCodeForReset.jsx";
+import UpdatePassword from "./UpdatePassword.jsx";
 
 
 
@@ -30,10 +34,14 @@ export {
   RestaurantDetails,
   ForgetPasswordEmail,
   VerificationCodeScreen,
-  NewPasswordScreen,
   RegisterScreen,
   Upcoming,
   History,
   MenuContainer,
+  ReviewForm,
+  ReservationReviews,
+  EnterEmailForReset,
+  EnterCodeForReset,
+  UpdatePassword
 
 };

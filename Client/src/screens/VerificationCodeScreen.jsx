@@ -1,28 +1,34 @@
-import { Colors } from '../contants';
-import React, { useState, useRef, useEffect } from 'react';
-import { Text, StyleSheet, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import { Colors } from "../contants";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import axios from "axios";
 import ToastMessage from "../Component/ToastMessage";
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-const inputs = Array(4).fill("")
-let newInputIndex = 0
+const inputs = Array(4).fill("");
+let newInputIndex = 0;
 
 const isObjValid = (obj) => {
-  return Object.values(obj).every(val => val.trim())
-}
+  return Object.values(obj).every((val) => val.trim());
+};
 
 const VerificationCodeScreen = ({ navigation }) => {
   const inputRefs = inputs.map(() => useRef());
   const toastRef = useRef(null);
 
   const [OTP, setOTP] = useState({ 0: "", 1: "", 2: "", 3: "" });
-  const [nextInputIndex, setNextInputIndex] = useState(0)
+  const [nextInputIndex, setNextInputIndex] = useState(0);
   const [showToast, setShowToast] = useState(false);
   const [showToast1, setShowToast1] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
   const [showToast3, setShowToast3] = useState(false);
-
 
   const handleChangeText = (text, index) => {
     const newOTP = { ...OTP };
@@ -33,26 +39,27 @@ const VerificationCodeScreen = ({ navigation }) => {
     if (!text) newInputIndex = index === 0 ? 0 : index - 1;
     else newInputIndex = index === lastInputIndex ? lastInputIndex : index + 1;
 
-    setNextInputIndex(newInputIndex)
-
-  }
+    setNextInputIndex(newInputIndex);
+  };
 
   useEffect(() => {
     inputRefs[nextInputIndex].current.focus();
   }, [nextInputIndex]);
 
   const verifyEmail = async () => {
-    const otp = Object.values(OTP).join('');
+    const otp = Object.values(OTP).join("");
     try {
-      const response = await axios.get(`http://${apiUrl}:3000/api/customers/verify/${otp}`);
+      const response = await axios.get(
+        `http://${apiUrl}:3000/api/customers/verify/${otp}`
+      );
 
       if (response.status === 200) {
-        navigation.navigate('LoginScreen');
+        navigation.navigate("LoginScreen");
         setShowToast(true);
         if (toastRef.current) {
           toastRef.current.show();
         }
-        return false
+        return false;
       } else {
         setShowToast1(true);
         if (toastRef.current) {
@@ -68,8 +75,6 @@ const VerificationCodeScreen = ({ navigation }) => {
       return false;
     }
   };
-
-
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -101,7 +106,7 @@ const VerificationCodeScreen = ({ navigation }) => {
         <Text style={styles.login1}>Verification Code</Text>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Verification Code</Text>
+          <Text style={styles.label}>Enter your Code</Text>
           <View style={styles.codeInputContainer}>
             {inputs.map((inp, index) => (
               <TextInput
@@ -111,17 +116,20 @@ const VerificationCodeScreen = ({ navigation }) => {
                 placeholder="0"
                 placeholderTextColor="#c8c8c8"
                 keyboardType="numeric"
+                returnKeyType="done"
                 maxLength={1}
                 style={styles.codeInput}
                 ref={inputRefs[index]}
-
               />
             ))}
           </View>
         </View>
 
-        <TouchableOpacity style={styles.loginButtonContainer} onPress={verifyEmail}>
-          <Text style={styles.loginButtonText} >Verify Code</Text>
+        <TouchableOpacity
+          style={styles.verifyButtonContainer}
+          onPress={verifyEmail}
+        >
+          <Text style={styles.verifyButtonText}>Verify Code</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -132,33 +140,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   loginParent: {
-    marginTop: 16,
+    marginTop: 5,
     padding: 20,
-    width: '100%',
-    height: '70%',
+    width: "100%",
+    height: "70%",
   },
   login1: {
     color: Colors.DEFAULT_RED,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 30,
-    textAlign: 'center',
-    paddingTop: 35,
+    textAlign: "center",
+    marginBottom: 50,
   },
   inputContainer: {
-    marginBottom: 16,
+    marginBottom: 30,
   },
   label: {
     color: Colors.DEFAULT_WHITE,
-    fontSize: 20,
-    marginBottom: 8,
+    fontSize: 18,
+    marginBottom: 10,
+    textAlign: "center",
   },
   codeInputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   codeInput: {
     flex: 1,
@@ -168,19 +177,20 @@ const styles = StyleSheet.create({
     padding: 16,
     color: Colors.DEFAULT_WHITE,
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
+    marginRight: 10,
   },
-  loginButtonContainer: {
+  verifyButtonContainer: {
     backgroundColor: Colors.DEFAULT_RED,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 20,
-    padding: 10,
-    marginTop: 48,
+    padding: 15,
+    marginTop: 20,
   },
-  loginButtonText: {
+  verifyButtonText: {
     color: Colors.DEFAULT_WHITE,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 20,
   },
 });

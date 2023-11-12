@@ -10,9 +10,13 @@ import {
     RestaurantDetails,
     ForgetPasswordEmail,
     VerificationCodeScreen,
-    NewPasswordScreen,
     RegisterScreen,
     MenuContainer,
+    ReviewForm,
+    ReservationReviews,
+    EnterEmailForReset,
+    EnterCodeForReset,
+    UpdatePassword
 } from "../screens";
 
 
@@ -46,6 +50,14 @@ const Navigators = () => {
                         component={VerificationCodeScreen}
                     />
                     <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
+                    <Stack.Screen name="ReviewForm" component={ReviewForm} />
+                    <Stack.Screen name="ReservationReviews" component={ReservationReviews} />
+                    <Stack.Screen
+                        name="EnterEmailForReset"
+                        component={EnterEmailForReset}
+                    />
+                    <Stack.Screen name="EnterCodeForReset" component={EnterCodeForReset} />
+                    <Stack.Screen name="UpdatePassword" component={UpdatePassword} />
 
                     <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
                     <Stack.Screen name="MenuContainer" component={MenuContainer} options={{ presentation: "transparentModal" }} />

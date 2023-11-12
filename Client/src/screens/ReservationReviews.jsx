@@ -5,6 +5,8 @@ import ReservationReviewList from './ReservationReviewList.jsx'
 import axios from '../../services/axiosInterceptor.jsx';
 import { useIsFocused } from '@react-navigation/native';
 import { Display } from "../utils";
+import { setReviewNotificationBadge } from "../../src/features/notificationSlice";
+import { useDispatch } from 'react-redux';
 
 
 
@@ -13,7 +15,7 @@ export default function ReservationReviews({ navigation }) {
 
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
     const isFocused = useIsFocused();
-
+    const dispatch = useDispatch()
 
     const [pending, setPending] = useState([])
     const [restaurants, setRestaurants] = useState([])
@@ -23,7 +25,6 @@ export default function ReservationReviews({ navigation }) {
 
             const { data } = await axios.get(`http://${apiUrl}:3000/api/reviews`)
             setPending(data)
-            console.log(pending)
         }
         catch (error) {
             console.log(error)
@@ -43,10 +44,26 @@ export default function ReservationReviews({ navigation }) {
         }
     }
 
+    const removeNotificationBadge = async () => {
+        try {
+            const { data } = await axios.put(`http://${apiUrl}:3000/api/reservations/notification`);
+            dispatch(setReviewNotificationBadge(data));
+            console.log('removed')
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleButtonPress = (reservation) => {
+        console.log('aaaaaaaaaaaaaa')
+        navigation.navigate("ReviewForm", { reservation });
+    };
+
     useEffect(() => {
         if (isFocused) {
             getPendingReviews()
             findRestaurantName()
+            removeNotificationBadge()
         }
     }, [isFocused])
 
@@ -63,7 +80,8 @@ export default function ReservationReviews({ navigation }) {
                     <View key={reservation.id} style={styles.card}
                     >
 
-                        <ReservationReviewList reservation={reservation} restaurants={restaurants}></ReservationReviewList>
+                        <ReservationReviewList reservation={reservation} restaurants={restaurants}
+                            onPress={(reservation) => handleButtonPress(reservation)} ></ReservationReviewList>
                     </View>
                 ))}
 

@@ -23,6 +23,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
 import ReviewDisplay from "./ReviewDisplay.jsx";
+import ReviewModal from "./ReviewModal.jsx";
 
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
@@ -41,7 +42,12 @@ export default function RestaurantDetails({ route }) {
   const [showToast2, setShowToast2] = useState(false);
   const [spotsRemaining, setSpotsRemaining] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const toastRef = useRef(null);
+
+  const toggleReviewModal = () => {
+    setIsReviewModalOpen(!isReviewModalOpen);
+  };
 
   const {
     id,
@@ -195,14 +201,17 @@ export default function RestaurantDetails({ route }) {
           <Text style={styles.menuText}>Make a Reservation</Text>
 
         </TouchableOpacity>
+        <TouchableOpacity onPress={toggleReviewModal}>
         <ReviewDisplay
           review={{
             title: "Great Experience",
             name: "John Doe",
-            body: "I had a wonderful time at this restaurant. The food was delicious, and the service was excellent!"
+            body:
+              "I had a wonderful time at this restaurant. The food was delicious, and the service was excellent!",
           }}
         />
-
+      </TouchableOpacity>
+        <View style={styles.topedite}></View>
       </ScrollView>
       {isModalOpen && (
         <TouchableWithoutFeedback onPress={toggleForm}>
@@ -277,6 +286,13 @@ export default function RestaurantDetails({ route }) {
 
         </TouchableWithoutFeedback>
       )}
+            <ReviewModal
+        isVisible={isReviewModalOpen}
+        reviews={{
+        title: "Review Title", name: "Reviewer Name", body: "Review Body" 
+        }}
+        onClose={toggleReviewModal}
+      />
     </View>
   );
 }
@@ -403,5 +419,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     marginTop: 8,
-  }
+  },
+  topedite: {
+    marginTop: 100,
+
+  },
 });

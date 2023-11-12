@@ -1,124 +1,65 @@
-import { StyleSheet, View, ScrollView, Text } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "../contants";
 import { Color, FontSize, Border } from "../../GlobalStyles";
-import axios from '../../services/axiosInterceptor.jsx';
-import store from '../features/store'
 import { Display } from "../utils";
-import HistoryList from './HistoryList.jsx'
-import React, { useState, useEffect } from 'react';
-import { useIsFocused } from '@react-navigation/native';
-
-
-import { setNotificationBadge, setReviewNotificationBadge } from '../../src/features/notificationSlice';
+import moment from 'moment'
+import React from 'react'
 
 
 
-const History = () => {
+const ReservationReviewList = ({ reservation, restaurants, onPress }) => {
 
 
-
-    const [expiredReservations, setExpiredReservations] = useState([])
-    const [restaurants, setRestaurants] = useState([])
-    const [logInMessage, setLogInMessage] = useState(false)
-
-
-    const isFocused = useIsFocused();
+    const handleButtonPress = () => {
+        onPress(reservation);
+    };
 
 
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+    const restaurantName = restaurants.slice().find((restaurant) => {
+        return restaurant.id === reservation.restaurantId
+    })
 
-
-    const customer = store.getState().customer
-
-    const fetchHistory = async () => {
-
-        try {
-            const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/expired`)
-            setExpiredReservations(data)
-        } catch (error) {
-            console.log(error)
-            if (error.response.status === 401) {
-                setExpiredReservations([])
-            }
-        }
-    }
-
-
-
-    const findRestaurantName = async () => {
-        try {
-
-            const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`)
-            setRestaurants(data)
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const removeNotificationBadge = async () => {
-        try {
-            const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/notification`)
-            store.dispatch(setNotificationBadge(data))
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-
-
-    useEffect(() => {
-        if (isFocused) {
-            fetchHistory()
-            findRestaurantName()
-
-        }
-
-    }, [isFocused])
 
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.constainer2}
-                contentContainerStyle={styles.scrollViewContent}
-            >
-                {expiredReservations.map((reserv) => (
-                    <View key={reserv.id} style={styles.card}>
-                        <HistoryList reservation={reserv} restaurants={restaurants}></HistoryList>
-                    </View>
-                ))}
-
-                {
-                    logInMessage && (
-                        <Text style={{ color: '#ffffff' }}>Log in to see your upcoming reservations!</Text>
-                    )
-                }
 
 
-            </ScrollView>
-            <View style={styles.topedite}></View>
+        <TouchableOpacity onPress={handleButtonPress}>
 
-        </View>
+            <LinearGradient
+                style={[styles.rectangleLineargradient, styles.groupIconLayout]}
+                locations={[0, 1]}
+                colors={["#000", "rgba(0, 0, 0, 0)"]}
+            />
+
+            <Text style={[styles.rosemarys, styles.rosemarysLayout]}>{restaurantName?.name}</Text>
+            <Text style={[styles.text, styles.textPosition]}>{moment(reservation.date).format("MMM Do YY")}</Text>
+            <Text style={[styles.pm, styles.rosemarysTypo]}>{moment(reservation.time).utcOffset('-000').format('LT')}</Text>
+
+
+        </TouchableOpacity>
+
 
     )
 }
 
-export default History
+export default ReservationReviewList
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: Colors.primaryBlackHex,
 
 
     },
-
     constainer2: {
         flex: 1,
         backgroundColor: Colors.DARK_ONE,
         marginTop: -150,
+
+    },
+    topedite: {
+        marginTop: 100,
 
     },
     scrollViewContent: {
@@ -127,14 +68,16 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 10,
         margin: 5,
-        padding: 5,
+        padding: 2,
         width: Display.setWidth(90),
         marginBottom: 100,
+
     },
+
+
     historyTypo: {
         justifyContent: "center",
         alignItems: "center",
-        display: "flex",
         textAlign: "center",
         color: Color.colorWhite,
         fontWeight: "700",
@@ -372,9 +315,5 @@ const styles = StyleSheet.create({
         height: 844,
         overflow: "hidden",
         backgroundColor: Color.colorWhite,
-    },
-    topedite: {
-        marginTop: 100,
-
     },
 })

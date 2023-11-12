@@ -12,6 +12,8 @@ import {
     VerificationCodeScreen,
     RegisterScreen,
     MenuContainer,
+    ReviewForm,
+    ReservationReviews,
     EnterEmailForReset,
     EnterCodeForReset,
     UpdatePassword
@@ -47,6 +49,8 @@ const Navigators = () => {
                         name="VerificationCodeScreen"
                         component={VerificationCodeScreen}
                     />
+                    <Stack.Screen name="ReviewForm" component={ReviewForm} />
+                    <Stack.Screen name="ReservationReviews" component={ReservationReviews} />
                     <Stack.Screen
                         name="EnterEmailForReset"
                         component={EnterEmailForReset}

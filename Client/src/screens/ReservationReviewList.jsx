@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "../contants";
 import { Color, FontSize, Border } from "../../GlobalStyles";
@@ -8,10 +8,12 @@ import React from 'react'
 
 
 
-const ReservationReviewList = ({ reservation, restaurants }) => {
+const ReservationReviewList = ({ reservation, restaurants, onPress }) => {
 
 
-
+    const handleButtonPress = () => {
+        onPress(reservation);
+    };
 
 
     const restaurantName = restaurants.slice().find((restaurant) => {
@@ -22,7 +24,7 @@ const ReservationReviewList = ({ reservation, restaurants }) => {
     return (
 
 
-        <>
+        <TouchableOpacity onPress={handleButtonPress}>
 
             <LinearGradient
                 style={[styles.rectangleLineargradient, styles.groupIconLayout]}
@@ -30,13 +32,12 @@ const ReservationReviewList = ({ reservation, restaurants }) => {
                 colors={["#000", "rgba(0, 0, 0, 0)"]}
             />
 
-            <Text style={[reservation.status === 'Pending' ? styles.pending : reservation.status === 'Approved' ? styles.accepted : null, styles.rosemarysTypo]}>{reservation.status}</Text>
             <Text style={[styles.rosemarys, styles.rosemarysLayout]}>{restaurantName?.name}</Text>
             <Text style={[styles.text, styles.textPosition]}>{moment(reservation.date).format("MMM Do YY")}</Text>
             <Text style={[styles.pm, styles.rosemarysTypo]}>{moment(reservation.time).utcOffset('-000').format('LT')}</Text>
 
 
-        </>
+        </TouchableOpacity>
 
 
     )

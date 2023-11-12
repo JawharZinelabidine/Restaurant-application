@@ -13,6 +13,8 @@ import RegisterScreen from "./RegisterScreen.jsx";
 import MenuContainer from "./MenuContainer";
 import Upcoming from './Upcoming.jsx'
 import History from './History.jsx'
+import ReviewForm from './ReviewForm.jsx'
+import ReservationReviews from './ReservationReviews.jsx'
 import EnterEmailForReset from "./EnterEmailForReset.jsx";
 import EnterCodeForReset from "./EnterCodeForReset.jsx";
 import UpdatePassword from "./UpdatePassword.jsx";
@@ -36,6 +38,8 @@ export {
   Upcoming,
   History,
   MenuContainer,
+  ReviewForm,
+  ReservationReviews,
   EnterEmailForReset,
   EnterCodeForReset,
   UpdatePassword

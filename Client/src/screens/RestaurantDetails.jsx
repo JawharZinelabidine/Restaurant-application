@@ -93,7 +93,13 @@ export default function RestaurantDetails({ route }) {
       console.log(error);
       console.log("Couldn't send reservation request :(", error);
       if (error.response.status === 400) {
-        if (error.response.data > 1) {
+        console.log(error.response.data.message)
+        if (error.response.data.message === 'user already has a reservation on this date.') {
+          setSpotsRemaining(
+            `You already have made a reservation on this date.`
+          );
+        }
+        else if (error.response.data > 1) {
           setSpotsRemaining(
             `This date only has ${error.response.data} reservation spots remaining`
           );
@@ -286,7 +292,7 @@ export default function RestaurantDetails({ route }) {
                   ref={toastRef}
                   type="danger"
                   text={spotsRemaining}
-                  timeout={3000}
+                  timeout={5000}
                 />
               )}
 

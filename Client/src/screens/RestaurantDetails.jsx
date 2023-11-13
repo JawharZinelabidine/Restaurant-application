@@ -238,7 +238,7 @@ export default function RestaurantDetails({ route }) {
           </View>
           <View style={styles.cardRating}>
             <AntDesign name="star" size={30} color="gold" />
-            <Text style={styles.cardRatingText}>{rating ? rating : 4.5}</Text>
+            <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
           </View>
           <Text style={styles.openingHours}>{`${moment(opening_time).format(
             "LT"

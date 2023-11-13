@@ -54,9 +54,9 @@ export default function ReservationReviews({ navigation }) {
         }
     };
 
-    const handleButtonPress = (reservation) => {
+    const handleButtonPress = (reservation, restaurants) => {
         console.log('aaaaaaaaaaaaaa')
-        navigation.navigate("ReviewForm", { reservation });
+        navigation.navigate("ReviewForm", { reservation, restaurants });
     };
 
     useEffect(() => {
@@ -81,7 +81,7 @@ export default function ReservationReviews({ navigation }) {
                     >
 
                         <ReservationReviewList reservation={reservation} restaurants={restaurants}
-                            onPress={(reservation) => handleButtonPress(reservation)} ></ReservationReviewList>
+                            onPress={(reservation) => handleButtonPress(reservation, restaurants)} ></ReservationReviewList>
                     </View>
                 ))}
 

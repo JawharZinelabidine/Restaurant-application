@@ -18,26 +18,25 @@ const ReviewModal = ({ isVisible, reviews, onClose }) => {
       >
         <View style={styles.modalContainer}>
           <ScrollView>
-          
-              <View  style={styles.reviewContainer}>
-                <Text style={styles.reviewTitle}>title</Text>
-                <Text style={styles.reviewAuthor}>name</Text>
-                <Text style={styles.reviewBody}>body</Text>
-                
+            {reviews.map((review) => (
+              <View style={styles.reviewContainer} key={review.key}>
+                <View style={styles.header}>
+
+                  <Text style={styles.reviewTitle}>{review.review_title}</Text>
+                  <View style={styles.cardRating}>
+                    <AntDesign name="star" size={20} color="gold" />
+                    <Text style={styles.cardRatingText}>{review.rating}</Text>
+                  </View>
+                </View>
+                <View style={styles.reviewDetails}>
+                  <Text style={styles.reviewLabel}>Guest:</Text>
+                  <Text style={styles.reviewAuthor}>name</Text>
+                </View>
+                <Text style={styles.reviewBody}>{review.review_body}</Text>
+
               </View>
-              <View  style={styles.reviewContainer}>
-                <Text style={styles.reviewTitle}>title</Text>
-                <Text style={styles.reviewAuthor}>name</Text>
-                <Text style={styles.reviewBody}>body</Text>
-                
-              </View>
-              <View  style={styles.reviewContainer}>
-                <Text style={styles.reviewTitle}>title</Text>
-                <Text style={styles.reviewAuthor}>name</Text>
-                <Text style={styles.reviewBody}>body</Text>
-                
-              </View>
-           
+            ))}
+
           </ScrollView>
           <Pressable style={styles.closeButton} onPress={onClose}>
             <AntDesign name="close" size={24} color={Colors.DARK_ONE} />
@@ -49,45 +48,73 @@ const ReviewModal = ({ isVisible, reviews, onClose }) => {
 };
 
 const styles = StyleSheet.create({
-    modalContainer: {
-        backgroundColor: "#FFF",
-        margin: 20,
-        padding: 24,
-        borderRadius: 10,
-        flex: 1,
-      },
-      reviewContainer: {
-        marginBottom: 20,
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        borderRadius: 10,
-        backgroundColor: "#FFF", 
-      },
-      reviewTitle: {
-        fontSize: 18,
-        fontWeight: "700",
-        color: "#333",
-        marginBottom: 8,
-      },
-      reviewBody: {
-        color: "#666",
-        marginBottom: 8,
-      },
-      reviewAuthor: {
-        fontStyle: "italic",
-        color: "#888",
-      },
-      closeButton: {
-        position: "absolute",
-        top: 10,
-        right: 10,
-      },
-    });
+  modalContainer: {
+    backgroundColor: "#FFF",
+    margin: 20,
+    padding: 24,
+    borderRadius: 10,
+    flex: 1,
+  },
+  reviewContainer: {
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderRadius: 10,
+    backgroundColor: "#FFF",
+
+  },
+  reviewTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#333",
+    marginBottom: 8,
+  },
+  reviewBody: {
+    color: "#666",
+    marginBottom: 8,
+    marginTop: 10,
+    padding: 10
+
+
+  },
+  reviewAuthor: {
+    fontStyle: "italic",
+    color: "#888",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  reviewLabel: {
+    fontWeight: "500",
+    marginRight: 5,
+  },
+
+
+  cardRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10
+  },
+  reviewDetails: {
+    flexDirection: "row",
+    marginBottom: 5,
+    padding: 10
+
+  },
+});
 
 export default ReviewModal;

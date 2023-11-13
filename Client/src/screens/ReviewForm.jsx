@@ -1,5 +1,5 @@
-import { Rating, AirbnbRating, TapRatingProps } from 'react-native-ratings';
-import { View, Text, StyleSheet, ScrollView, Modal, TextInput, TouchableOpacity } from "react-native";
+import { AirbnbRating } from 'react-native-ratings';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { useState, useRef } from 'react';
 import axios from '../../services/axiosInterceptor'
 
@@ -16,6 +16,7 @@ export default function ReviewForm({ route, navigation }) {
         canReview,
         status,
     } = route.params.reservation;
+    const restaurants = route.params.restaurants;
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
     const toastRef = useRef(null);
 
@@ -33,6 +34,8 @@ export default function ReviewForm({ route, navigation }) {
     const handleChange = (name, value) => {
         setReview((values) => ({ ...values, [name]: value, rating: rating }));
     };
+
+
 
     const handleSubmit = async () => {
         if (review.review_title && review.review_body) {
@@ -72,7 +75,9 @@ export default function ReviewForm({ route, navigation }) {
 
     }
 
-
+    const restaurantName = restaurants.slice().find((restaurant) => {
+        return restaurant.id === restaurantId
+    })
 
     return (
 
@@ -95,7 +100,7 @@ export default function ReviewForm({ route, navigation }) {
             )}
 
 
-            <Text>Restaurant_name would love your feedback!</Text>
+            <Text>{restaurantName.name} would love your feedback!</Text>
 
             <AirbnbRating
                 showRating
@@ -109,7 +114,7 @@ export default function ReviewForm({ route, navigation }) {
                 <TextInput
 
                     style={styles.title}
-                    placeholder='Write your review title'
+                    placeholder='Write your review title (optional)'
                     onChangeText={(text) => handleChange("review_title", text)}
 
                 />
@@ -117,7 +122,7 @@ export default function ReviewForm({ route, navigation }) {
                 <TextInput
 
                     style={styles.body}
-                    placeholder='How was your experience?'
+                    placeholder='How was your experience? (optional)'
                     onChangeText={(text) => handleChange("review_body", text)}
 
                 />

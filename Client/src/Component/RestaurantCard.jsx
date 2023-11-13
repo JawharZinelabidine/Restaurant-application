@@ -28,7 +28,7 @@ export default function RestaurantCard({ restaurant, onPress }) {
         <Text style={styles.cardCategory}>{spaced}</Text>
         <View style={styles.cardRating}>
           <AntDesign name="star" size={20} color="gold" />
-          <Text style={styles.cardRatingText}>4.5</Text>
+          <Text style={styles.cardRatingText}>{rating ? rating : 4.5}</Text>
         </View>
         <Text style={styles.cardStatus}>Open</Text>
       </View>

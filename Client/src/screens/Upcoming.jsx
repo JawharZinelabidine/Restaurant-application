@@ -21,21 +21,19 @@ const Upcoming = () => {
 
 
   const fetchUpcoming = async () => {
-    const token = await SecureStore.getItemAsync('token')
-    if (token) {
-      try {
-        const { data } = await axios.get(
-          `http://${apiUrl}:3000/api/reservations/upcoming`
-        );
-        setUpcomoingReservations(data);
-      } catch (error) {
-        console.log(error);
-        if (error.response.status === 401) {
-          setUpcomoingReservations([]);
-        }
+
+    try {
+      const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/upcoming`);
+      setUpcomoingReservations(data);
+
+    } catch (error) {
+      if (error.response.status === 401) {
+        setUpcomoingReservations([]);
       }
     }
-  };
+  }
+
+
 
   const findRestaurantName = async () => {
     const token = await SecureStore.getItemAsync('token')

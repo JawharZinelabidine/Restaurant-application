@@ -332,6 +332,7 @@ export default function RestaurantDetails({ route }) {
                     confirmBtnText="Confirm"
                     display="default"
                     minimumDate={new Date()}
+
                     timeZoneName={"Africa/Tunis"}
                     timeZoneOffsetInMinutes={0}
                     onChange={handleDateChange}

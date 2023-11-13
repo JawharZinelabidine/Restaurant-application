@@ -10,7 +10,14 @@ import {
 import { Colors } from "../contants";
 import { AntDesign } from "@expo/vector-icons";
 
-const ReviewModal = ({ isVisible, reviews, onClose }) => {
+const ReviewModal = ({ isVisible, reviews, onClose, customers }) => {
+
+  const latestCustomer = (customerId) => customers.slice().find((customer) => {
+    return customer.id === customerId
+  })
+
+
+
   return (
     <Modal transparent={true} visible={isVisible}>
       <Pressable
@@ -19,9 +26,8 @@ const ReviewModal = ({ isVisible, reviews, onClose }) => {
         <View style={styles.modalContainer}>
           <ScrollView>
             {reviews.map((review) => (
-              <View style={styles.reviewContainer} key={review.key}>
+              <View style={styles.reviewContainer} key={review.id}>
                 <View style={styles.header}>
-
                   <Text style={styles.reviewTitle}>{review.review_title}</Text>
                   <View style={styles.cardRating}>
                     <AntDesign name="star" size={20} color="gold" />
@@ -30,7 +36,7 @@ const ReviewModal = ({ isVisible, reviews, onClose }) => {
                 </View>
                 <View style={styles.reviewDetails}>
                   <Text style={styles.reviewLabel}>Guest:</Text>
-                  <Text style={styles.reviewAuthor}>name</Text>
+                  <Text style={styles.reviewAuthor}>{latestCustomer(review.customerId)?.fullname}</Text>
                 </View>
                 <Text style={styles.reviewBody}>{review.review_body}</Text>
 
@@ -86,6 +92,8 @@ const styles = StyleSheet.create({
   reviewAuthor: {
     fontStyle: "italic",
     color: "#888",
+    color: "#666",
+
   },
   closeButton: {
     position: "absolute",

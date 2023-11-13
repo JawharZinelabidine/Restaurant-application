@@ -2,6 +2,10 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 const ReviewDisplay = ({ review }) => {
+
+
+
+
   return (
     <View style={styles.reviewContainer}>
       {review.title && (<View>

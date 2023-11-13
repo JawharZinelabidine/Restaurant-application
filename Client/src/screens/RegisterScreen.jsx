@@ -233,10 +233,10 @@ const styles = StyleSheet.create({
   },
   nameInputs: {
     flexDirection: "row",
-    justifyContent: "space-between", 
+    justifyContent: "space-between",
   },
   largeInput: {
-    width: 150, 
+    width: 150,
   },
   header: {
     marginVertical: 36,

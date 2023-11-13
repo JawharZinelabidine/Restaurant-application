@@ -46,6 +46,7 @@ export default function RestaurantDetails({ route }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const toastRef = useRef(null);
 
   const toggleReviewModal = () => {
@@ -65,7 +66,7 @@ export default function RestaurantDetails({ route }) {
     City,
     category,
     extra_images,
-    rating
+    rating,
   } = route.params.restaurant;
   const navigation = useNavigation();
 
@@ -164,14 +165,39 @@ export default function RestaurantDetails({ route }) {
 
     }
   }
-  const latestReview = reviews.reduce((max, review) =>
+
+  const getAllCustomers = async () => {
+    try {
+
+      const { data } = await regularAxios.get(`http://${apiUrl}:3000/api/customers`)
+      setCustomers(data)
+
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+  const latestReview = reviews.slice().reduce((max, review) =>
     review.createdAt > max.createdAt ? review : max, reviews[0]
   );
+
+  if (latestReview) {
+
+    var latestCustomer = customers.slice().find((customer) => {
+      return customer.id === latestReview.customerId
+    })
+
+
+
+  }
 
 
   useEffect(() => {
 
     getReviews()
+    getAllCustomers()
 
   }, [])
 
@@ -239,7 +265,7 @@ export default function RestaurantDetails({ route }) {
           <ReviewDisplay
             review={{
               title: latestReview?.review_title,
-              name: "John Doe",
+              name: latestCustomer?.fullname,
               body: latestReview?.review_body,
               rating: latestReview?.rating,
               size: reviews?.length
@@ -326,6 +352,7 @@ export default function RestaurantDetails({ route }) {
         isVisible={isReviewModalOpen}
         onClose={toggleReviewModal}
         reviews={reviews}
+        customers={customers}
       />
 
     </View>

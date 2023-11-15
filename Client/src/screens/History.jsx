@@ -72,6 +72,7 @@ const History = () => {
         if (isFocused) {
             fetchHistory()
             findRestaurantName()
+            removeNotificationBadge()
 
         }
 

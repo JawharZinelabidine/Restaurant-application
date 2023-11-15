@@ -17,6 +17,7 @@ import React, { useState, useRef } from "react";
 import { Colors, Images } from "../contants";
 import store from "../features/store";
 import axios from "../../services/axiosInterceptor.jsx";
+import regularAxios from "axios";
 import ToastMessage from "../Component/ToastMessage";
 import moment from "moment";
 import { AntDesign } from "@expo/vector-icons";
@@ -24,6 +25,8 @@ import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
 import ReviewDisplay from "./ReviewDisplay.jsx";
 import ReviewModal from "./ReviewModal.jsx";
+import { useEffect } from "react";
+import RestaurantMap from "../Component/RestaurantMap.jsx";
 
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
@@ -43,10 +46,15 @@ export default function RestaurantDetails({ route }) {
   const [spotsRemaining, setSpotsRemaining] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const toastRef = useRef(null);
 
   const toggleReviewModal = () => {
-    setIsReviewModalOpen(!isReviewModalOpen);
+    if (reviews.length > 0) {
+      console.log('a')
+      setIsReviewModalOpen(!isReviewModalOpen);
+    }
   };
 
   const {
@@ -59,6 +67,9 @@ export default function RestaurantDetails({ route }) {
     City,
     category,
     extra_images,
+    rating,
+    latitude,
+    longtitude,
   } = route.params.restaurant;
   const navigation = useNavigation();
 
@@ -85,7 +96,13 @@ export default function RestaurantDetails({ route }) {
       console.log(error);
       console.log("Couldn't send reservation request :(", error);
       if (error.response.status === 400) {
-        if (error.response.data > 1) {
+        console.log(error.response.data.message)
+        if (error.response.data.message === 'user already has a reservation on this date.') {
+          setSpotsRemaining(
+            `You already have made a reservation on this date.`
+          );
+        }
+        else if (error.response.data > 1) {
           setSpotsRemaining(
             `This date only has ${error.response.data} reservation spots remaining`
           );
@@ -146,12 +163,58 @@ export default function RestaurantDetails({ route }) {
     setShowDateTime(true);
   };
 
+
+  const getReviews = async () => {
+    try {
+      const { data } = await regularAxios.get(`http://${apiUrl}:3000/api/reviews/${id}`)
+      setReviews(data)
+
+    } catch (error) {
+      console.log(error)
+
+    }
+  }
+
+  const getAllCustomers = async () => {
+    try {
+
+      const { data } = await regularAxios.get(`http://${apiUrl}:3000/api/customers`)
+      setCustomers(data)
+
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+  const latestReview = reviews.slice().reduce((max, review) =>
+    review.createdAt > max.createdAt ? review : max, reviews[0]
+  );
+
+  if (latestReview) {
+
+    var latestCustomer = customers.slice().find((customer) => {
+      return customer.id === latestReview.customerId
+    })
+
+
+
+  }
+
+
+  useEffect(() => {
+
+    getReviews()
+    getAllCustomers()
+
+  }, [])
+
   const spaced = category.toString().split(",").join("  ");
 
   return (
     <View style={styles.container}>
       <RestaurantDetailsSwiper extraImages={extra_images} />
-
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
@@ -167,7 +230,9 @@ export default function RestaurantDetails({ route }) {
       >
         <View style={styles.detailsContainer}>
           <View style={styles.headerContainer}>
+
             <Text style={styles.name}>{name}</Text>
+
             <TouchableOpacity
               style={styles.menuButton}
               onPress={() =>
@@ -178,8 +243,12 @@ export default function RestaurantDetails({ route }) {
             >
               <Text style={styles.menuText}>Menu</Text>
             </TouchableOpacity>
-          </View>
 
+          </View>
+          <View style={styles.cardRating}>
+            <AntDesign name="star" size={30} color="gold" />
+            <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
+          </View>
           <Text style={styles.openingHours}>{`${moment(opening_time).format(
             "LT"
           )} - ${moment(closing_time).format("LT")}`}</Text>
@@ -202,15 +271,19 @@ export default function RestaurantDetails({ route }) {
 
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleReviewModal}>
-        <ReviewDisplay
-          review={{
-            title: "Great Experience",
-            name: "John Doe",
-            body:
-              "I had a wonderful time at this restaurant. The food was delicious, and the service was excellent!",
-          }}
-        />
-      </TouchableOpacity>
+          <ReviewDisplay
+            review={{
+              title: latestReview?.review_title,
+              name: latestCustomer?.fullname,
+              body: latestReview?.review_body,
+              rating: latestReview?.rating,
+              size: reviews?.length
+            }}
+          />
+        </TouchableOpacity>
+        <View style={{ marginTop: "25%" }}>
+          <RestaurantMap latitude={latitude} longitude={longtitude} />
+        </View>
         <View style={styles.topedite}></View>
       </ScrollView>
       {isModalOpen && (
@@ -225,7 +298,7 @@ export default function RestaurantDetails({ route }) {
                   ref={toastRef}
                   type="danger"
                   text={spotsRemaining}
-                  timeout={3000}
+                  timeout={5000}
                 />
               )}
 
@@ -265,6 +338,7 @@ export default function RestaurantDetails({ route }) {
                     confirmBtnText="Confirm"
                     display="default"
                     minimumDate={new Date()}
+
                     timeZoneName={"Africa/Tunis"}
                     timeZoneOffsetInMinutes={0}
                     onChange={handleDateChange}
@@ -287,13 +361,14 @@ export default function RestaurantDetails({ route }) {
 
         </TouchableWithoutFeedback>
       )}
-            <ReviewModal
+
+      <ReviewModal
         isVisible={isReviewModalOpen}
-        reviews={{
-        title: "Review Title", name: "Reviewer Name", body: "Review Body" 
-        }}
         onClose={toggleReviewModal}
+        reviews={reviews}
+        customers={customers}
       />
+
     </View>
   );
 }
@@ -383,6 +458,9 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+    padding: 10,
+    margin: 5
+
   },
   detailsContainer: {
     marginBottom: 20,
@@ -423,6 +501,17 @@ const styles = StyleSheet.create({
   },
   topedite: {
     marginTop: 100,
+
+  },
+  cardRatingText: {
+    color: 'gray',
+    fontSize: 20
+
+  },
+  cardRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    bottom: 18,
 
   },
 });

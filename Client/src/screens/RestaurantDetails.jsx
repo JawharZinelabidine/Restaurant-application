@@ -26,6 +26,7 @@ import { Display } from "../utils";
 import ReviewDisplay from "./ReviewDisplay.jsx";
 import ReviewModal from "./ReviewModal.jsx";
 import { useEffect } from "react";
+import RestaurantMap from "../Component/RestaurantMap.jsx";
 
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
@@ -67,6 +68,8 @@ export default function RestaurantDetails({ route }) {
     category,
     extra_images,
     rating,
+    latitude,
+    longtitude,
   } = route.params.restaurant;
   const navigation = useNavigation();
 
@@ -278,6 +281,9 @@ export default function RestaurantDetails({ route }) {
             }}
           />
         </TouchableOpacity>
+        <View style={{ marginTop: "25%" }}>
+          <RestaurantMap latitude={latitude} longitude={longtitude} />
+        </View>
         <View style={styles.topedite}></View>
       </ScrollView>
       {isModalOpen && (
@@ -332,6 +338,7 @@ export default function RestaurantDetails({ route }) {
                     confirmBtnText="Confirm"
                     display="default"
                     minimumDate={new Date()}
+
                     timeZoneName={"Africa/Tunis"}
                     timeZoneOffsetInMinutes={0}
                     onChange={handleDateChange}
@@ -340,6 +347,7 @@ export default function RestaurantDetails({ route }) {
                 <Text style={{ fontSize: 25, color: "#ffffff" }}>Guests</Text>
                 <TextInput
                   keyboardType="numeric"
+                  returnKeyType="done"
                   onChangeText={(text) => handleChange("guest_number", +text)}
                   style={styles.inputControlGuest}
                 />

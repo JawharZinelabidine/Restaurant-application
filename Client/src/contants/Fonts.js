@@ -1,0 +1,21 @@
+export default {
+    POPPINS_BLACK: 'Poppins-Black',
+    POPPINS_BOLD: 'Poppins-Bold',
+    POPPINS_EXTRA_BOLD: 'Poppins-ExtraBold',
+    POPPINS_EXTRA_LIGHT: 'Poppins-ExtraLight',
+    POPPINS_LIGHT: 'Poppins-Light',
+    POPPINS_MEDIUM: 'Poppins-Medium',
+    POPPINS_REGULAR: 'Poppins-Regular',
+    POPPINS_SEMI_BOLD: 'Poppins-SemiBold',
+    POPPINS_THIN: 'Poppins-Thin',
+    interRegular: "Inter-Regular",
+    interLight: "Inter-Light",
+    interBold: "Inter-Bold",
+    yuGothicUI: "Yu Gothic UI",
+    soraSemiBold: "Sora-SemiBold",
+    iBMPlexSansRegular: "IBMPlexSans-Regular",
+    poppinsRegular: "Poppins-Regular",
+    soraRegular: "Sora-Regular",
+    poppinsSemiBold: "Poppins-SemiBold",
+  };
+

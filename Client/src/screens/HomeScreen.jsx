@@ -12,7 +12,6 @@ import Categorys from "../Component/Categorys";
 import ToastMessage from "../Component/ToastMessage";
 import { useSelector } from 'react-redux';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 

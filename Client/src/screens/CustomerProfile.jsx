@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
+import { setLoggedin } from '../features/loggedinSlice';
 
 export default function CustomerProfile({navigation}) {
   const dispatch = useDispatch();

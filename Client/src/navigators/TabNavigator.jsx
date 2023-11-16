@@ -1,13 +1,13 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { StyleSheet, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen, ReviewForm, ReservationReviews } from '../screens'
-import { AntDesign } from '@expo/vector-icons'
+import { AntDesign , MaterialIcons} from '@expo/vector-icons'
 import { Colors } from "../contants";
 import { BlurView } from '@react-native-community/blur'
 import { useIsFocused } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
 import * as Notifications from 'expo-notifications';
 import store from "../features/store";
 import { setNotificationBadge, setToast, setReviewNotificationBadge } from '../../src/features/notificationSlice';
@@ -89,10 +89,12 @@ const TabNavigator = ({ navigation }) => {
 
   const isFocused = useIsFocused();
 
+  
+
   const { notificationBadge, reviewNotificationBadge } = useSelector(state => state.notification);
 
 
-
+  const { loggedin } = useSelector(state => state.loggedin);
 
   useEffect(() => {
 
@@ -189,13 +191,15 @@ const TabNavigator = ({ navigation }) => {
           alignSelf: undefined,
         }
       }} ></Tab.Screen>
-      <Tab.Screen name={"LoginScreen"} component={LoginScreen} options={{
-
-        tabBarIcon: ({ focused, color, size }) => (
-          <AntDesign name="login" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />
-
-        )
-      }} ></Tab.Screen>
+        <Tab.Screen
+        name={'Login'}
+        component={LoginScreen}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <MaterialIcons name={loggedin ? 'logout' : 'login'} size={24} color={loggedin ? Colors.DEFAULT_RED : 'green'} />
+          ),
+        }}
+      ></Tab.Screen>
 
     </Tab.Navigator>
   )

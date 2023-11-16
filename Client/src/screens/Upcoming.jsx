@@ -24,6 +24,7 @@ const Upcoming = () => {
 
     try {
       const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/upcoming`);
+
       setUpcomoingReservations(data);
 
     } catch (error) {

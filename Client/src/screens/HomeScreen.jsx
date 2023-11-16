@@ -10,13 +10,15 @@ import HeaderBar from "./HeaderBar";
 import SearchBar from "../Component/SearchBar";
 import Categorys from "../Component/Categorys";
 import ToastMessage from "../Component/ToastMessage";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import * as Location from "expo-location";
+import { setLat, setLng } from "../features/customerSlice";
 
 
 
 
 export default function HomeScreen({ navigation, route }) {
-
+  const dispatch = useDispatch();
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
   const toastRef = useRef(null);
@@ -24,8 +26,6 @@ export default function HomeScreen({ navigation, route }) {
 
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
-
-
 
   const fetchData = async () => {
     try {
@@ -38,25 +38,30 @@ export default function HomeScreen({ navigation, route }) {
     }
   };
 
+  const getPermissions = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Please grant location permissions");
+      return;
+    }
 
+    let currentLocation = await Location.getCurrentPositionAsync({});
+    dispatch(setLat(currentLocation.coords.latitude));
+    dispatch(setLng(currentLocation.coords.longitude));
+  };
 
   if (toast) {
     if (toastRef.current) {
       toastRef.current.show()
     }
   }
-
-
   const sortedRestaurants = filterData.slice().sort((a, b) => new Date(b.rating) - new Date(a.rating));
-
 
   useEffect(() => {
     if (isFocused) {
       fetchData()
-
+      getPermissions()
     }
-
-
   }, [isFocused])
 
 
@@ -71,9 +76,6 @@ export default function HomeScreen({ navigation, route }) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.scrollViewFlex}
     >
-
-
-
       <View style={styles.topSection}>
         <HeaderBar />
         {toast && (
@@ -85,7 +87,6 @@ export default function HomeScreen({ navigation, route }) {
             timeout={4000}
           />
         )}
-
         <Text style={styles.screenTitle}>
           Find the best{"\n"}restaurant near you.
         </Text>

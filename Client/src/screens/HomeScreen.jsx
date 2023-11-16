@@ -13,7 +13,7 @@ import ToastMessage from "../Component/ToastMessage";
 import { useSelector, useDispatch } from 'react-redux';
 import * as Location from "expo-location";
 import { setLat, setLng } from "../features/customerSlice";
-
+import { calculateDistance } from "../utils";
 
 
 
@@ -23,14 +23,13 @@ export default function HomeScreen({ navigation, route }) {
   const isFocused = useIsFocused();
   const toastRef = useRef(null);
   const { toast } = useSelector(state => state.notification);
-
+  const {lat, lng} = useSelector(state => state.customer);
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
 
   const fetchData = async () => {
     try {
       const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`);
-      setRestaurant(data);
       setRestaurant(data);
       setFilterData(data);
     } catch (error) {

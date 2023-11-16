@@ -347,6 +347,7 @@ export default function RestaurantDetails({ route }) {
                 <Text style={{ fontSize: 25, color: "#ffffff" }}>Guests</Text>
                 <TextInput
                   keyboardType="numeric"
+                  returnKeyType="done"
                   onChangeText={(text) => handleChange("guest_number", +text)}
                   style={styles.inputControlGuest}
                 />

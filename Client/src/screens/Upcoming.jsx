@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import UpcomingList from "./UpcomingList.jsx";
 import { useIsFocused } from "@react-navigation/native";
 import { setNotificationBadge } from "../../src/features/notificationSlice";
+import * as SecureStore from 'expo-secure-store';
 
 const Upcoming = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -17,26 +18,33 @@ const Upcoming = () => {
 
   const isFocused = useIsFocused();
 
+
+
   const fetchUpcoming = async () => {
+
     try {
-      const { data } = await axios.get(
-        `http://${apiUrl}:3000/api/reservations/upcoming`
-      );
+      const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/upcoming`);
+
       setUpcomoingReservations(data);
+
     } catch (error) {
-      console.log(error);
       if (error.response.status === 401) {
         setUpcomoingReservations([]);
       }
     }
-  };
+  }
+
+
 
   const findRestaurantName = async () => {
-    try {
-      const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`);
-      setRestaurants(data);
-    } catch (error) {
-      console.log(error);
+    const token = await SecureStore.getItemAsync('token')
+    if (token) {
+      try {
+        const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`);
+        setRestaurants(data);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

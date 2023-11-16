@@ -76,7 +76,7 @@ const ToastMessage = forwardRef(({ type, text, description, timeout = 1000 }, re
                 >
                     <FontAwesome5 name={icon} size={30} color="#FFF" />
 
-                    <View style={{ marginLeft: 50 }}>
+                    <View style={{ marginLeft: 20 }}>
                         <Text style={{ fontSize: 14, fontWeight: '600', color: '#FFF', textAlign: 'center' }}>{text}</Text>
                         <Text style={{ fontSize: 12, fontWeight: '400', color: '#FFF', textAlign: 'center' }}>{description}</Text>
                     </View>

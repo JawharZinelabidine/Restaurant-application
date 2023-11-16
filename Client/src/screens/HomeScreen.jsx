@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation, route }) {
   }
 
 
-
+  const sortedRestaurants = filterData.slice().sort((a, b) => new Date(b.rating) - new Date(a.rating));
 
 
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function HomeScreen({ navigation, route }) {
         />
       </View>
       <ScrollView vertical>
-        {filterData.map((rest) => (
+        {sortedRestaurants.map((rest) => (
           <View key={rest.id}>
             <RestaurantCard
               restaurant={rest}

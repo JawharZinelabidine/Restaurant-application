@@ -2,24 +2,39 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 const ReviewDisplay = ({ review }) => {
+
+
+
+
   return (
     <View style={styles.reviewContainer}>
-      <Text style={styles.reviewTitle}>Latest Review</Text>
-      <View style={styles.reviewDetails}>
-        <Text style={styles.reviewLabel}>Title:</Text>
-        <Text style={styles.reviewText}>{review.title}</Text>
-      </View>
-      <View style={styles.reviewDetails}>
-        <Text style={styles.reviewLabel}>Customer:</Text>
-        <Text style={styles.reviewText}>{review.name}</Text>
+      {review.title && (<View>
+        <View style={styles.header}>
+          <Text style={styles.reviewTitle}>Latest Review:</Text>
+          <Text style={styles.reviewAmount}>{`${review.size} more reviews`}</Text>
+        </View>
         <View style={styles.cardRating}>
           <AntDesign name="star" size={20} color="gold" />
-          <Text style={styles.cardRatingText}>4.5</Text>
+          <Text style={styles.cardRatingText}>{review.rating}</Text>
         </View>
-      </View>
-      <Text style={styles.reviewBody}>{review.body}</Text>
+        <View style={styles.reviewDetails}>
+          <Text style={styles.reviewLabel}>Title:</Text>
+          <Text style={styles.reviewText}>{review.title}</Text>
+        </View>
+        <View style={styles.reviewDetails}>
+          <Text style={styles.reviewLabel}>Guest:</Text>
+          <Text style={styles.reviewText}>{review.name}</Text>
+
+        </View>
+        <Text style={styles.reviewBody}>{review.body}</Text>
+      </View>)}
+      {!review.title && (<Text> No reviews yet for this restaurant
+      </Text>)}
+
     </View>
-  );
+
+
+  )
 };
 
 const styles = StyleSheet.create({
@@ -42,6 +57,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 10,
   },
+  reviewAmount: {
+    fontSize: 17,
+    fontWeight: "400",
+    marginBottom: 10,
+  },
   reviewDetails: {
     flexDirection: "row",
     marginBottom: 5,
@@ -59,8 +79,13 @@ const styles = StyleSheet.create({
   cardRating: {
     flexDirection: 'row',
     alignItems: 'center',
-    top: 15,
-    right: 305
+    bottom: 7,
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 6
   },
 });
 

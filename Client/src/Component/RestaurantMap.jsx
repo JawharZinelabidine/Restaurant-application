@@ -10,8 +10,8 @@ const RestaurantMap = ({ latitude, longitude }) => {
                 initialRegion={{
                     latitude: latitude,
                     longitude: longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001,
                 }}
             >
                 <Marker

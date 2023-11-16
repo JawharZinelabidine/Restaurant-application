@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Colors } from "../contants";
-import { AntDesign } from "@expo/vector-icons";
 import RestaurantCard from "../Component/RestaurantCard";
 import { useEffect, useRef } from "react";
 import { useIsFocused } from '@react-navigation/native';
@@ -12,7 +10,6 @@ import Categorys from "../Component/Categorys";
 import ToastMessage from "../Component/ToastMessage";
 import { useSelector } from 'react-redux';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 

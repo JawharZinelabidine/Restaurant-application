@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Display } from "../utils";
-import { calculateDistance } from '../utils/CalculateDistance';
+import { Display, calculateDistance } from "../utils";
 import { Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
@@ -18,9 +17,12 @@ export default function RestaurantCard({ restaurant, onPress }) {
   };
 
   const spaced = category.toString().split(',').join('  ');
+  let formattedDistance = null;
+  if (lat && lng) {
+    const distance = calculateDistance(lat, lng, latitude, longtitude);
+    formattedDistance = distance < 1 ? `${Math.round(distance * 1000)} m away` : `${distance.toFixed(2)} km away`;
+  }
 
-  const distance = calculateDistance(lat, lng, latitude, longtitude);
-  const formattedDistance = distance < 1 ? `${Math.round(distance * 1000)} m away` : `${distance.toFixed(2)} km away`;
 
   return (
     <TouchableOpacity onPress={handleButtonPress}>
@@ -28,7 +30,7 @@ export default function RestaurantCard({ restaurant, onPress }) {
         <Image source={{ uri: main_image.trim() }} style={styles.cardImage} />
         <Text style={styles.cardName}>{name}</Text>
         <Text style={styles.cardCategory}>{spaced}</Text>
-        <Text style={styles.cardDistance}>{formattedDistance}</Text>
+        {formattedDistance && <Text style={styles.cardDistance}>{formattedDistance}</Text>}
         <View style={styles.cardRating}>
           <AntDesign name="star" size={20} color="gold" />
           <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>

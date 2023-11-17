@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   cardStatus: {
     color: 'green',
     fontSize: 16,
-    left: 320
+    left: 280
   },
   cardDistance: {
     color: 'gray',

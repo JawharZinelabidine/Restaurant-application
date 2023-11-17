@@ -20,7 +20,7 @@ import axios from "../../services/axiosInterceptor.jsx";
 import regularAxios from "axios";
 import ToastMessage from "../Component/ToastMessage";
 import moment from "moment";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign,Entypo } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
 import ReviewDisplay from "./ReviewDisplay.jsx";
@@ -256,7 +256,7 @@ export default function RestaurantDetails({ route }) {
             <Text style={styles.category}>{spaced}</Text>
           </View>
           <View style={styles.locationContainer}>
-            <Image source={Images.PINICON} style={styles.icon} />
+            <Entypo name="location-pin" style={styles.icon} color={"red"} />
             <Text style={styles.openingHours}>{City}</Text>
           </View>
           <Text style={styles.description}>{description}</Text>
@@ -281,7 +281,7 @@ export default function RestaurantDetails({ route }) {
             }}
           />
         </TouchableOpacity>
-        <View style={{ marginTop: "25%" }}>
+        <View style={styles.map} >
           <RestaurantMap latitude={latitude} longitude={longtitude} />
         </View>
         <View style={styles.topedite}></View>
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    padding: 0,
+    maxHeight: 800
   },
   imageSwiper: {
     height: Display.setHeight(100),
@@ -495,9 +495,11 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   icon: {
-    width: 40,
-    height: 40,
+    width: 20,
+    height: 34,
     marginTop: 8,
+    fontSize:20
+    
   },
   topedite: {
     marginTop: 100,
@@ -514,4 +516,8 @@ const styles = StyleSheet.create({
     bottom: 18,
 
   },
+  map : {
+    width: '100%',
+    marginTop: "20%",
+  }
 });

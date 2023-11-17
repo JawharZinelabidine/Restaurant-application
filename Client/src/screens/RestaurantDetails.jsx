@@ -287,8 +287,8 @@ export default function RestaurantDetails({ route }) {
         <View style={styles.topedite}></View>
       </ScrollView>
       {isModalOpen && (
-        <TouchableWithoutFeedback onPress={toggleForm}>
-          <Modal transparent={true} visible={true} onPress={toggleForm}>
+        <TouchableWithoutFeedback>
+          <Modal transparent={true} visible={true} >
             <Pressable
               style={{ backgroundColor: "#000000aa", flex: 1 }}
               onPress={toggleForm}
@@ -312,6 +312,7 @@ export default function RestaurantDetails({ route }) {
                   height: 350,
                   justifyContent: "space-between",
                 }}
+                onPress={setIsModalOpen}
               >
                 <Pressable
                   style={styles.btn}
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 15,
     fontWeight: "500",
-    color: "#333",
+    color: "white",
     marginBottom: 20,
     borderRadius: 8,
   },
@@ -475,6 +476,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
+    justifyContent: 'flex-start'
   },
   reservationButtonText: {
     color: "white",
@@ -498,6 +500,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     marginTop: 8,
+
   },
   topedite: {
     marginTop: 100,

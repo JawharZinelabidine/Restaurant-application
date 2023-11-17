@@ -205,7 +205,6 @@ const RegisterScreen = ({ navigation }) => {
           </View>
 
           <TouchableOpacity
-            style={{ marginTop: "auto" }}
             onPress={handleButtonPress}
           >
             <Text style={styles.formFooter}>

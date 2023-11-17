@@ -20,7 +20,7 @@ export default function RestaurantCard({ restaurant, onPress }) {
   let formattedDistance = null;
   if (lat && lng) {
     const distance = calculateDistance(lat, lng, latitude, longtitude);
-    formattedDistance = distance < 1 ? `${Math.round(distance * 1000)} m away` : `${distance.toFixed(0)} km away`;
+    formattedDistance = distance < 1 ? `${Math.round(distance * 1000)} m away` : `${distance.toFixed(0)} kilometers away`;
   }
 
 
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   cardStatus: {
     color: 'green',
     fontSize: 16,
-    left: 280
+    left: 320
   },
   cardDistance: {
     color: 'gray',

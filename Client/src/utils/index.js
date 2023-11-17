@@ -1,3 +1,3 @@
 import Display from "./Display";
-
-export {Display}
+import { calculateDistance } from "./calculateDistance";
+export { Display, calculateDistance };

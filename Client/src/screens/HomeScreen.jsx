@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Colors } from "../contants";
-import { AntDesign } from "@expo/vector-icons";
 import RestaurantCard from "../Component/RestaurantCard";
 import { useEffect, useRef } from "react";
 import { useIsFocused } from '@react-navigation/native';
@@ -10,27 +8,26 @@ import HeaderBar from "./HeaderBar";
 import SearchBar from "../Component/SearchBar";
 import Categorys from "../Component/Categorys";
 import ToastMessage from "../Component/ToastMessage";
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import * as Location from "expo-location";
+import { setLat, setLng } from "../features/customerSlice";
+import { calculateDistance } from "../utils";
 
 
 
 export default function HomeScreen({ navigation, route }) {
-
+  const dispatch = useDispatch();
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
   const toastRef = useRef(null);
   const { toast } = useSelector(state => state.notification);
-
+  const {lat, lng} = useSelector(state => state.customer);
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
-
-
 
   const fetchData = async () => {
     try {
       const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`);
-      setRestaurant(data);
       setRestaurant(data);
       setFilterData(data);
     } catch (error) {
@@ -38,25 +35,30 @@ export default function HomeScreen({ navigation, route }) {
     }
   };
 
+  const getPermissions = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Please grant location permissions");
+      return;
+    }
 
+    let currentLocation = await Location.getCurrentPositionAsync({});
+    dispatch(setLat(currentLocation.coords.latitude));
+    dispatch(setLng(currentLocation.coords.longitude));
+  };
 
   if (toast) {
     if (toastRef.current) {
       toastRef.current.show()
     }
   }
-
-
   const sortedRestaurants = filterData.slice().sort((a, b) => new Date(b.rating) - new Date(a.rating));
-
 
   useEffect(() => {
     if (isFocused) {
       fetchData()
-
+      getPermissions()
     }
-
-
   }, [isFocused])
 
 
@@ -71,9 +73,6 @@ export default function HomeScreen({ navigation, route }) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.scrollViewFlex}
     >
-
-
-
       <View style={styles.topSection}>
         <HeaderBar />
         {toast && (
@@ -85,7 +84,6 @@ export default function HomeScreen({ navigation, route }) {
             timeout={4000}
           />
         )}
-
         <Text style={styles.screenTitle}>
           Find the best{"\n"}restaurant near you.
         </Text>

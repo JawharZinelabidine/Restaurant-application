@@ -16,9 +16,11 @@ import {
     ReservationReviews,
     EnterEmailForReset,
     EnterCodeForReset,
-    UpdatePassword
+    UpdatePassword,
+    CustomerProfile,
+    HomeScreen,
+    LoginScreen
 } from "../screens";
-
 
 
 
@@ -59,6 +61,11 @@ const Navigators = () => {
                     <Stack.Screen name="UpdatePassword" component={UpdatePassword} />
 
                     <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+                    <Stack.Screen name="LoginScreen" component={LoginScreen} />
+                    <Stack.Screen name="CustomerProfile" component={CustomerProfile} />
+                    <Stack.Screen name="HomeScreen" component={HomeScreen} />
+
+
                     <Stack.Screen name="MenuContainer" component={MenuContainer} options={{ presentation: "transparentModal" }} />
 
                 </Stack.Navigator>

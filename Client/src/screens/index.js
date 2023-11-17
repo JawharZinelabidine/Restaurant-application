@@ -18,6 +18,9 @@ import ReservationReviews from './ReservationReviews.jsx'
 import EnterEmailForReset from "./EnterEmailForReset.jsx";
 import EnterCodeForReset from "./EnterCodeForReset.jsx";
 import UpdatePassword from "./UpdatePassword.jsx";
+import CustomerProfile from "./CustomerProfile.jsx";
+import ProfileIcon from "../Component/ProfileIcon.jsx";
+import HomeScreen from "./HomeScreen";
 
 
 
@@ -42,6 +45,9 @@ export {
   ReservationReviews,
   EnterEmailForReset,
   EnterCodeForReset,
-  UpdatePassword
+  UpdatePassword,
+  CustomerProfile,
+  ProfileIcon,
+  HomeScreen
 
 };

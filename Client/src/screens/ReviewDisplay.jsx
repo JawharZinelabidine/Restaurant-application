@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 const ReviewDisplay = ({ review }) => {
 
-
+  const size = review.size - 1
 
 
   return (
@@ -11,7 +11,7 @@ const ReviewDisplay = ({ review }) => {
       {review.title && (<View>
         <View style={styles.header}>
           <Text style={styles.reviewTitle}>Latest Review:</Text>
-          <Text style={styles.reviewAmount}>{`${review.size} more reviews`}</Text>
+          <Text style={styles.reviewAmount}>{size > 1 ? `${size} more reviews` : size === 1 ? `${size} more review` : ''}</Text>
         </View>
         <View style={styles.cardRating}>
           <AntDesign name="star" size={20} color="gold" />

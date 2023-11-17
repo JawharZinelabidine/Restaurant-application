@@ -67,6 +67,7 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const handleSubmit = async () => {
+
     if (validator()) {
       try {
         const { data } = await axios.post(

@@ -10,8 +10,8 @@ const RestaurantMap = ({ latitude, longitude }) => {
                 initialRegion={{
                     latitude: latitude,
                     longitude: longitude,
-                    latitudeDelta: 0.001,
-                    longitudeDelta: 0.001,
+                    latitudeDelta: 0.006,
+                    longitudeDelta: 0.006,
                 }}
             >
                 <Marker
@@ -29,7 +29,7 @@ const RestaurantMap = ({ latitude, longitude }) => {
 
 const styles = StyleSheet.create({
     mapContainer: {
-        height: 300,
+        height:400,
     },
     map: {
         ...StyleSheet.absoluteFillObject,

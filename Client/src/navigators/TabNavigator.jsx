@@ -1,9 +1,9 @@
 
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen, ReviewForm, ReservationReviews } from '../screens'
-import { AntDesign , MaterialIcons} from '@expo/vector-icons'
+import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import { Colors } from "../contants";
 import { BlurView } from '@react-native-community/blur'
 import { useIsFocused } from '@react-navigation/native';
@@ -89,7 +89,7 @@ const TabNavigator = ({ navigation }) => {
 
   const isFocused = useIsFocused();
 
-  
+
 
   const { notificationBadge, reviewNotificationBadge } = useSelector(state => state.notification);
 
@@ -191,7 +191,7 @@ const TabNavigator = ({ navigation }) => {
           alignSelf: undefined,
         }
       }} ></Tab.Screen>
-        <Tab.Screen
+      <Tab.Screen
         name={'Login'}
         component={LoginScreen}
         options={{

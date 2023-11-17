@@ -213,7 +213,7 @@ export default function RestaurantDetails({ route }) {
   const spaced = category.toString().split(",").join("  ");
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <RestaurantDetailsSwiper extraImages={extra_images} />
       <TouchableOpacity
         style={styles.backButton}
@@ -369,7 +369,7 @@ export default function RestaurantDetails({ route }) {
         customers={customers}
       />
 
-    </View>
+    </ScrollView>
   );
 }
 

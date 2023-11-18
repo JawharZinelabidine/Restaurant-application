@@ -95,44 +95,6 @@ const TabNavigator = ({ navigation }) => {
 
 
 
-  const establishConnection = async () => {
-    const token = await SecureStore.getItemAsync('token')
-    if (token) {
-
-      socket.current = io(`ws://${apiUrl}:8900`, {
-        auth: {
-          token: token,
-        }
-      });
-
-      socket.current.emit("addUser");
-
-
-      // Event handlers
-      socket.current.on("connect", () => {
-        console.log("Connected to server");
-      });
-
-      socket.current.on("connect_error", (error) => {
-        console.error("Connection error:", error);
-      });
-
-      socket.current.on("disconnect", () => {
-        console.log("Disconnected from server");
-      });
-    }
-  }
-  useEffect(() => {
-
-    establishConnection()
-
-
-
-  }, [])
-
-
-
-
   useEffect(() => {
 
 

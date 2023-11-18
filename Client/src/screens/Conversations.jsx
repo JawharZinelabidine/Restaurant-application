@@ -8,7 +8,7 @@ import { Display } from "../utils";
 import { setReviewNotificationBadge } from "../../src/features/notificationSlice";
 import { useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
-import { io } from "socket.io-client";
+
 
 
 
@@ -22,6 +22,7 @@ export default function Conversations({ navigation }) {
 
     const [conversations, setConversations] = useState([])
     const [restaurants, setRestaurants] = useState([])
+    const [token, setToken] = useState('')
 
 
 
@@ -61,14 +62,22 @@ export default function Conversations({ navigation }) {
     }
 
 
-    const handleButtonPress = (conversation, restaurants) => {
-        navigation.navigate("Messages", { conversation, restaurants });
+    const handleButtonPress = (conversation, restaurants, token) => {
+        navigation.navigate("Messages", { conversation, restaurants, token });
 
     };
+
+    const getToken = async () => {
+
+        const token = await SecureStore.getItemAsync('token')
+
+        setToken(token)
+    }
 
 
     useEffect(() => {
         if (isFocused) {
+            getToken()
             getConvos()
             findRestaurantName()
         }
@@ -92,7 +101,7 @@ export default function Conversations({ navigation }) {
                     >
 
                         <ConversationList conversation={conversation} restaurants={restaurants}
-                            onPress={(conversation) => handleButtonPress(conversation, restaurants)} ></ConversationList>
+                            onPress={(conversation) => handleButtonPress(conversation, restaurants, token)} ></ConversationList>
                     </View>
                 ))}
 

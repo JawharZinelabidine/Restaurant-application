@@ -1,16 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { useRef } from 'react';
-import { useIsFocused } from "@react-navigation/native";
-import { Display } from "../utils";
 import moment from "moment";
 
 
 const Messages = ({ message }) => {
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
-    const socket = useRef()
-    const isFocused = useIsFocused()
 
 
 
@@ -58,9 +51,6 @@ const styles = StyleSheet.create({
         padding: 10,
         maxWidth: '80%',
         alignSelf: 'flex-start',
-
-
-
     },
     messageText: {
         padding: 10,
@@ -81,7 +71,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: 'rgb(245, 241, 241)',
         color: 'black',
-        alignSelf: 'flex-start',
+        alignSelf: 'flex-end',
     },
 
 

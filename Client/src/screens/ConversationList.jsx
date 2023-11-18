@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { LinearGradient } from "expo-linear-gradient";
-import { Colors } from "../contants";
-import { Color, FontSize, Border } from "../../GlobalStyles";
-import { Display } from "../utils";
-import moment from 'moment'
+import { Color, FontSize } from "../../GlobalStyles";
 import React from 'react'
 
 

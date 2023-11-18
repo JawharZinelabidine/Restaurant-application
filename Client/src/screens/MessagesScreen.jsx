@@ -17,10 +17,14 @@ const MessagesScreen = ({ route, navigation }) => {
 
   const conversation = route.params.conversation;
   const restaurants = route.params.restaurants;
+  const token = route.params.token;
   const socket = useRef()
   const inputRef = useRef(null);
+  const scrollRef = useRef()
 
   const [messages, setMessages] = useState([])
+  const [newMessage, setNewMessage] = useState([])
+  const [arrivalMessage, setArrivalMessage] = useState(null)
 
   const restaurantName = restaurants.slice().find((restaurant) => {
     return restaurant.id === conversation.restaurantId;
@@ -42,18 +46,89 @@ const MessagesScreen = ({ route, navigation }) => {
 
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    socket.current.emit('sendMessage', {
+      receiverId: conversation.restaurantId,
+      text: newMessage
+    })
+
+
+    try {
+
+      const { data } = await axios.post(`http://${apiUrl}:3000/api/messages/customer/${conversation.restaurantId}`, { message: newMessage })
+      setMessages([...messages, data])
+      setNewMessage('')
+
+
+    } catch (error) {
+      if (error.response.status === 403 || error.response.status === 401) {
+        await SecureStore.deleteItemAsync('token')
+        navigation.navigate('LoginScreen')
+      }
+    }
+  }
+
   const handleMessageChange = (text) => {
-    setMessage(text);
+    setNewMessage(text);
     const lineCount = text.split('\n').length;
     inputRef.current.setNativeProps({
       height: 35 * Math.min(lineCount + 1, 6), // Set maximum number of lines to 6 (adjust as needed)
     });
   };
 
+
+
   useEffect(() => {
     getMessages()
   }, [])
 
+  useEffect(() => {
+
+
+    arrivalMessage && conversation.restaurantId === arrivalMessage.sender &&
+      setMessages((prev) => [...prev, arrivalMessage]); console.log(arrivalMessage)
+
+  }, [arrivalMessage])
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollToEnd({ animated: true });
+    }
+  }, [messages])
+
+
+  useEffect(() => {
+
+    if (!socket.current) {
+      socket.current = io(`ws://${apiUrl}:8900`, {
+        auth: {
+          token: token
+        }
+      });
+    }
+
+    socket.current.emit("addUser");
+
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        message: data.text,
+        createdAt: Date.now(),
+      });
+    });
+
+    return () => {
+      // Clean up the socket connection when the component unmounts
+      // (This will only execute when the entire application unmounts)
+      if (socket.current) {
+        socket.current.disconnect();
+        socket.current = null;
+      }
+    };
+
+  }, []);
 
   return (
 
@@ -76,10 +151,9 @@ const MessagesScreen = ({ route, navigation }) => {
 
       </View>
 
-      <ScrollView style={styles.constainer2} contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView style={styles.constainer2} contentContainerStyle={styles.scrollViewContent} ref={scrollRef}>
         {messages.map((message) => (
           <Messages key={message.id} message={message} />
-
 
         ))}
 
@@ -97,7 +171,7 @@ const MessagesScreen = ({ route, navigation }) => {
           placeholder="Write something...">
 
         </TextInput>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Ionicons name="send" size={40} color="red" />
         </TouchableOpacity>
       </View>

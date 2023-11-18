@@ -1,37 +1,53 @@
 import { View, Text, StyleSheet, ScrollView, Modal, TextInput, TouchableOpacity } from "react-native";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Colors } from "../contants";
-import ReservationReviewList from './ReservationReviewList.jsx'
+import ConversationList from './ConversationList.jsx'
 import axios from '../../services/axiosInterceptor.jsx';
 import { useIsFocused } from '@react-navigation/native';
 import { Display } from "../utils";
 import { setReviewNotificationBadge } from "../../src/features/notificationSlice";
 import { useDispatch } from 'react-redux';
+import * as SecureStore from 'expo-secure-store';
+import { io } from "socket.io-client";
 
 
 
 
-export default function ReservationReviews({ navigation }) {
+export default function Conversations({ navigation }) {
 
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
     const isFocused = useIsFocused();
     const dispatch = useDispatch()
 
-    const [pending, setPending] = useState([])
+    const [conversations, setConversations] = useState([])
     const [restaurants, setRestaurants] = useState([])
 
-    const getPendingReviews = async () => {
+
+
+
+
+    const getConvos = async () => {
         try {
-
-            const { data } = await axios.get(`http://${apiUrl}:3000/api/reviews`)
-            setPending(data)
-        }
-        catch (error) {
+            const { data } = await axios.get(`http://${apiUrl}:3000/api/messages/customer/conversations`)
+            const uniqueConversationsMap = {};
+            for (const conversation of data) {
+                const { customerId, createdAt } = conversation;
+                if (!uniqueConversationsMap[customerId] || new Date(createdAt) > new Date(uniqueConversationsMap[customerId].createdAt)) {
+                    uniqueConversationsMap[customerId] = conversation;
+                }
+            }
+            const uniqueConvos = Object.values(uniqueConversationsMap);
+            const sortedConvos = uniqueConvos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            setConversations(sortedConvos)
+        } catch (error) {
             console.log(error)
-
+            if (error.response.status === 403 || error.response.status === 401) {
+                localStorage.clear()
+                navigate('/')
+            }
         }
     }
-
 
     const findRestaurantName = async () => {
         try {
@@ -44,27 +60,23 @@ export default function ReservationReviews({ navigation }) {
         }
     }
 
-    const removeNotificationBadge = async () => {
-        try {
-            const { data } = await axios.put(`http://${apiUrl}:3000/api/reservations/notification`);
-            dispatch(setReviewNotificationBadge(data));
-            console.log('removed')
-        } catch (error) {
-            console.log(error);
-        }
+
+    const handleButtonPress = (conversation, restaurants) => {
+        navigation.navigate("Messages", { conversation, restaurants });
+
     };
 
-    const handleButtonPress = (reservation, restaurants) => {
-        navigation.navigate("ReviewForm", { reservation, restaurants });
-    };
 
     useEffect(() => {
         if (isFocused) {
-            getPendingReviews()
+            getConvos()
             findRestaurantName()
-            removeNotificationBadge()
         }
+
+
+
     }, [isFocused])
+
 
 
     return (
@@ -75,12 +87,12 @@ export default function ReservationReviews({ navigation }) {
                 contentContainerStyle={styles.scrollViewContent}
 
             >
-                {pending.map((reservation) => (
-                    <View key={reservation.id} style={styles.card}
+                {conversations.map((conversation) => (
+                    <View key={conversation} style={styles.card}
                     >
 
-                        <ReservationReviewList reservation={reservation} restaurants={restaurants}
-                            onPress={(reservation) => handleButtonPress(reservation, restaurants)} ></ReservationReviewList>
+                        <ConversationList conversation={conversation} restaurants={restaurants}
+                            onPress={(conversation) => handleButtonPress(conversation, restaurants)} ></ConversationList>
                     </View>
                 ))}
 

@@ -21,6 +21,7 @@ import UpdatePassword from "./UpdatePassword.jsx";
 import CustomerProfile from "./CustomerProfile.jsx";
 import ProfileIcon from "../Component/ProfileIcon.jsx";
 import HomeScreen from "./HomeScreen";
+import Conversations from "./Conversations.jsx";
 
 
 
@@ -48,6 +49,7 @@ export {
   UpdatePassword,
   CustomerProfile,
   ProfileIcon,
-  HomeScreen
+  HomeScreen,
+  Conversations
 
 };

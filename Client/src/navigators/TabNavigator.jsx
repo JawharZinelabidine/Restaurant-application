@@ -1,8 +1,8 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { StyleSheet, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen, ReviewForm, ReservationReviews } from '../screens'
+import { Homescreen, ReservationListScreen, MessagesScreen, LoginScreen, ReviewForm, ReservationReviews, Conversations } from '../screens'
 import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import { Colors } from "../contants";
 import { BlurView } from '@react-native-community/blur'
@@ -13,7 +13,7 @@ import store from "../features/store";
 import { setNotificationBadge, setToast, setReviewNotificationBadge } from '../../src/features/notificationSlice';
 import axios from '../../services/axiosInterceptor.jsx';
 import * as SecureStore from 'expo-secure-store';
-
+import { io } from "socket.io-client";
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -86,15 +86,52 @@ const Tab = createBottomTabNavigator()
 
 const TabNavigator = ({ navigation }) => {
 
-
+  const socket = useRef()
   const isFocused = useIsFocused();
-
-
-
   const { notificationBadge, reviewNotificationBadge } = useSelector(state => state.notification);
-
-
   const { loggedin } = useSelector(state => state.loggedin);
+
+
+
+
+
+  const establishConnection = async () => {
+    const token = await SecureStore.getItemAsync('token')
+    if (token) {
+
+      socket.current = io(`ws://${apiUrl}:8900`, {
+        auth: {
+          token: token,
+        }
+      });
+
+      socket.current.emit("addUser");
+
+
+      // Event handlers
+      socket.current.on("connect", () => {
+        console.log("Connected to server");
+      });
+
+      socket.current.on("connect_error", (error) => {
+        console.error("Connection error:", error);
+      });
+
+      socket.current.on("disconnect", () => {
+        console.log("Disconnected from server");
+      });
+    }
+  }
+  useEffect(() => {
+
+    establishConnection()
+
+
+
+  }, [])
+
+
+
 
   useEffect(() => {
 
@@ -152,7 +189,6 @@ const TabNavigator = ({ navigation }) => {
 
           ),
 
-
           tabBarBadge: false,
           tabBarBadgeStyle: {
             backgroundColor: notificationBadge === true ? "red" : "transparent",
@@ -167,7 +203,7 @@ const TabNavigator = ({ navigation }) => {
 
 
         }} ></Tab.Screen>
-      <Tab.Screen name="Messages" component={MessagesScreen} options={{
+      <Tab.Screen name="Conversations" component={Conversations} options={{
 
         tabBarIcon: ({ focused, color, size }) => (
           <AntDesign name="message1" size={24} color={focused ? Colors.DEFAULT_RED : "black"} />

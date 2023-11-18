@@ -68,8 +68,6 @@ export default function HomeScreen({ navigation, route }) {
 
   const distanceSortedRestaurants = restaurantDistance.slice().sort((a, b) => a.distance - b.distance)
 
-
-
   const sortedRestaurants = filterData.slice().sort((a, b) => new Date(b.rating) - new Date(a.rating));
 
   useEffect(() => {
@@ -78,6 +76,9 @@ export default function HomeScreen({ navigation, route }) {
       getPermissions()
     }
   }, [isFocused])
+
+
+
 
 
   const handleButtonPress = (restaurant) => {

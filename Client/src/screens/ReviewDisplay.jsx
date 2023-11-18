@@ -39,7 +39,7 @@ const ReviewDisplay = ({ review }) => {
 
 const styles = StyleSheet.create({
   reviewContainer: {
-    marginTop: 20,
+    marginTop: 50,
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 8,

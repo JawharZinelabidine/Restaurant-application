@@ -29,7 +29,7 @@ const RestaurantMap = ({ latitude, longitude }) => {
 
 const styles = StyleSheet.create({
     mapContainer: {
-        height: 300,
+        height:400,
     },
     map: {
         ...StyleSheet.absoluteFillObject,

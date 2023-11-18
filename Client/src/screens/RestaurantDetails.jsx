@@ -20,7 +20,7 @@ import axios from "../../services/axiosInterceptor.jsx";
 import regularAxios from "axios";
 import ToastMessage from "../Component/ToastMessage";
 import moment from "moment";
-import { AntDesign,Entypo } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
 import ReviewDisplay from "./ReviewDisplay.jsx";
@@ -287,8 +287,8 @@ export default function RestaurantDetails({ route }) {
         <View style={styles.topedite}></View>
       </ScrollView>
       {isModalOpen && (
-        <TouchableWithoutFeedback onPress={toggleForm}>
-          <Modal transparent={true} visible={true} onPress={toggleForm}>
+        <TouchableWithoutFeedback>
+          <Modal transparent={true} visible={true} >
             <Pressable
               style={{ backgroundColor: "#000000aa", flex: 1 }}
               onPress={toggleForm}
@@ -312,6 +312,7 @@ export default function RestaurantDetails({ route }) {
                   height: 350,
                   justifyContent: "space-between",
                 }}
+                onPress={setIsModalOpen}
               >
                 <Pressable
                   style={styles.btn}
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 15,
     fontWeight: "500",
-    color: "#333",
+    color: "white",
     marginBottom: 20,
     borderRadius: 8,
   },
@@ -475,6 +476,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
+    justifyContent: 'flex-start'
   },
   reservationButtonText: {
     color: "white",
@@ -498,8 +500,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 34,
     marginTop: 8,
-    fontSize:20
-    
+    fontSize: 20
   },
   topedite: {
     marginTop: 100,
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
     bottom: 18,
 
   },
-  map : {
+  map: {
     width: '100%',
     marginTop: "20%",
   }

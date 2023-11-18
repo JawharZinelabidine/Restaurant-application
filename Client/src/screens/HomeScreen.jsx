@@ -21,7 +21,7 @@ export default function HomeScreen({ navigation, route }) {
   const isFocused = useIsFocused();
   const toastRef = useRef(null);
   const { toast } = useSelector(state => state.notification);
-  const {lat, lng} = useSelector(state => state.customer);
+  const { lat, lng } = useSelector(state => state.customer);
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
 
@@ -52,6 +52,24 @@ export default function HomeScreen({ navigation, route }) {
       toastRef.current.show()
     }
   }
+
+
+
+  const restaurantDistance = filterData.slice().map((restaurant) => {
+    let formattedDistance = null;
+    if (lat && lng) {
+      const distance = calculateDistance(lat, lng, restaurant.latitude, restaurant.longtitude);
+      formattedDistance = distance
+      restaurant.distance = distance
+    }
+    return restaurant
+  })
+
+
+  const distanceSortedRestaurants = restaurantDistance.slice().sort((a, b) => a.distance - b.distance)
+
+
+
   const sortedRestaurants = filterData.slice().sort((a, b) => new Date(b.rating) - new Date(a.rating));
 
   useEffect(() => {
@@ -101,16 +119,30 @@ export default function HomeScreen({ navigation, route }) {
           setFilterData={setFilterData}
         />
       </View>
-      <ScrollView vertical>
-        {sortedRestaurants.map((rest) => (
-          <View key={rest.id}>
-            <RestaurantCard
-              restaurant={rest}
-              onPress={(restaurant) => handleButtonPress(restaurant)}
-            />
-          </View>
-        ))}
-      </ScrollView>
+      {!lng && !lat && (
+        <ScrollView vertical>
+          {sortedRestaurants.map((rest) => (
+            <View key={rest.id}>
+              <RestaurantCard
+                restaurant={rest}
+                onPress={(restaurant) => handleButtonPress(restaurant)}
+              />
+            </View>
+          ))}
+        </ScrollView>)}
+      {lng && lat && (
+        <ScrollView vertical>
+          {distanceSortedRestaurants.map((rest) => (
+            <View key={rest.id}>
+              <RestaurantCard
+                restaurant={rest}
+                onPress={(restaurant) => handleButtonPress(restaurant)}
+              />
+            </View>
+          ))}
+        </ScrollView>)}
+
+
       <View style={styles.topedite}></View>
     </ScrollView>
   );

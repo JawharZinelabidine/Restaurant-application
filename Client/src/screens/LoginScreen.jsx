@@ -36,7 +36,7 @@ export default function LoginScreen({ navigation }) {
   const [showToast3, setShowToast3] = useState(false);
   const toastRef = useRef(null);
   const isFocused = useIsFocused();
-  
+
 
   const handleButtonPress = () => {
     navigation.navigate("RegisterScreen");
@@ -113,7 +113,7 @@ export default function LoginScreen({ navigation }) {
           `http://${apiUrl}:3000/api/customers/signin`,
           inputs
         );
-        
+
         await SecureStore.setItemAsync('token', data.token)
         await registerForPushNotificationsAsync()
 
@@ -250,7 +250,7 @@ export default function LoginScreen({ navigation }) {
           </View>
           <TouchableOpacity
             onPress={handleButtonPress}
-            style={{ marginTop: "auto" }}
+            style={{ marginTop: 10 }}
           >
             <Text style={styles.formFooter}>
               Don't have an account?{" "}

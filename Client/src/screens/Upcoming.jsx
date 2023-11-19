@@ -24,11 +24,11 @@ const Upcoming = () => {
 
     try {
       const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/upcoming`);
-      console.log(data)
 
       setUpcomoingReservations(data);
 
     } catch (error) {
+      console.log(error)
       if (error.response.status === 401) {
         setUpcomoingReservations([]);
       }

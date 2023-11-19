@@ -63,6 +63,7 @@ const MessagesScreen = ({ route, navigation }) => {
 
 
     } catch (error) {
+      console.log(error)
       if (error.response.status === 403 || error.response.status === 401) {
         await SecureStore.deleteItemAsync('token')
         navigation.navigate('LoginScreen')
@@ -87,8 +88,8 @@ const MessagesScreen = ({ route, navigation }) => {
   useEffect(() => {
 
 
-    arrivalMessage && conversation.restaurantId === arrivalMessage.sender &&
-      setMessages((prev) => [...prev, arrivalMessage]); console.log(arrivalMessage)
+    arrivalMessage && conversation.restaurantId === arrivalMessage.id &&
+      setMessages((prev) => [...prev, arrivalMessage]);
 
   }, [arrivalMessage])
 
@@ -101,7 +102,7 @@ const MessagesScreen = ({ route, navigation }) => {
 
   useEffect(() => {
 
-    if (!socket.current) {
+    if (!socket.current && token) {
       socket.current = io(`ws://${apiUrl}:8900`, {
         auth: {
           token: token
@@ -113,7 +114,8 @@ const MessagesScreen = ({ route, navigation }) => {
 
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
-        sender: data.senderId,
+        sender: 'restaurant',
+        id: data.senderId,
         message: data.text,
         createdAt: Date.now(),
       });

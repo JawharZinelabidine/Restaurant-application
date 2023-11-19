@@ -4,15 +4,17 @@ import { Color, FontSize } from "../../GlobalStyles";
 import React from 'react'
 import { useEffect, useState } from 'react';
 import axios from '../../services/axiosInterceptor';
+import { useIsFocused } from '@react-navigation/native';
 
 
 const ConversationList = ({ conversation, restaurants, onPress }) => {
 
 
-    const [messages, setMessages] = useState([])
+    const [latestMessage, setLatesetMessage] = useState([])
 
 
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+    const isFocused = useIsFocused();
 
 
     const handleButtonPress = () => {
@@ -23,7 +25,7 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
         try {
 
             const { data } = await axios.get(`http://${apiUrl}:3000/api/messages/customer/messages/${conversation.restaurantId}`)
-            setMessages(data)
+            setLatesetMessage(data[data.length - 1].message)
         } catch (error) {
             console.log(error)
             if (error && error.response.status === 403 || error && error.response.status === 401) {
@@ -42,8 +44,13 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
 
 
     useEffect(() => {
-        getMessages()
-    }, [])
+        if (isFocused) {
+            getMessages()
+            console.log('logging')
+        }
+
+    }, [isFocused])
+
 
 
     return (
@@ -57,7 +64,7 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
                 colors={["#000", "rgba(0, 0, 0, 0)"]}
             />
             <Text style={[styles.restaurantName, styles.restaurantNameLayout]}>{restaurantName?.name}</Text>
-            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>{messages[messages.length - 1].message}</Text>
+            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>{latestMessage}</Text>
 
 
 

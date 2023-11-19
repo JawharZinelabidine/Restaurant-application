@@ -27,6 +27,7 @@ import ReviewDisplay from "./ReviewDisplay.jsx";
 import ReviewModal from "./ReviewModal.jsx";
 import { useEffect } from "react";
 import RestaurantMap from "../Component/RestaurantMap.jsx";
+import * as SecureStore from 'expo-secure-store';
 
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
@@ -48,6 +49,8 @@ export default function RestaurantDetails({ route }) {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [token, setToken] = useState('')
+
   const toastRef = useRef(null);
 
   const toggleReviewModal = () => {
@@ -70,6 +73,7 @@ export default function RestaurantDetails({ route }) {
     rating,
     latitude,
     longtitude,
+    accountType
   } = route.params.restaurant;
   const navigation = useNavigation();
 
@@ -198,16 +202,31 @@ export default function RestaurantDetails({ route }) {
       return customer.id === latestReview.customerId
     })
 
-
-
   }
+
+  const getToken = async () => {
+
+    const token = await SecureStore.getItemAsync('token')
+
+    setToken(token)
+  }
+
+
+  const handleButtonPress = (conversation, restaurants, token) => {
+    navigation.navigate("Messages", { conversation, restaurants, token });
+
+  };
+
+  const conversation = { restaurantId: id }
+  const restaurants = [{ id: id, name: name }]
+
 
 
   useEffect(() => {
 
     getReviews()
     getAllCustomers()
-
+    getToken()
   }, [])
 
   const spaced = category.toString().split(",").join("  ");
@@ -245,6 +264,13 @@ export default function RestaurantDetails({ route }) {
             </TouchableOpacity>
 
           </View>
+          <TouchableOpacity
+            style={styles.chatButton}
+            onPress={() => handleButtonPress(conversation, restaurants, token)}
+          >
+            <Text style={styles.chatText}>Message us!</Text>
+          </TouchableOpacity>
+
           <View style={styles.cardRating}>
             <AntDesign name="star" size={30} color="gold" />
             <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
@@ -378,7 +404,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    maxHeight: 800
   },
   imageSwiper: {
     height: Display.setHeight(100),
@@ -489,6 +514,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   menuText: {
+    color: "#FFF",
+    textAlign: "center",
+    fontSize: 16,
+    fontStyle: "normal",
+    fontWeight: "700",
+    lineHeight: 24,
+  },
+  chatButton: {
+    borderRadius: 16,
+    backgroundColor: "#F00",
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    width: Display.setWidth(40),
+    left: 220
+  },
+  chatText: {
     color: "#FFF",
     textAlign: "center",
     fontSize: 16,

@@ -20,7 +20,7 @@ export default function HomeScreen({ navigation, route }) {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
   const toastRef = useRef(null);
-  const { toast } = useSelector(state => state.notification);
+  const { toast, toast2 } = useSelector(state => state.notification);
   const { lat, lng } = useSelector(state => state.customer);
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -52,6 +52,11 @@ export default function HomeScreen({ navigation, route }) {
       toastRef.current.show()
     }
   }
+  if (toast2) {
+    if (toastRef.current) {
+      toastRef.current.show()
+    }
+  }
 
 
 
@@ -66,9 +71,28 @@ export default function HomeScreen({ navigation, route }) {
   })
 
 
-  const distanceSortedRestaurants = restaurantDistance.slice().sort((a, b) => a.distance - b.distance)
+  const distanceSortedRestaurants = restaurantDistance.slice().sort((a, b) => {
+    if (a.accountType === 'PREMIUM' && b.accountType !== 'PREMIUM') {
+      return -1;
+    } else if (a.accountType !== 'PREMIUM' && b.accountType === 'PREMIUM') {
+      return 1;
+    } else {
+      return a.distance - b.distance;
+    }
 
-  const sortedRestaurants = filterData.slice().sort((a, b) => new Date(b.rating) - new Date(a.rating));
+  })
+
+  const sortedRestaurants = filterData.slice().sort((a, b) => {
+
+    if (a.accountType === 'PREMIUM' && b.accountType !== 'PREMIUM') {
+      return -1;
+    } else if (a.accountType !== 'PREMIUM' && b.accountType === 'PREMIUM') {
+      return 1;
+    } else {
+      return new Date(b.rating) - new Date(a.rating);
+    }
+  });
+
 
   useEffect(() => {
     if (isFocused) {
@@ -100,6 +124,15 @@ export default function HomeScreen({ navigation, route }) {
             ref={toastRef}
             type="info"
             text='There has been an update to one of your reservations!'
+            timeout={4000}
+          />
+        )}
+        {toast2 && (
+
+          <ToastMessage
+            ref={toastRef}
+            type="info"
+            text='You have received a message.'
             timeout={4000}
           />
         )}

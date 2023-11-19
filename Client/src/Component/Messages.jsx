@@ -10,6 +10,7 @@ const Messages = ({ message }) => {
     return (
 
         <View style={message.sender === 'restaurant' ? styles.message : styles.myMessage}   >
+            {console.log(message)}
             <View style={styles.messageTop}  >
                 <Text style={message.sender === 'restaurant' ? styles.messageText : styles.myMessageText} >
                     {message.message}

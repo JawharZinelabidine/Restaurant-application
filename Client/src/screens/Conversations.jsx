@@ -5,9 +5,9 @@ import ConversationList from './ConversationList.jsx'
 import axios from '../../services/axiosInterceptor.jsx';
 import { useIsFocused } from '@react-navigation/native';
 import { Display } from "../utils";
-import { setReviewNotificationBadge } from "../../src/features/notificationSlice";
 import { useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
+import { setMessageNotificationBadge } from '../../src/features/notificationSlice';
 
 
 
@@ -33,9 +33,9 @@ export default function Conversations({ navigation }) {
             const { data } = await axios.get(`http://${apiUrl}:3000/api/messages/customer/conversations`)
             const uniqueConversationsMap = {};
             for (const conversation of data) {
-                const { customerId, createdAt } = conversation;
-                if (!uniqueConversationsMap[customerId] || new Date(createdAt) > new Date(uniqueConversationsMap[customerId].createdAt)) {
-                    uniqueConversationsMap[customerId] = conversation;
+                const { restaurantId, createdAt } = conversation;
+                if (!uniqueConversationsMap[restaurantId] || new Date(createdAt) > new Date(uniqueConversationsMap[restaurantId].createdAt)) {
+                    uniqueConversationsMap[restaurantId] = conversation;
                 }
             }
             const uniqueConvos = Object.values(uniqueConversationsMap);
@@ -74,12 +74,24 @@ export default function Conversations({ navigation }) {
         setToken(token)
     }
 
+    const removeNotificationBadge = async () => {
+        try {
+            const { data } = await axios.put(`http://${apiUrl}:3000/api/customers/notification`)
+            dispatch(setMessageNotificationBadge(data))
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
 
     useEffect(() => {
         if (isFocused) {
             getToken()
             getConvos()
             findRestaurantName()
+            removeNotificationBadge()
         }
 
 
@@ -96,8 +108,8 @@ export default function Conversations({ navigation }) {
                 contentContainerStyle={styles.scrollViewContent}
 
             >
-                {conversations.map((conversation) => (
-                    <View key={conversation} style={styles.card}
+                {conversations.map((conversation, index) => (
+                    <View key={index} style={styles.card}
                     >
 
                         <ConversationList conversation={conversation} restaurants={restaurants}

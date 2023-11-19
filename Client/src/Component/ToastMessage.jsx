@@ -2,7 +2,7 @@ import { useState, forwardRef, useImperativeHandle } from 'react';
 import { View, Text, } from 'react-native';
 import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { setToast } from '../../src/features/notificationSlice';
+import { setToast, setToast2 } from '../../src/features/notificationSlice';
 import store from "../features/store";
 
 const ToastMessage = forwardRef(({ type, text, description, timeout = 1000 }, ref) => {
@@ -34,6 +34,7 @@ const ToastMessage = forwardRef(({ type, text, description, timeout = 1000 }, re
             setIsVisible(false);
             clearTimeout(timer);
             store.dispatch(setToast(false))
+            store.dispatch(setToast2(false))
 
         }, timeout);
     };

@@ -2,19 +2,50 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { LinearGradient } from "expo-linear-gradient";
 import { Color, FontSize } from "../../GlobalStyles";
 import React from 'react'
-
+import { useEffect, useState } from 'react';
+import axios from '../../services/axiosInterceptor';
 
 
 const ConversationList = ({ conversation, restaurants, onPress }) => {
+
+
+    const [messages, setMessages] = useState([])
+
+
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 
     const handleButtonPress = () => {
         onPress(conversation);
     };
 
+    const getMessages = async () => {
+        try {
+
+            const { data } = await axios.get(`http://${apiUrl}:3000/api/messages/customer/messages/${conversation.restaurantId}`)
+            setMessages(data)
+        } catch (error) {
+            console.log(error)
+            if (error && error.response.status === 403 || error && error.response.status === 401) {
+                await SecureStore.deleteItemAsync('token')
+                navigation.navigate('LoginScreen')
+            }
+        }
+
+    }
+
     const restaurantName = restaurants.slice().find((restaurant) => {
         return restaurant.id === conversation.restaurantId
     })
+
+
+
+
+    useEffect(() => {
+        getMessages()
+    }, [])
+
+
     return (
 
 
@@ -25,9 +56,8 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
                 locations={[0, 1]}
                 colors={["#000", "rgba(0, 0, 0, 0)"]}
             />
-
             <Text style={[styles.restaurantName, styles.restaurantNameLayout]}>{restaurantName?.name}</Text>
-            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>safdsafsaf</Text>
+            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>{messages[messages.length - 1].message}</Text>
 
 
 

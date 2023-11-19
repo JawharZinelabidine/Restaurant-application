@@ -166,6 +166,7 @@ const MessagesScreen = ({ route, navigation }) => {
         <TextInput style={styles.chatMessageInput}
           ref={inputRef}
           multiline={true}
+          value={newMessage}
           onChangeText={handleMessageChange}
           numberOfLines={1}
           placeholder="Write something...">

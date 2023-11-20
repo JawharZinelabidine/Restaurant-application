@@ -7,6 +7,9 @@ import { Display } from "../utils";
 import HistoryList from './HistoryList.jsx'
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import { useSelector } from 'react-redux'
+import { setToken } from "../../src/features/loggedinSlice.js";
+import * as SecureStore from 'expo-secure-store';
 
 
 import { setNotificationBadge, setReviewNotificationBadge } from '../../src/features/notificationSlice';
@@ -21,6 +24,7 @@ const History = () => {
     const [restaurants, setRestaurants] = useState([])
     const [logInMessage, setLogInMessage] = useState(false)
 
+    const { token } = useSelector(state => state.loggedin);
 
     const isFocused = useIsFocused();
 
@@ -46,13 +50,18 @@ const History = () => {
 
 
     const findRestaurantName = async () => {
-        try {
+        const token = await SecureStore.getItemAsync('token')
+        if (token) {
+            store.dispatch(setToken(token));
 
-            const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`)
-            setRestaurants(data)
+            try {
 
-        } catch (error) {
-            console.log(error)
+                const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`)
+                setRestaurants(data)
+
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 
@@ -80,23 +89,39 @@ const History = () => {
 
     return (
         <View style={styles.container}>
-            <ScrollView style={styles.constainer2}
-                contentContainerStyle={styles.scrollViewContent}
-            >
-                {expiredReservations.map((reserv) => (
-                    <View key={reserv.id} style={styles.card}>
-                        <HistoryList reservation={reserv} restaurants={restaurants}></HistoryList>
-                    </View>
-                ))}
+            {expiredReservations.length > 0 && (
+                <ScrollView style={styles.constainer2}
+                    contentContainerStyle={styles.scrollViewContent}
+                >
+                    {expiredReservations.map((reserv) => (
+                        <View key={reserv.id} style={styles.card}>
+                            <HistoryList reservation={reserv} restaurants={restaurants}></HistoryList>
+                        </View>
+                    ))}
 
-                {
-                    logInMessage && (
-                        <Text style={{ color: '#ffffff' }}>Log in to see your upcoming reservations!</Text>
-                    )
-                }
+                    {
+                        logInMessage && (
+                            <Text style={{ color: '#ffffff' }}>Log in to see your upcoming reservations!</Text>
+                        )
+                    }
 
 
-            </ScrollView>
+                </ScrollView>
+            )}
+
+            {!expiredReservations.length && !token && (
+                <View style={styles.loginMessage}>
+
+                    <Text style={styles.loginMessageText}>Log in to see your reservation history!</Text>
+                </View>
+            )}
+            {!expiredReservations.length && token && (
+                <View style={styles.loginMessage}>
+
+                    <Text style={styles.loginMessageText}>Your reservation history is empty</Text>
+                </View>
+            )}
+
             <View style={styles.topedite}></View>
 
         </View>
@@ -378,4 +403,14 @@ const styles = StyleSheet.create({
         marginTop: 100,
 
     },
+    loginMessage: {
+        borderRadius: 10,
+        margin: 5,
+        padding: 2,
+        marginTop: 15,
+    },
+    loginMessageText: {
+        color: 'white',
+        alignSelf: 'center'
+    }
 })

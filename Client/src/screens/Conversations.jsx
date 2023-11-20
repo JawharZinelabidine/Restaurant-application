@@ -8,6 +8,8 @@ import { Display } from "../utils";
 import { useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import { setMessageNotificationBadge } from '../../src/features/notificationSlice';
+import { useSelector } from 'react-redux'
+import { setToken } from "../../src/features/loggedinSlice.js";
 
 
 
@@ -22,7 +24,7 @@ export default function Conversations({ navigation }) {
 
     const [conversations, setConversations] = useState([])
     const [restaurants, setRestaurants] = useState([])
-    const [token, setToken] = useState('')
+    const { token } = useSelector(state => state.loggedin);
 
 
 
@@ -43,9 +45,8 @@ export default function Conversations({ navigation }) {
             setConversations(sortedConvos)
         } catch (error) {
             console.log(error)
-            if (error.response.status === 403 || error.response.status === 401) {
-                localStorage.clear()
-                navigate('/')
+            if (error.response.status === 401) {
+                setConversations([]);
             }
         }
     }
@@ -70,8 +71,9 @@ export default function Conversations({ navigation }) {
     const getToken = async () => {
 
         const token = await SecureStore.getItemAsync('token')
-
-        setToken(token)
+        if (token) {
+            dispatch(setToken(token))
+        }
     }
 
     const removeNotificationBadge = async () => {
@@ -100,10 +102,11 @@ export default function Conversations({ navigation }) {
 
 
 
+
     return (
 
         <View style={styles.container}>
-            <ScrollView
+            {conversations.length > 0 && (<ScrollView
                 style={styles.constainer2}
                 contentContainerStyle={styles.scrollViewContent}
 
@@ -118,11 +121,29 @@ export default function Conversations({ navigation }) {
                 ))}
 
 
-            </ScrollView>
+
+
+
+            </ScrollView>)}
+            {!conversations.length && token && (
+                <View style={styles.loginMessage}>
+
+                    <Text style={styles.loginMessageText}>You don't have any conversations yet.</Text>
+                </View>
+            )}
+            {!conversations.length && !token && (
+                <View style={styles.loginMessage}>
+
+                    <Text style={styles.loginMessageText}>Log in to see your conversations!</Text>
+                </View>
+            )}
+
             <View style={styles.topedite}></View>
 
         </View>
     )
+
+
 
 
 }
@@ -158,5 +179,15 @@ const styles = StyleSheet.create({
         marginBottom: 100,
 
     },
+    loginMessage: {
+        borderRadius: 10,
+        margin: 5,
+        padding: 2,
+        marginTop: 350,
+    },
+    loginMessageText: {
+        color: 'white',
+        alignSelf: 'center'
+    }
 
 })

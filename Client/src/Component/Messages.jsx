@@ -1,21 +1,27 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
 import moment from "moment";
 
 
-const Messages = ({ message }) => {
-
+const Messages = ({ message, restaurantImage }) => {
 
 
     return (
 
-        <View style={message.sender === 'restaurant' ? styles.message : styles.myMessage}   >
-            {console.log(message)}
+        <View style={message.sender !== 'restaurant' ? styles.message : styles.myMessage}   >
             <View style={styles.messageTop}  >
-                <Text style={message.sender === 'restaurant' ? styles.messageText : styles.myMessageText} >
+                {message.sender !== 'restaurant' && (<Image
+                    source={{ uri: restaurantImage.main_image }}
+                    style={styles.image} />)}
+
+                <Text style={message.sender !== 'restaurant' ? styles.messageText : styles.myMessageText} >
                     {message.message}
 
                 </Text>
+                {console.log(message.message.length)}
+                {message.sender !== 'customer' && (<Image
+                    source={require('../assets/images/man.png')}
+                    style={styles.myImage} />)}
             </View>
             <Text style={styles.messageBottom} className="messageBottom ">{moment(message.createdAt).fromNow()}</Text>
 
@@ -30,13 +36,7 @@ export default Messages
 const styles = StyleSheet.create({
 
 
-    messageImg: {
-        width: 32,
-        height: 32,
-        borderRadius: '50%',
-        objectFit: 'cover',
-        marginRight: 10,
-    },
+
     messageBottom: {
         fontSize: 12,
         color: 'white',
@@ -45,10 +45,13 @@ const styles = StyleSheet.create({
     },
     messageTop: {
         display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
 
     },
     message: {
-
+        display: 'flex',
+        borderRadius: 20,
         padding: 10,
         maxWidth: '80%',
         alignSelf: 'flex-start',
@@ -61,9 +64,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 17,
         alignSelf: 'flex-start',
+
+
     },
     myMessage: {
+        display: 'flex',
         padding: 10,
+        borderRadius: 20,
         maxWidth: '80%',
         alignSelf: 'flex-end',
     },
@@ -76,6 +83,21 @@ const styles = StyleSheet.create({
         fontSize: 17,
         alignSelf: 'flex-end',
     },
+    image: {
+        width: 25,
+        height: 25,
+        borderRadius: 16,
+        alignSelf: 'flex-start',
+        margin: 5
+    },
+    myImage: {
+        width: 25,
+        height: 25,
+        borderRadius: 16,
+        alignSelf: 'flex-start',
+        margin: 5
 
+
+    },
 
 })

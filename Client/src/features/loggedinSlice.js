@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    loggedin:false
+    loggedin: false,
+    token: ''
 
 
 
@@ -13,11 +14,14 @@ const loggedinSlice = createSlice({
     initialState,
     reducers: {
 
-       
+
 
         setLoggedin: (state, action) => {
-            state.loggedin =        !state.loggedin
-          },
+            state.loggedin = !state.loggedin
+        },
+        setToken: (state, action) => {
+            state.token = action.payload;
+        },
 
 
     },
@@ -25,6 +29,7 @@ const loggedinSlice = createSlice({
 
 export const {
     setLoggedin,
+    setToken
 } = loggedinSlice.actions;
 
 

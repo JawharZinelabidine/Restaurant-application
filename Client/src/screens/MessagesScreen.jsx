@@ -23,7 +23,7 @@ const MessagesScreen = ({ route, navigation }) => {
   const scrollRef = useRef()
 
   const [messages, setMessages] = useState([])
-  const [newMessage, setNewMessage] = useState([])
+  const [newMessage, setNewMessage] = useState('')
   const [arrivalMessage, setArrivalMessage] = useState(null)
 
   const restaurantName = restaurants.slice().find((restaurant) => {
@@ -155,7 +155,7 @@ const MessagesScreen = ({ route, navigation }) => {
 
       <ScrollView style={styles.constainer2} contentContainerStyle={styles.scrollViewContent} ref={scrollRef}>
         {messages.map((message) => (
-          <Messages key={message.id} message={message} />
+          <Messages key={message.id} message={message} restaurantImage={restaurantName} />
 
         ))}
 
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginLeft: 330,
-    bottom: 60
+    bottom: 55
   },
 
   chatMessageInput: {

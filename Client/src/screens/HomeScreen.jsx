@@ -103,8 +103,6 @@ export default function HomeScreen({ navigation, route }) {
 
 
 
-
-
   const handleButtonPress = (restaurant) => {
     navigation.navigate("RestaurantDetails", { restaurant });
   };

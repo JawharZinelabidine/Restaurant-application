@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView, Text } from "react-native";
 import { Colors } from "../contants";
 import { Color, FontSize, Border } from "../../GlobalStyles";
 import axios from "../../services/axiosInterceptor.jsx";
@@ -8,7 +8,9 @@ import React, { useState, useEffect } from "react";
 import UpcomingList from "./UpcomingList.jsx";
 import { useIsFocused } from "@react-navigation/native";
 import { setNotificationBadge } from "../../src/features/notificationSlice";
+import { setToken } from "../../src/features/loggedinSlice.js";
 import * as SecureStore from 'expo-secure-store';
+import { useSelector } from 'react-redux'
 
 const Upcoming = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -17,6 +19,7 @@ const Upcoming = () => {
   const [restaurants, setRestaurants] = useState([]);
 
   const isFocused = useIsFocused();
+  const { token } = useSelector(state => state.loggedin);
 
 
 
@@ -40,6 +43,8 @@ const Upcoming = () => {
   const findRestaurantName = async () => {
     const token = await SecureStore.getItemAsync('token')
     if (token) {
+      store.dispatch(setToken(token));
+
       try {
         const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`);
         setRestaurants(data);
@@ -73,21 +78,36 @@ const Upcoming = () => {
     .slice()
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
+
   return (
     <View style={styles.container}>
-      <ScrollView
-        style={styles.constainer2}
-        contentContainerStyle={styles.scrollViewContent}
-      >
-        {sortedReservations.map((reservation) => (
-          <View key={reservation.id} style={styles.card}>
-            <UpcomingList
-              reservation={reservation}
-              restaurants={restaurants}
-            ></UpcomingList>
-          </View>
-        ))}
-      </ScrollView>
+      {sortedReservations.length > 0 && (
+        <ScrollView
+          style={styles.constainer2}
+          contentContainerStyle={styles.scrollViewContent}
+        >
+          {sortedReservations.map((reservation) => (
+            <View key={reservation.id} style={styles.card}>
+              <UpcomingList
+                reservation={reservation}
+                restaurants={restaurants}
+              ></UpcomingList>
+            </View>
+          ))}
+        </ScrollView>
+      )}
+      {!sortedReservations.length && token && (
+        <View style={styles.loginMessage}>
+
+          <Text style={styles.loginMessageText}>No upcoming reservations yet</Text>
+        </View>
+      )}
+      {!sortedReservations.length && !token && (
+        <View style={styles.loginMessage}>
+
+          <Text style={styles.loginMessageText}>Log in to see your upcoming reservations!</Text>
+        </View>
+      )}
       <View style={styles.topedite}></View>
     </View>
   );
@@ -359,4 +379,14 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: Color.colorWhite,
   },
+  loginMessage: {
+    borderRadius: 10,
+    margin: 5,
+    padding: 2,
+    marginTop: 350,
+  },
+  loginMessageText: {
+    color: 'white',
+    alignSelf: 'center'
+  }
 });

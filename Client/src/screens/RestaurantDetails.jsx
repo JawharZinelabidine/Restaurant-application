@@ -275,9 +275,7 @@ export default function RestaurantDetails({ route }) {
             <AntDesign name="star" size={30} color="gold" />
             <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
           </View>
-          <Text style={styles.openingHours}>{`${moment(opening_time).format(
-            "LT"
-          )} - ${moment(closing_time).format("LT")}`}</Text>
+          <Text style={styles.openingHours}>{`${moment(opening_time).utcOffset("-000").format("LT")} - ${moment(closing_time).utcOffset("-000").format("LT")}`}</Text>
           <View style={styles.categoryContainer}>
             <Text style={styles.category}>{spaced}</Text>
           </View>

@@ -5,12 +5,14 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import axios from '../../services/axiosInterceptor';
 import { useIsFocused } from '@react-navigation/native';
+import moment from "moment";
 
 
 const ConversationList = ({ conversation, restaurants, onPress }) => {
 
 
     const [latestMessage, setLatesetMessage] = useState([])
+    const [latestMessageDate, setlatestMessageDate] = useState([])
 
 
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -26,6 +28,7 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
 
             const { data } = await axios.get(`http://${apiUrl}:3000/api/messages/customer/messages/${conversation.restaurantId}`)
             setLatesetMessage(data[data.length - 1].message)
+            setlatestMessageDate(data[data.length - 1].createdAt)
         } catch (error) {
             console.log(error)
             if (error && error.response.status === 403 || error && error.response.status === 401) {
@@ -64,7 +67,8 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
                 colors={["#000", "rgba(0, 0, 0, 0)"]}
             />
             <Text style={[styles.restaurantName, styles.restaurantNameLayout]}>{restaurantName?.name}</Text>
-            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>{latestMessage}</Text>
+            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>{latestMessage.slice(0, 30)}...</Text>
+            <Text style={[styles.lastMessageDate, styles.lastMessageDateLayout]}>{moment(latestMessageDate).fromNow()}</Text>
 
 
 
@@ -118,10 +122,25 @@ const styles = StyleSheet.create({
     },
     lastMessageLayout: {
         height: 29,
-        width: 149,
+        width: 300,
         fontSize: FontSize.size_6xl,
         alignItems: "center",
         display: "flex",
         color: 'grey'
+    },
+    lastMessageDate: {
+        top: 105,
+        left: 280,
+        textAlign: "left",
+        lineHeight: 20,
+        position: "absolute",
+    },
+    lastMessageDateLayout: {
+        height: 29,
+        width: 300,
+        fontSize: FontSize.size_6xl,
+        alignItems: "center",
+        display: "flex",
+        color: Color.colorWhite,
     },
 })

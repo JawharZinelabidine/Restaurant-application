@@ -35,7 +35,6 @@ const History = () => {
         try {
             const { data } = await axios.get(`http://${apiUrl}:3000/api/reservations/expired`)
             setExpiredReservations(data)
-            console.log(data)
         } catch (error) {
             console.log(error)
             if (error.response.status === 401) {

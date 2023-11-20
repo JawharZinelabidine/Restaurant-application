@@ -55,7 +55,6 @@ export default function ReservationReviews({ navigation }) {
     };
 
     const handleButtonPress = (reservation, restaurants) => {
-        console.log('aaaaaaaaaaaaaa')
         navigation.navigate("ReviewForm", { reservation, restaurants });
     };
 

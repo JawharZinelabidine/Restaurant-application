@@ -24,8 +24,8 @@ const UpcomingList = ({ reservation, restaurants }) => {
           reservation.status === "Pending"
             ? styles.rectangleViewPending
             : reservation.status === "Approved"
-            ? styles.rectangleViewApproved
-            : null,
+              ? styles.rectangleViewApproved
+              : null,
           styles.iphone131412ChildLayout1,
         ]}
       />
@@ -34,8 +34,8 @@ const UpcomingList = ({ reservation, restaurants }) => {
           reservation.status === "Pending"
             ? styles.pending
             : reservation.status === "Approved"
-            ? styles.accepted
-            : null,
+              ? styles.accepted
+              : null,
           styles.rosemarysTypo,
         ]}
       >

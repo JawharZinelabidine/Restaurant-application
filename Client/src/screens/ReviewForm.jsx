@@ -6,16 +6,7 @@ import axios from '../../services/axiosInterceptor'
 
 
 export default function ReviewForm({ route, navigation }) {
-    const {
-        id,
-        date,
-        time,
-        customerId,
-        restaurantId,
-        notification,
-        canReview,
-        status,
-    } = route.params.reservation;
+    const { id, restaurantId } = route.params.reservation;
     const restaurants = route.params.restaurants;
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
     const toastRef = useRef(null);

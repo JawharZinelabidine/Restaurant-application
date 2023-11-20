@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import { useIsFocused } from '@react-navigation/native';
 import { setLoggedin } from "../features/loggedinSlice.js";
+import { setToken } from "../../src/features/loggedinSlice.js";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -98,6 +99,7 @@ export default function LoginScreen({ navigation }) {
   const emptyStorage = async () => {
     try {
       await SecureStore.deleteItemAsync('token')
+      store.dispatch(setToken(''));
       dispatch(setLoggedin(false));
     } catch (error) {
       console.log(error)

@@ -19,8 +19,12 @@ import {
     UpdatePassword,
     CustomerProfile,
     HomeScreen,
-    LoginScreen
+    LoginScreen,
+    Conversations,
+    MessagesScreen
+
 } from "../screens";
+import { useEffect } from "react";
 
 
 
@@ -31,7 +35,6 @@ const Stack = createStackNavigator();
 
 
 const Navigators = () => {
-
 
 
 
@@ -64,6 +67,8 @@ const Navigators = () => {
                     <Stack.Screen name="LoginScreen" component={LoginScreen} />
                     <Stack.Screen name="CustomerProfile" component={CustomerProfile} />
                     <Stack.Screen name="HomeScreen" component={HomeScreen} />
+                    <Stack.Screen name="Conversations" component={Conversations} />
+                    <Stack.Screen name="Messages" component={MessagesScreen} />
 
 
                     <Stack.Screen name="MenuContainer" component={MenuContainer} options={{ presentation: "transparentModal" }} />

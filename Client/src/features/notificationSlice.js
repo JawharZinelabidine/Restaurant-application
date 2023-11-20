@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     toast: false,
+    toast2: false,
     notificationBadge: false,
     notificationBody: '',
     reviewNotificationBadge: false,
     reviewNotificationBody: '',
+    messageNotificationBadge: false,
 
 
 };
@@ -17,6 +19,9 @@ const notificationSlice = createSlice({
     reducers: {
         setToast: (state, action) => {
             state.toast = action.payload;
+        },
+        setToast2: (state, action) => {
+            state.toast2 = action.payload;
         },
         setNotificationBadge: (state, action) => {
             state.notificationBadge = action.payload;
@@ -30,6 +35,9 @@ const notificationSlice = createSlice({
         setReviewNotificationBody: (state, action) => {
             state.reviewNotificationBody = action.payload;
         },
+        setMessageNotificationBadge: (state, action) => {
+            state.messageNotificationBadge = action.payload;
+        },
 
 
 
@@ -38,10 +46,12 @@ const notificationSlice = createSlice({
 
 export const {
     setToast,
+    setToast2,
     setNotificationBadge,
     setNotificationBody,
     setReviewNotificationBadge,
-    setReviewNotificationBody
+    setReviewNotificationBody,
+    setMessageNotificationBadge
 
 
 } = notificationSlice.actions;

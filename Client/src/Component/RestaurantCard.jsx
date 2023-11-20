@@ -10,7 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 export default function RestaurantCard({ restaurant, onPress }) {
-  const { name, main_image, category, opening_time, closing_time, rating, status, City, latitude, longtitude } = restaurant;
+  const { name, main_image, category, rating, latitude, longtitude, accountType } = restaurant;
   const { lat, lng } = useSelector(state => state.customer)
   const handleButtonPress = () => {
     onPress(restaurant);
@@ -28,7 +28,9 @@ export default function RestaurantCard({ restaurant, onPress }) {
     <TouchableOpacity onPress={handleButtonPress}>
       <View style={styles.cardContainer}>
         <Image source={{ uri: main_image.trim() }} style={styles.cardImage} />
+
         <Text style={styles.cardName}>{name}</Text>
+
         <Text style={styles.cardCategory}>{spaced}</Text>
         {formattedDistance && <Text style={styles.cardDistance}>{formattedDistance}</Text>}
         <View style={styles.cardRating}>
@@ -37,6 +39,9 @@ export default function RestaurantCard({ restaurant, onPress }) {
         </View>
         <Text style={styles.cardStatus}>Open</Text>
       </View>
+      {accountType === 'PREMIUM' && (<AntDesign name="message1" size={24} style={styles.chatSign} />
+      )}
+
     </TouchableOpacity>
   );
 }
@@ -88,11 +93,16 @@ const styles = StyleSheet.create({
   cardStatus: {
     color: 'green',
     fontSize: 16,
-    left: 280
+    left: 320
   },
   cardDistance: {
     color: 'gray',
     fontSize: 14,
     top: 10,
   },
+  chatSign: {
+    left: 350,
+    bottom: 120,
+
+  }
 });

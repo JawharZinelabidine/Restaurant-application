@@ -59,7 +59,7 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
     return (
 
 
-        <TouchableOpacity onPress={handleButtonPress}>
+        <TouchableOpacity onPress={handleButtonPress} style={{ width: '100%' }}>
 
             <LinearGradient
                 style={[styles.rectangleLineargradient, styles.groupIconLayout]}

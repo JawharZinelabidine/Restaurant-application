@@ -163,7 +163,7 @@ const MessagesScreen = ({ route, navigation }) => {
       </ScrollView>
       <View style={styles.lineSeparator2} />
 
-      <KeyboardAvoidingView behavior="padding" style={styles.chatBoxBottom}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.chatBoxBottom}>
         <TextInput style={styles.chatMessageInput}
           ref={inputRef}
           multiline={true}
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: Colors.primaryBlackHex,
-    
+
 
 
   },
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   button: {
 
     marginRight: 25,
-    marginTop: 10,
+    marginTop: 15,
   },
 
   chatMessageInput: {

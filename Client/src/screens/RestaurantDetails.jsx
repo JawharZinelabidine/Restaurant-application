@@ -192,14 +192,43 @@ export default function RestaurantDetails({ route }) {
 
   }
 
-  const latestReview = reviews.slice().reduce((max, review) =>
-    review.createdAt > max.createdAt ? review : max, reviews[0]
+
+  const highestReview = reviews.slice().reduce((max, review) =>
+    review.rating > max.rating ? review : max, reviews[0]
   );
 
-  if (latestReview) {
+  const filteredReviews = reviews.filter(review => review.id !== highestReview.id);
 
-    var latestCustomer = customers.slice().find((customer) => {
-      return customer.id === latestReview.customerId
+  const lowestReview = filteredReviews.slice().reduce((min, review) =>
+    review.rating < min.rating ? review : min, filteredReviews[0]
+  );
+
+
+
+
+  if (reviews.length <= 2) {
+
+    var onlyCustomer = customers.slice().find((customer) => {
+      return customer.id === reviews[0]?.customerId
+    })
+
+  }
+
+
+  const size = reviews.length - 2
+
+
+  if (highestReview) {
+
+    var highestCustomer = customers.slice().find((customer) => {
+      return customer.id === highestReview.customerId
+    })
+
+  }
+  if (lowestReview) {
+
+    var lowestCustomer = customers.slice().find((customer) => {
+      return customer.id === lowestReview.customerId
     })
 
   }
@@ -314,17 +343,72 @@ export default function RestaurantDetails({ route }) {
           <Text style={styles.menuText}>Make a Reservation</Text>
 
         </TouchableOpacity>
-        <TouchableOpacity onPress={toggleReviewModal}>
-          <ReviewDisplay
-            review={{
-              title: latestReview?.review_title,
-              name: latestCustomer?.fullname,
-              body: latestReview?.review_body,
-              rating: latestReview?.rating,
-              size: reviews?.length
-            }}
-          />
-        </TouchableOpacity>
+        {reviews.length > 2 && (
+          <View style={{ display: 'flex', flexDirection: 'column', marginTop: 50 }}>
+            <ReviewDisplay
+              review={{
+                title: highestReview?.review_title,
+                name: highestCustomer?.fullname,
+                body: highestReview?.review_body,
+                rating: highestReview?.rating,
+              }}
+            />
+            <ReviewDisplay
+              review={{
+                title: lowestReview?.review_title,
+                name: lowestCustomer?.fullname,
+                body: lowestReview?.review_body,
+                rating: lowestReview?.rating,
+              }}
+
+
+
+            />
+            <TouchableOpacity onPress={toggleReviewModal}>
+
+              <Text style={styles.reviewAmount}>
+                {size > 1 ? `See ${size} more reviews!` : size === 1 ? `See ${size} more review!` : ''}
+              </Text>
+            </TouchableOpacity>
+
+          </View>
+        )}
+
+        {reviews.length === 2 && (
+          <View style={{ display: 'flex', flexDirection: 'column', marginTop: 50 }}>
+            <ReviewDisplay
+              review={{
+                title: highestReview?.review_title,
+                name: highestCustomer?.fullname,
+                body: highestReview?.review_body,
+                rating: highestReview?.rating,
+              }}
+            />
+            <ReviewDisplay
+              review={{
+                title: lowestReview?.review_title,
+                name: lowestCustomer?.fullname,
+                body: lowestReview?.review_body,
+                rating: lowestReview?.rating,
+              }}
+            />
+          </View>
+        )}
+        {reviews.length < 2 && (
+          <View style={{ display: 'flex', flexDirection: 'column', marginTop: 50 }}>
+            <ReviewDisplay
+              review={{
+                title: reviews[0]?.review_title,
+                name: onlyCustomer?.fullname,
+                body: reviews[0]?.review_body,
+                rating: reviews[0]?.rating,
+              }}
+            />
+          </View>
+        )}
+
+
+
         <View style={styles.map} >
           <RestaurantMap latitude={latitude} longitude={longtitude} />
         </View>
@@ -422,6 +506,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
+  },
+  reviewAmount: {
+    fontSize: 17,
+    fontWeight: "400",
+    marginTop: 10,
+    alignSelf: 'flex-start'
   },
   imageSwiper: {
     height: Display.setHeight(100),

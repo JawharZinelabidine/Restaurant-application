@@ -17,6 +17,12 @@ const ReviewModal = ({ isVisible, reviews, onClose, customers }) => {
   })
 
 
+  const sortedReviews = reviews.slice().sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt)
+  })
+
+
+
 
   return (
     <Modal transparent={true} visible={isVisible}>
@@ -25,7 +31,7 @@ const ReviewModal = ({ isVisible, reviews, onClose, customers }) => {
       >
         <View style={styles.modalContainer}>
           <ScrollView>
-            {reviews.map((review) => (
+            {sortedReviews.map((review) => (
               <View style={styles.reviewContainer} key={review.id}>
                 <View style={styles.header}>
                   <Text style={styles.reviewTitle}>{review.review_title}</Text>

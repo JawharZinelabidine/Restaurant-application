@@ -59,7 +59,7 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
     return (
 
 
-        <TouchableOpacity onPress={handleButtonPress} style={{ width: '100%' }}>
+        <TouchableOpacity onPress={handleButtonPress} style={{ width: '100%', display: 'flex' }}>
 
             <LinearGradient
                 style={[styles.rectangleLineargradient, styles.groupIconLayout]}
@@ -67,8 +67,8 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
                 colors={["#000", "rgba(0, 0, 0, 0)"]}
             />
             <Text style={[styles.restaurantName, styles.restaurantNameLayout]}>{restaurantName?.name}</Text>
-            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>{latestMessage.slice(0, 30)}...</Text>
             <Text style={[styles.lastMessageDate, styles.lastMessageDateLayout]}>{moment(latestMessageDate).fromNow()}</Text>
+            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>{latestMessage.slice(0, 30)}...</Text>
 
 
 
@@ -83,6 +83,12 @@ export default ConversationList
 
 
 const styles = StyleSheet.create({
+
+
+    topInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
 
 
     rectangleLineargradient: {
@@ -130,7 +136,8 @@ const styles = StyleSheet.create({
     },
     lastMessageDate: {
         top: 105,
-        left: 280,
+        left: 270,
+        marginRight: 30,
         textAlign: "left",
         lineHeight: 20,
         position: "absolute",

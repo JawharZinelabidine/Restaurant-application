@@ -3,23 +3,21 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 const ReviewDisplay = ({ review }) => {
 
-  const size = review.size - 1
 
 
   return (
     <View style={styles.reviewContainer}>
       {review.title && (<View>
-        <View style={styles.header}>
-          <Text style={styles.reviewTitle}>Latest Review:</Text>
-          <Text style={styles.reviewAmount}>{size > 1 ? `${size} more reviews` : size === 1 ? `${size} more review` : ''}</Text>
-        </View>
-        <View style={styles.cardRating}>
-          <AntDesign name="star" size={20} color="gold" />
-          <Text style={styles.cardRatingText}>{review.rating}</Text>
-        </View>
-        <View style={styles.reviewDetails}>
-          <Text style={styles.reviewLabel}>Title:</Text>
-          <Text style={styles.reviewText}>{review.title}</Text>
+        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+          <View style={styles.reviewDetails}>
+            <Text style={styles.reviewLabel}>Title:</Text>
+            <Text >{review.title}</Text>
+          </View>
+          <View style={styles.cardRating}>
+            <AntDesign name="star" size={20} color="gold" />
+            <Text style={styles.cardRatingText}>{review.rating}</Text>
+          </View>
         </View>
         <View style={styles.reviewDetails}>
           <Text style={styles.reviewLabel}>Guest:</Text>
@@ -39,7 +37,6 @@ const ReviewDisplay = ({ review }) => {
 
 const styles = StyleSheet.create({
   reviewContainer: {
-    marginTop: 50,
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 8,

@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.primaryBlackHex,
+        
 
 
     },
@@ -164,6 +165,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.DARK_ONE,
         marginTop: -150,
+        
 
     },
     topedite: {

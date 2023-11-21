@@ -213,7 +213,17 @@ export default function RestaurantDetails({ route }) {
 
 
   const handleButtonPress = (conversation, restaurants, token) => {
-    navigation.navigate("Messages", { conversation, restaurants, token });
+    if (token) {
+      navigation.navigate("Messages", { conversation, restaurants, token });
+    }
+    else if (!token) {
+
+      setSpotsRemaining("You need to be logged in");
+      setShowToast(true);
+      if (toastRef.current) {
+        toastRef.current.show();
+      }
+    }
 
   };
 
@@ -233,7 +243,17 @@ export default function RestaurantDetails({ route }) {
 
   return (
     <ScrollView style={styles.container}>
+
+
       <RestaurantDetailsSwiper extraImages={extra_images} />
+      {showToast && (
+        <ToastMessage
+          ref={toastRef}
+          type="danger"
+          text={spotsRemaining}
+          timeout={5000}
+        />
+      )}
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
@@ -415,7 +435,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 50,
     left: 20,
-    zIndex: 1,
   },
   name: {
     fontSize: 36,

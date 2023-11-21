@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import { useIsFocused } from '@react-navigation/native';
 import { setLoggedin } from "../features/loggedinSlice.js";
+import { setToken } from "../../src/features/loggedinSlice.js";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ export default function LoginScreen({ navigation }) {
   const [showToast3, setShowToast3] = useState(false);
   const toastRef = useRef(null);
   const isFocused = useIsFocused();
-  
+
 
   const handleButtonPress = () => {
     navigation.navigate("RegisterScreen");
@@ -98,6 +99,7 @@ export default function LoginScreen({ navigation }) {
   const emptyStorage = async () => {
     try {
       await SecureStore.deleteItemAsync('token')
+      store.dispatch(setToken(''));
       dispatch(setLoggedin(false));
     } catch (error) {
       console.log(error)
@@ -113,7 +115,7 @@ export default function LoginScreen({ navigation }) {
           `http://${apiUrl}:3000/api/customers/signin`,
           inputs
         );
-        
+
         await SecureStore.setItemAsync('token', data.token)
         await registerForPushNotificationsAsync()
 
@@ -250,7 +252,7 @@ export default function LoginScreen({ navigation }) {
           </View>
           <TouchableOpacity
             onPress={handleButtonPress}
-            style={{ marginTop: "auto" }}
+            style={{ marginTop: 10 }}
           >
             <Text style={styles.formFooter}>
               Don't have an account?{" "}

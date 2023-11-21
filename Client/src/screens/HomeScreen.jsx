@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as Location from "expo-location";
 import { setLat, setLng } from "../features/customerSlice";
 import { calculateDistance } from "../utils";
-
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function HomeScreen({ navigation, route }) {
@@ -20,8 +20,8 @@ export default function HomeScreen({ navigation, route }) {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const isFocused = useIsFocused();
   const toastRef = useRef(null);
-  const { toast } = useSelector(state => state.notification);
-  const {lat, lng} = useSelector(state => state.customer);
+  const { toast, toast2 } = useSelector(state => state.notification);
+  const { lat, lng } = useSelector(state => state.customer);
   const [restaurant, setRestaurant] = useState([]);
   const [filterData, setFilterData] = useState([]);
 
@@ -52,7 +52,47 @@ export default function HomeScreen({ navigation, route }) {
       toastRef.current.show()
     }
   }
-  const sortedRestaurants = filterData.slice().sort((a, b) => new Date(b.rating) - new Date(a.rating));
+  if (toast2) {
+    if (toastRef.current) {
+      toastRef.current.show()
+    }
+  }
+
+
+
+  const restaurantDistance = filterData.slice().map((restaurant) => {
+    let formattedDistance = null;
+    if (lat && lng) {
+      const distance = calculateDistance(lat, lng, restaurant.latitude, restaurant.longtitude);
+      formattedDistance = distance
+      restaurant.distance = distance
+    }
+    return restaurant
+  })
+
+
+  const distanceSortedRestaurants = restaurantDistance.slice().sort((a, b) => {
+    if (a.accountType === 'PREMIUM' && b.accountType !== 'PREMIUM') {
+      return -1;
+    } else if (a.accountType !== 'PREMIUM' && b.accountType === 'PREMIUM') {
+      return 1;
+    } else {
+      return a.distance - b.distance;
+    }
+
+  })
+
+  const sortedRestaurants = filterData.slice().sort((a, b) => {
+
+    if (a.accountType === 'PREMIUM' && b.accountType !== 'PREMIUM') {
+      return -1;
+    } else if (a.accountType !== 'PREMIUM' && b.accountType === 'PREMIUM') {
+      return 1;
+    } else {
+      return new Date(b.rating) - new Date(a.rating);
+    }
+  });
+
 
   useEffect(() => {
     if (isFocused) {
@@ -60,6 +100,7 @@ export default function HomeScreen({ navigation, route }) {
       getPermissions()
     }
   }, [isFocused])
+
 
 
   const handleButtonPress = (restaurant) => {
@@ -84,10 +125,20 @@ export default function HomeScreen({ navigation, route }) {
             timeout={4000}
           />
         )}
+        {toast2 && (
+
+          <ToastMessage
+            ref={toastRef}
+            type="info"
+            text='You have received a message.'
+            timeout={4000}
+          />
+        )}
         <Text style={styles.screenTitle}>
           Find the best{"\n"}restaurant near you.
         </Text>
       </View>
+   <StatusBar style="light" /> 
       <View style={styles.categorySearchContainer}>
         <SearchBar
           restaurant={restaurant}
@@ -101,18 +152,33 @@ export default function HomeScreen({ navigation, route }) {
           setFilterData={setFilterData}
         />
       </View>
-      <ScrollView vertical>
-        {sortedRestaurants.map((rest) => (
-          <View key={rest.id}>
-            <RestaurantCard
-              restaurant={rest}
-              onPress={(restaurant) => handleButtonPress(restaurant)}
-            />
-          </View>
-        ))}
-      </ScrollView>
+     
+      {!lng && !lat && (
+        <ScrollView vertical>
+          {sortedRestaurants.map((rest) => (
+            <View key={rest.id}>
+              <RestaurantCard
+                restaurant={rest}
+                onPress={(restaurant) => handleButtonPress(restaurant)}
+              />
+            </View>
+          ))}
+        </ScrollView>)}
+      {lng && lat && (
+        <ScrollView vertical>
+          {distanceSortedRestaurants.map((rest) => (
+            <View key={rest.id}>
+              <RestaurantCard
+                restaurant={rest}
+                onPress={(restaurant) => handleButtonPress(restaurant)}
+              />
+            </View>
+          ))}
+        </ScrollView>)}
+
       <View style={styles.topedite}></View>
     </ScrollView>
+    
   );
 
 }

@@ -20,13 +20,14 @@ import axios from "../../services/axiosInterceptor.jsx";
 import regularAxios from "axios";
 import ToastMessage from "../Component/ToastMessage";
 import moment from "moment";
-import { AntDesign,Entypo } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 import { Display } from "../utils";
 import ReviewDisplay from "./ReviewDisplay.jsx";
 import ReviewModal from "./ReviewModal.jsx";
 import { useEffect } from "react";
 import RestaurantMap from "../Component/RestaurantMap.jsx";
+import * as SecureStore from 'expo-secure-store';
 
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
@@ -48,6 +49,8 @@ export default function RestaurantDetails({ route }) {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [token, setToken] = useState('')
+
   const toastRef = useRef(null);
 
   const toggleReviewModal = () => {
@@ -70,6 +73,7 @@ export default function RestaurantDetails({ route }) {
     rating,
     latitude,
     longtitude,
+    accountType
   } = route.params.restaurant;
   const navigation = useNavigation();
 
@@ -198,23 +202,58 @@ export default function RestaurantDetails({ route }) {
       return customer.id === latestReview.customerId
     })
 
-
-
   }
+
+  const getToken = async () => {
+
+    const token = await SecureStore.getItemAsync('token')
+
+    setToken(token)
+  }
+
+
+  const handleButtonPress = (conversation, restaurants, token) => {
+    if (token) {
+      navigation.navigate("Messages", { conversation, restaurants, token });
+    }
+    else if (!token) {
+
+      setSpotsRemaining("You need to be logged in");
+      setShowToast(true);
+      if (toastRef.current) {
+        toastRef.current.show();
+      }
+    }
+
+  };
+
+  const conversation = { restaurantId: id }
+  const restaurants = [{ id: id, name: name }]
+
 
 
   useEffect(() => {
 
     getReviews()
     getAllCustomers()
-
+    getToken()
   }, [])
 
   const spaced = category.toString().split(",").join("  ");
 
   return (
     <ScrollView style={styles.container}>
+
+
       <RestaurantDetailsSwiper extraImages={extra_images} />
+      {showToast && (
+        <ToastMessage
+          ref={toastRef}
+          type="danger"
+          text={spotsRemaining}
+          timeout={5000}
+        />
+      )}
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
@@ -245,13 +284,18 @@ export default function RestaurantDetails({ route }) {
             </TouchableOpacity>
 
           </View>
+          <TouchableOpacity
+            style={styles.chatButton}
+            onPress={() => handleButtonPress(conversation, restaurants, token)}
+          >
+            <Text style={styles.chatText}>Message us!</Text>
+          </TouchableOpacity>
+
           <View style={styles.cardRating}>
             <AntDesign name="star" size={30} color="gold" />
             <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
           </View>
-          <Text style={styles.openingHours}>{`${moment(opening_time).format(
-            "LT"
-          )} - ${moment(closing_time).format("LT")}`}</Text>
+          <Text style={styles.openingHours}>{`${moment(opening_time).utcOffset("-000").format("LT")} - ${moment(closing_time).utcOffset("-000").format("LT")}`}</Text>
           <View style={styles.categoryContainer}>
             <Text style={styles.category}>{spaced}</Text>
           </View>
@@ -287,8 +331,8 @@ export default function RestaurantDetails({ route }) {
         <View style={styles.topedite}></View>
       </ScrollView>
       {isModalOpen && (
-        <TouchableWithoutFeedback onPress={toggleForm}>
-          <Modal transparent={true} visible={true} onPress={toggleForm}>
+        <TouchableWithoutFeedback>
+          <Modal transparent={true} visible={true} >
             <Pressable
               style={{ backgroundColor: "#000000aa", flex: 1 }}
               onPress={toggleForm}
@@ -312,6 +356,7 @@ export default function RestaurantDetails({ route }) {
                   height: 350,
                   justifyContent: "space-between",
                 }}
+                onPress={setIsModalOpen}
               >
                 <Pressable
                   style={styles.btn}
@@ -377,7 +422,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    maxHeight: 800
   },
   imageSwiper: {
     height: Display.setHeight(100),
@@ -391,7 +435,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 50,
     left: 20,
-    zIndex: 1,
   },
   name: {
     fontSize: 36,
@@ -452,7 +495,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 15,
     fontWeight: "500",
-    color: "#333",
+    color: "white",
     marginBottom: 20,
     borderRadius: 8,
   },
@@ -475,6 +518,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
+    justifyContent: 'flex-start'
   },
   reservationButtonText: {
     color: "white",
@@ -494,12 +538,27 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 24,
   },
+  chatButton: {
+    borderRadius: 16,
+    backgroundColor: "#F00",
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    width: Display.setWidth(40),
+    left: 220
+  },
+  chatText: {
+    color: "#FFF",
+    textAlign: "center",
+    fontSize: 16,
+    fontStyle: "normal",
+    fontWeight: "700",
+    lineHeight: 24,
+  },
   icon: {
     width: 20,
     height: 34,
     marginTop: 8,
-    fontSize:20
-    
+    fontSize: 20
   },
   topedite: {
     marginTop: 100,
@@ -516,7 +575,7 @@ const styles = StyleSheet.create({
     bottom: 18,
 
   },
-  map : {
+  map: {
     width: '100%',
     marginTop: "20%",
   }

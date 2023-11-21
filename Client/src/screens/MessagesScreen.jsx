@@ -58,6 +58,7 @@ const MessagesScreen = ({ route, navigation }) => {
     try {
 
       const { data } = await axios.post(`http://${apiUrl}:3000/api/messages/customer/${conversation.restaurantId}`, { message: newMessage })
+      console.log(data)
       setMessages([...messages, data])
       setNewMessage('')
 

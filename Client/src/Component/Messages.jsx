@@ -8,18 +8,17 @@ const Messages = ({ message, restaurantImage }) => {
 
     return (
 
-        <View style={message.sender !== 'restaurant' ? styles.message : styles.myMessage}   >
+        <View style={message.sender === 'restaurant' ? styles.message : styles.myMessage}   >
             <View style={styles.messageTop}  >
-                {message.sender !== 'restaurant' && (<Image
+                {message.sender === 'restaurant' && (<Image
                     source={{ uri: restaurantImage.main_image }}
                     style={styles.image} />)}
 
-                <Text style={message.sender !== 'restaurant' ? styles.messageText : styles.myMessageText} >
+                <Text style={message.sender === 'restaurant' ? styles.messageText : styles.myMessageText} >
                     {message.message}
 
                 </Text>
-                {console.log(message.message.length)}
-                {message.sender !== 'customer' && (<Image
+                {message.sender === 'customer' && (<Image
                     source={require('../assets/images/man.png')}
                     style={styles.myImage} />)}
             </View>

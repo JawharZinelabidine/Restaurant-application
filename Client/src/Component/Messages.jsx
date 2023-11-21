@@ -7,25 +7,28 @@ const Messages = ({ message, restaurantImage }) => {
 
 
     return (
+        <>
+            <View style={message.sender === 'restaurant' ? styles.message : styles.myMessage}   >
+                <View style={styles.messageTop}  >
+                    {message.sender === 'restaurant' && (<Image
+                        source={{ uri: restaurantImage.main_image }}
+                        style={styles.image} />)}
 
-        <View style={message.sender === 'restaurant' ? styles.message : styles.myMessage}   >
-            <View style={styles.messageTop}  >
-                {message.sender === 'restaurant' && (<Image
-                    source={{ uri: restaurantImage.main_image }}
-                    style={styles.image} />)}
+                    <Text style={message.sender === 'restaurant' ? styles.messageText : styles.myMessageText} >
+                        {message.message}
 
-                <Text style={message.sender === 'restaurant' ? styles.messageText : styles.myMessageText} >
-                    {message.message}
+                    </Text>
 
-                </Text>
-                {message.sender === 'customer' && (<Image
-                    source={require('../assets/images/man.png')}
-                    style={styles.myImage} />)}
+                    {message.sender === 'customer' && (<Image
+                        source={require('../assets/images/man.png')}
+                        style={styles.myImage} />)}
+                </View>
+
+
             </View>
-            <Text style={styles.messageBottom} className="messageBottom ">{moment(message.createdAt).fromNow()}</Text>
 
-        </View>
-
+            <Text style={message.sender === 'restaurant' ? styles.messageBottom : styles.myMessageBottom} className="messageBottom ">{moment(message.createdAt).fromNow()}</Text>
+        </>
 
     )
 }
@@ -39,13 +42,20 @@ const styles = StyleSheet.create({
     messageBottom: {
         fontSize: 12,
         color: 'white',
-        paddingLeft: 5,
-        top: 8,
+        marginLeft: 5
+
+
+    },
+    myMessageBottom: {
+        fontSize: 12,
+        color: 'white',
+        textAlign: 'right',
+        marginRight: 5
+
     },
     messageTop: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
 
     },
     message: {
@@ -62,8 +72,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#EF0107',
         color: 'white',
         fontSize: 17,
-        alignSelf: 'flex-start',
-
 
     },
     myMessage: {
@@ -80,21 +88,23 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(245, 241, 241)',
         color: 'black',
         fontSize: 17,
-        alignSelf: 'flex-end',
+        alignSelf: 'auto',
     },
     image: {
         width: 25,
         height: 25,
         borderRadius: 16,
+        margin: 5,
         alignSelf: 'flex-start',
-        margin: 5
+
     },
     myImage: {
         width: 25,
         height: 25,
         borderRadius: 16,
+        margin: 5,
         alignSelf: 'flex-start',
-        margin: 5
+
 
 
     },

@@ -23,7 +23,7 @@ const MessagesScreen = ({ route, navigation }) => {
   const scrollRef = useRef()
 
   const [messages, setMessages] = useState([])
-  const [newMessage, setNewMessage] = useState([])
+  const [newMessage, setNewMessage] = useState('')
   const [arrivalMessage, setArrivalMessage] = useState(null)
 
   const restaurantName = restaurants.slice().find((restaurant) => {
@@ -58,6 +58,7 @@ const MessagesScreen = ({ route, navigation }) => {
     try {
 
       const { data } = await axios.post(`http://${apiUrl}:3000/api/messages/customer/${conversation.restaurantId}`, { message: newMessage })
+      console.log(data)
       setMessages([...messages, data])
       setNewMessage('')
 
@@ -155,7 +156,7 @@ const MessagesScreen = ({ route, navigation }) => {
 
       <ScrollView style={styles.constainer2} contentContainerStyle={styles.scrollViewContent} ref={scrollRef}>
         {messages.map((message) => (
-          <Messages key={message.id} message={message} />
+          <Messages key={message.id} message={message} restaurantImage={restaurantName} />
 
         ))}
 
@@ -222,15 +223,16 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
-
   chatBoxBottom: {
     marginBottom: 35,
     marginLeft: 20,
     display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   button: {
-    marginLeft: 330,
-    bottom: 60
+    marginRight: 20,
+    marginTop: 10,
   },
 
   chatMessageInput: {

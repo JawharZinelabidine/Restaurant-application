@@ -6,7 +6,9 @@ import axios from '../../services/axiosInterceptor.jsx';
 import { useIsFocused } from '@react-navigation/native';
 import { Display } from "../utils";
 import { setReviewNotificationBadge } from "../../src/features/notificationSlice";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken } from "../../src/features/loggedinSlice.js";
+import * as SecureStore from 'expo-secure-store';
 
 
 
@@ -16,6 +18,7 @@ export default function ReservationReviews({ navigation }) {
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
     const isFocused = useIsFocused();
     const dispatch = useDispatch()
+    const { token } = useSelector(state => state.loggedin);
 
     const [pending, setPending] = useState([])
     const [restaurants, setRestaurants] = useState([])
@@ -34,13 +37,17 @@ export default function ReservationReviews({ navigation }) {
 
 
     const findRestaurantName = async () => {
-        try {
+        const token = await SecureStore.getItemAsync('token')
+        if (token) {
+            dispatch(setToken(token))
+            try {
 
-            const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`)
-            setRestaurants(data)
+                const { data } = await axios.get(`http://${apiUrl}:3000/api/restaurants`)
+                setRestaurants(data)
 
-        } catch (error) {
-            console.log(error)
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 
@@ -70,8 +77,7 @@ export default function ReservationReviews({ navigation }) {
     return (
 
         <View style={styles.container}>
-
-            <ScrollView
+            {pending.length > 0 && (<ScrollView
                 style={styles.constainer2}
                 contentContainerStyle={styles.scrollViewContent}
 
@@ -87,6 +93,19 @@ export default function ReservationReviews({ navigation }) {
 
 
             </ScrollView>
+            )}
+            {!pending.length && token && (
+                <View style={styles.loginMessage}>
+
+                    <Text style={styles.loginMessageText}>You don't have currently any reservations to review.</Text>
+                </View>
+            )}
+            {!pending.length && !token && (
+                <View style={styles.loginMessage}>
+
+                    <Text style={styles.loginMessageText}>Log in to see your pending reservation reviews!</Text>
+                </View>
+            )}
             <View style={styles.topedite}></View>
 
         </View>
@@ -126,5 +145,14 @@ const styles = StyleSheet.create({
         marginBottom: 100,
 
     },
-
+    loginMessage: {
+        borderRadius: 10,
+        margin: 5,
+        padding: 2,
+        marginTop: 350,
+    },
+    loginMessageText: {
+        color: 'white',
+        alignSelf: 'center'
+    }
 })

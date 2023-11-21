@@ -213,7 +213,17 @@ export default function RestaurantDetails({ route }) {
 
 
   const handleButtonPress = (conversation, restaurants, token) => {
-    navigation.navigate("Messages", { conversation, restaurants, token });
+    if (token) {
+      navigation.navigate("Messages", { conversation, restaurants, token });
+    }
+    else if (!token) {
+
+      setSpotsRemaining("You need to be logged in");
+      setShowToast(true);
+      if (toastRef.current) {
+        toastRef.current.show();
+      }
+    }
 
   };
 
@@ -233,7 +243,17 @@ export default function RestaurantDetails({ route }) {
 
   return (
     <ScrollView style={styles.container}>
+
+
       <RestaurantDetailsSwiper extraImages={extra_images} />
+      {showToast && (
+        <ToastMessage
+          ref={toastRef}
+          type="danger"
+          text={spotsRemaining}
+          timeout={5000}
+        />
+      )}
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
@@ -275,9 +295,7 @@ export default function RestaurantDetails({ route }) {
             <AntDesign name="star" size={30} color="gold" />
             <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
           </View>
-          <Text style={styles.openingHours}>{`${moment(opening_time).format(
-            "LT"
-          )} - ${moment(closing_time).format("LT")}`}</Text>
+          <Text style={styles.openingHours}>{`${moment(opening_time).utcOffset("-000").format("LT")} - ${moment(closing_time).utcOffset("-000").format("LT")}`}</Text>
           <View style={styles.categoryContainer}>
             <Text style={styles.category}>{spaced}</Text>
           </View>
@@ -417,7 +435,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 50,
     left: 20,
-    zIndex: 1,
   },
   name: {
     fontSize: 36,

@@ -9,6 +9,7 @@ import UpcomingList from "./UpcomingList.jsx";
 import { useIsFocused } from "@react-navigation/native";
 import { setNotificationBadge } from "../../src/features/notificationSlice";
 import * as SecureStore from 'expo-secure-store';
+import { StatusBar } from 'expo-status-bar';
 
 const Upcoming = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -74,7 +75,10 @@ const Upcoming = () => {
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container}
+  
+    >
+       <StatusBar style="light" />
       <ScrollView
         style={styles.constainer2}
         contentContainerStyle={styles.scrollViewContent}

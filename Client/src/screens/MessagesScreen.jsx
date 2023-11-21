@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: Colors.primaryBlackHex,
+    
 
 
   },
@@ -196,6 +197,10 @@ const styles = StyleSheet.create({
   constainer2: {
     flex: 1,
     backgroundColor: Colors.DARK_ONE,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
 
   },
 
@@ -212,6 +217,10 @@ const styles = StyleSheet.create({
 
   scrollViewContent: {
     paddingVertical: 10,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
 
   chatBoxBottom: {

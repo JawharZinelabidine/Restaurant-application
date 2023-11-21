@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as Location from "expo-location";
 import { setLat, setLng } from "../features/customerSlice";
 import { calculateDistance } from "../utils";
-
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function HomeScreen({ navigation, route }) {
@@ -140,6 +140,7 @@ export default function HomeScreen({ navigation, route }) {
           Find the best{"\n"}restaurant near you.
         </Text>
       </View>
+   <StatusBar style="light" /> 
       <View style={styles.categorySearchContainer}>
         <SearchBar
           restaurant={restaurant}
@@ -153,6 +154,7 @@ export default function HomeScreen({ navigation, route }) {
           setFilterData={setFilterData}
         />
       </View>
+     
       {!lng && !lat && (
         <ScrollView vertical>
           {sortedRestaurants.map((rest) => (
@@ -176,9 +178,9 @@ export default function HomeScreen({ navigation, route }) {
           ))}
         </ScrollView>)}
 
-
       <View style={styles.topedite}></View>
     </ScrollView>
+    
   );
 
 }

@@ -36,15 +36,24 @@ const styles = StyleSheet.create({
         borderRadius: '50%',
         objectFit: 'cover',
         marginRight: 10,
+        
     },
     messageBottom: {
         fontSize: 12,
         color: 'white',
         paddingLeft: 5,
         top: 8,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
     },
     messageTop: {
         display: 'flex',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
 
     },
     message: {
@@ -52,19 +61,32 @@ const styles = StyleSheet.create({
         padding: 10,
         maxWidth: '80%',
         alignSelf: 'flex-start',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+
     },
     messageText: {
         padding: 10,
-        borderRadius: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
         backgroundColor: '#EF0107',
         color: 'white',
         fontSize: 17,
         alignSelf: 'flex-start',
+
     },
     myMessage: {
         padding: 10,
         maxWidth: '80%',
         alignSelf: 'flex-end',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
     },
     myMessageText: {
 
@@ -72,7 +94,12 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: 'rgb(245, 241, 241)',
         color: 'black',
+        fontSize: 17,
         alignSelf: 'flex-end',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
     },
 
 

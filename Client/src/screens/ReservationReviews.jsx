@@ -70,6 +70,7 @@ export default function ReservationReviews({ navigation }) {
     return (
 
         <View style={styles.container}>
+
             <ScrollView
                 style={styles.constainer2}
                 contentContainerStyle={styles.scrollViewContent}

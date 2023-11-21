@@ -45,10 +45,18 @@ export default function RestaurantCard({ restaurant, onPress }) {
 
   return (
     <TouchableOpacity onPress={handleButtonPress}>
+
       <View style={styles.cardContainer}>
+
         <Image source={{ uri: main_image.trim() }} style={styles.cardImage} />
 
-        <Text style={styles.cardName}>{name}</Text>
+        <View style={styles.cardInfo}>
+          <Text style={styles.cardName}>{name}</Text>
+          {accountType === 'PREMIUM' && (
+            <AntDesign name="message1" size={24} style={styles.chatSign} />
+
+          )}
+        </View>
         <Text style={styles.cardCategory}>{spaced}</Text>
         {formattedDistance && <Text style={styles.cardDistance}>{formattedDistance}</Text>}
         <View style={styles.cardRating}>
@@ -60,8 +68,7 @@ export default function RestaurantCard({ restaurant, onPress }) {
           <Text style={isCurrentlyOpen ? styles.cardOpen : styles.cardClosed}>{isCurrentlyOpen ? 'Open' : 'Closed'}</Text>
         </View>
       </View>
-      {accountType === 'PREMIUM' && (<AntDesign name="message1" size={24} style={styles.chatSign} />
-      )}
+
 
     </TouchableOpacity>
   );
@@ -91,11 +98,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 10,
+
   },
   cardCategory: {
     color: 'gray',
     fontSize: 14,
-    top: 5
+    top: 5,
+
 
   },
   cardRating: {
@@ -110,7 +119,7 @@ const styles = StyleSheet.create({
   },
   cardStatus: {
     flexDirection: 'row',
-    left: 300,
+    alignSelf: 'flex-end',
   },
   cardOpen: {
     color: 'green',
@@ -129,9 +138,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     top: 10,
   },
+  cardInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+
+  },
   chatSign: {
-    left: 350,
-    bottom: 120,
+    marginTop: 10,
+
 
   }
 });

@@ -11,16 +11,18 @@ import { setMessageNotificationBadge } from '../../src/features/notificationSlic
 import { useSelector } from 'react-redux'
 import { setToken } from "../../src/features/loggedinSlice.js";
 
+import { useNavigation } from '@react-navigation/native';
 
 
 
 
-export default function Conversations({ navigation }) {
+export default function Conversations() {
 
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
     const isFocused = useIsFocused();
     const dispatch = useDispatch()
+    const navigation = useNavigation();
 
     const [conversations, setConversations] = useState([])
     const [restaurants, setRestaurants] = useState([])

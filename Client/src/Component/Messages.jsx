@@ -33,6 +33,7 @@ const Messages = ({ message, restaurantImage }) => {
 
     return (
         <>
+
             <View style={{ display: "flex" }}>
                 {message.sender === 'restaurant' && (<Image
                     source={{ uri: restaurantImage.main_image }}
@@ -50,7 +51,6 @@ const Messages = ({ message, restaurantImage }) => {
                         </Text>
 
                     </View>
-
 
                 </View>
 
@@ -116,11 +116,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(245, 241, 241)',
     },
     myMessageText: {
+width:200,
 
         borderRadius: 20,
         fontSize: 17,
         alignSelf: 'flex-end',
-
     },
     image: {
         width: 25,
@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         margin: 5,
         alignSelf: 'flex-end',
-
 
     },
 

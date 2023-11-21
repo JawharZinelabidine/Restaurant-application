@@ -10,9 +10,9 @@ const Tab = createMaterialTopTabNavigator();
 
 function MyTabs() {
   return (
-    <Tab.Navigator style={styles.tabBarStyle}>
+    <Tab.Navigator style={styles.tabBarStyle} >
       <Tab.Screen name="Upcoming" component={Upcoming} />
-
+     
       <Tab.Screen name="History" component={History} />
     </Tab.Navigator>
   );

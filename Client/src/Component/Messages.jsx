@@ -1,10 +1,34 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
 import moment from "moment";
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from "../../services/axiosInterceptor.jsx";
 
 
 const Messages = ({ message, restaurantImage }) => {
 
+    const [myImage, setMyImage] = useState('')
+    const altProfileImage = require('../assets/images/icons8-customer-50.png')
+
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
+    const fetchMyImage = async () => {
+        try {
+            const { data } = await axios.get(`http://${apiUrl}:3000/api/customers/profile/`);
+
+            setMyImage(data.profilePic);
+            dispatch(setLoggedin(true));
+        } catch (error) {
+            navigation.navigate('LoginScreen');
+            console.error('Error fetching user data:', error);
+
+        }
+    }
+
+    useEffect(() => {
+        fetchMyImage()
+    }, [])
 
     return (
         <>
@@ -20,7 +44,7 @@ const Messages = ({ message, restaurantImage }) => {
                     </Text>
 
                     {message.sender === 'customer' && (<Image
-                        source={require('../assets/images/man.png')}
+                        source={myImage ? myImage : altProfileImage}
                         style={styles.myImage} />)}
                 </View>
 

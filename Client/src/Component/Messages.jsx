@@ -5,11 +5,13 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from "../../services/axiosInterceptor.jsx";
 
+import { useNavigation } from '@react-navigation/native';
 
 const Messages = ({ message, restaurantImage }) => {
 
     const [myImage, setMyImage] = useState('')
     const altProfileImage = require('../assets/images/icons8-customer-50.png')
+    const navigation = useNavigation();
 
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -18,7 +20,6 @@ const Messages = ({ message, restaurantImage }) => {
             const { data } = await axios.get(`http://${apiUrl}:3000/api/customers/profile/`);
 
             setMyImage(data.profilePic);
-            dispatch(setLoggedin(true));
         } catch (error) {
             navigation.navigate('LoginScreen');
             console.error('Error fetching user data:', error);
@@ -32,26 +33,29 @@ const Messages = ({ message, restaurantImage }) => {
 
     return (
         <>
-            <View style={message.sender === 'restaurant' ? styles.message : styles.myMessage}   >
-                <View style={styles.messageTop}  >
-                    {message.sender === 'restaurant' && (<Image
-                        source={{ uri: restaurantImage.main_image }}
-                        style={styles.image} />)}
+            <View style={{ display: "flex" }}>
+                {message.sender === 'restaurant' && (<Image
+                    source={{ uri: restaurantImage.main_image }}
+                    style={styles.image} />)}
+                {message.sender === 'customer' && (<Image
+                    source={myImage ? myImage : altProfileImage}
+                    style={styles.myImage} />)}
+                <View style={message.sender === 'restaurant' ? styles.message : styles.myMessage}   >
 
-                    <Text style={message.sender === 'restaurant' ? styles.messageText : styles.myMessageText} >
-                        {message.message}
+                    <View style={styles.messageTop}  >
 
-                    </Text>
+                        <Text style={message.sender === 'restaurant' ? styles.messageText : styles.myMessageText} >
+                            {message.message}
 
-                    {message.sender === 'customer' && (<Image
-                        source={myImage ? myImage : altProfileImage}
-                        style={styles.myImage} />)}
+                        </Text>
+
+                    </View>
+
+
                 </View>
 
-
+                <Text style={message.sender === 'restaurant' ? styles.messageBottom : styles.myMessageBottom} className="messageBottom ">{moment(message.createdAt).fromNow()}</Text>
             </View>
-
-            <Text style={message.sender === 'restaurant' ? styles.messageBottom : styles.myMessageBottom} className="messageBottom ">{moment(message.createdAt).fromNow()}</Text>
         </>
 
     )
@@ -88,31 +92,35 @@ const styles = StyleSheet.create({
         padding: 10,
         maxWidth: '80%',
         alignSelf: 'flex-start',
+        overflow: 'hidden',
+        borderWidth: 2,
+        backgroundColor: "red"
+
 
     },
     messageText: {
-        padding: 10,
-        borderRadius: 20,
-        backgroundColor: '#EF0107',
+
         color: 'white',
         fontSize: 17,
+        backgroundColor: "red"
 
     },
     myMessage: {
         display: 'flex',
         padding: 10,
         borderRadius: 20,
-        maxWidth: '80%',
+        maxWidth: '100%',
         alignSelf: 'flex-end',
+        overflow: 'hidden',
+        borderWidth: 2,
+        backgroundColor: 'rgb(245, 241, 241)',
     },
     myMessageText: {
 
-        padding: 10,
         borderRadius: 20,
-        backgroundColor: 'rgb(245, 241, 241)',
-        color: 'black',
         fontSize: 17,
-        alignSelf: 'auto',
+        alignSelf: 'flex-end',
+
     },
     image: {
         width: 25,
@@ -127,10 +135,14 @@ const styles = StyleSheet.create({
         height: 25,
         borderRadius: 16,
         margin: 5,
-        alignSelf: 'flex-start',
-
+        alignSelf: 'flex-end',
 
 
     },
 
 })
+
+
+
+
+

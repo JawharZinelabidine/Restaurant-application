@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, KeyboardAvoidingView } from 'react-native'
 import { Colors, Images } from "../contants";
 import React from 'react'
 import { useState, useEffect, useRef } from 'react';
@@ -40,7 +40,6 @@ const MessagesScreen = ({ route, navigation }) => {
       console.log(error)
       if (error && error.response.status === 403 || error && error.response.status === 401) {
         await SecureStore.deleteItemAsync('token')
-        navigation.navigate('LoginScreen')
       }
     }
 
@@ -67,7 +66,6 @@ const MessagesScreen = ({ route, navigation }) => {
       console.log(error)
       if (error.response.status === 403 || error.response.status === 401) {
         await SecureStore.deleteItemAsync('token')
-        navigation.navigate('LoginScreen')
       }
     }
   }
@@ -136,7 +134,7 @@ const MessagesScreen = ({ route, navigation }) => {
   return (
 
 
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -165,7 +163,7 @@ const MessagesScreen = ({ route, navigation }) => {
       </ScrollView>
       <View style={styles.lineSeparator2} />
 
-      <View style={styles.chatBoxBottom}>
+      <KeyboardAvoidingView behavior="padding" style={styles.chatBoxBottom}>
         <TextInput style={styles.chatMessageInput}
           ref={inputRef}
           multiline={true}
@@ -178,8 +176,8 @@ const MessagesScreen = ({ route, navigation }) => {
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Ionicons name="send" size={40} color="red" />
         </TouchableOpacity>
-      </View>
-    </View>
+      </KeyboardAvoidingView >
+    </SafeAreaView>
   )
 }
 
@@ -219,10 +217,12 @@ const styles = StyleSheet.create({
     marginBottom: 35,
     marginLeft: 20,
     display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   button: {
-    marginLeft: 330,
-    bottom: 55
+    marginRight: 25,
+    marginTop: 10,
   },
 
   chatMessageInput: {

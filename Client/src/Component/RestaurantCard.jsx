@@ -25,8 +25,8 @@ export default function RestaurantCard({ restaurant, onPress }) {
   }
 
   const now = moment().utcOffset("120");
-  const open = moment(opening_time).utcOffset("120");
-  const close = moment(closing_time).utcOffset("120");
+  const open = moment(opening_time).utcOffset("-000");
+  const close = moment(closing_time).utcOffset("-000");
 
   const isOpen = (openingTime, closingTime) => {
     const currentTime = moment(now).format('HH:mm');
@@ -47,6 +47,7 @@ export default function RestaurantCard({ restaurant, onPress }) {
     <TouchableOpacity onPress={handleButtonPress}>
       <View style={styles.cardContainer}>
         <Image source={{ uri: main_image.trim() }} style={styles.cardImage} />
+
         <Text style={styles.cardName}>{name}</Text>
         <Text style={styles.cardCategory}>{spaced}</Text>
         {formattedDistance && <Text style={styles.cardDistance}>{formattedDistance}</Text>}

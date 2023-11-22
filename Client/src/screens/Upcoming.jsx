@@ -73,7 +73,7 @@ const Upcoming = () => {
 
       removeNotificationBadge();
     }
-  
+
   }, [isFocused]);
 
   const sortedReservations = upcomingReservations
@@ -83,22 +83,39 @@ const Upcoming = () => {
 
   return (
     <View style={styles.container}
-  
+
     >
-       <StatusBar style="light" />
-      <ScrollView
-        style={styles.constainer2}
-        contentContainerStyle={styles.scrollViewContent}
-      >
-        {sortedReservations.map((reservation) => (
-          <View key={reservation.id} style={styles.card}>
-            <UpcomingList
-              reservation={reservation}
-              restaurants={restaurants}
-            ></UpcomingList>
-          </View>
-        ))}
-      </ScrollView>
+      <StatusBar style="light" />
+      {sortedReservations.length > 0 && (
+        <ScrollView
+          style={styles.constainer2}
+          contentContainerStyle={styles.scrollViewContent}
+        >
+          {sortedReservations.map((reservation) => (
+            <View key={reservation.id} style={styles.card}>
+              <UpcomingList
+                reservation={reservation}
+                restaurants={restaurants}
+              ></UpcomingList>
+            </View>
+          ))}
+        </ScrollView>
+
+      )}
+
+      {!sortedReservations.length && !token && (
+        <View style={styles.loginMessage}>
+
+          <Text style={styles.loginMessageText}>Log in to see your upcomging reservations!</Text>
+        </View>
+      )}
+      {!sortedReservations.length && token && (
+        <View style={styles.loginMessage}>
+
+          <Text style={styles.loginMessageText}>You have no upcoming reservations at the moment</Text>
+        </View>
+      )}
+
       <View style={styles.topedite}></View>
     </View>
   );

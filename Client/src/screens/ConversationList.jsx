@@ -64,7 +64,7 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
             <LinearGradient
                 style={[styles.rectangleLineargradient, styles.groupIconLayout]}
                 locations={[0, 1]}
-                colors={["#000", "rgba(0, 0, 0, 0)"]}
+                colors={["#fff", "rgba(225, 225, 225, 225)"]}
             />
             <Text style={[styles.restaurantName, styles.restaurantNameLayout]}>{restaurantName?.name}</Text>
             <Text style={[styles.lastMessageDate, styles.lastMessageDateLayout]}>{moment(latestMessageDate).fromNow()}</Text>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         top: 92,
         left: 0,
         width: 388,
-        backgroundColor: "transparent",
+        backgroundColor: "white",
 
     },
     groupIconLayout: {
@@ -117,7 +117,8 @@ const styles = StyleSheet.create({
         fontSize: FontSize.size_6xl,
         alignItems: "center",
         display: "flex",
-        color: Color.colorWhite,
+        fontWeight: 'bold',
+        color: Color.colorBlack,
     },
     lastMessage: {
         top: 135,
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
         color: 'grey'
     },
     lastMessageDate: {
-        top: 105,
+        top: 135,
         left: 270,
         marginRight: 30,
         textAlign: "left",
@@ -148,6 +149,6 @@ const styles = StyleSheet.create({
         fontSize: FontSize.size_6xl,
         alignItems: "center",
         display: "flex",
-        color: Color.colorWhite,
+        color: Color.colorBlack,
     },
 })

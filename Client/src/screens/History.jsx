@@ -99,12 +99,6 @@ const History = () => {
                         </View>
                     ))}
 
-                    {
-                        logInMessage && (
-                            <Text style={{ color: '#ffffff' }}>Log in to see your upcoming reservations!</Text>
-                        )
-                    }
-
 
                 </ScrollView>
             )}

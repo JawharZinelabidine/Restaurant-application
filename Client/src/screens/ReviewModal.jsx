@@ -6,9 +6,11 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Image
 } from "react-native";
 import { Colors } from "../contants";
 import { AntDesign } from "@expo/vector-icons";
+import StarRating from 'react-native-star-rating-widget';
 
 const ReviewModal = ({ isVisible, reviews, onClose, customers }) => {
 
@@ -21,6 +23,7 @@ const ReviewModal = ({ isVisible, reviews, onClose, customers }) => {
     return new Date(b.createdAt) - new Date(a.createdAt)
   })
 
+  const altProfileImage = require('../assets/images/icons8-customer-50.png')
 
 
 
@@ -36,12 +39,15 @@ const ReviewModal = ({ isVisible, reviews, onClose, customers }) => {
                 <View style={styles.header}>
                   <Text style={styles.reviewTitle}>{review.review_title}</Text>
                   <View style={styles.cardRating}>
-                    <AntDesign name="star" size={20} color="gold" />
-                    <Text style={styles.cardRatingText}>{review.rating}</Text>
+                    <StarRating
+                      rating={review.rating} starSize={25} enableHalfStar={true} starStyle={{ width: 10 }}
+                      onChange={() => { return }} enableSwiping={false} />
                   </View>
                 </View>
                 <View style={styles.reviewDetails}>
-                  <Text style={styles.reviewLabel}>Guest:</Text>
+                  <Image
+                    source={latestCustomer(review.customerId)?.profilePic ? latestCustomer(review.customerId)?.profilePic : altProfileImage}
+                    style={styles.myImage} />
                   <Text style={styles.reviewAuthor}>{latestCustomer(review.customerId)?.fullname}</Text>
                 </View>
                 <Text style={styles.reviewBody}>{review.review_body}</Text>
@@ -66,6 +72,13 @@ const styles = StyleSheet.create({
     padding: 24,
     borderRadius: 10,
     flex: 1,
+  },
+  myImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 16,
+    marginRight: 5,
+
   },
   reviewContainer: {
     marginBottom: 20,
@@ -99,6 +112,9 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     color: "#888",
     color: "#666",
+    fontWeight: '800',
+    alignSelf: 'center'
+
 
   },
   closeButton: {

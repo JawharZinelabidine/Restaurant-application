@@ -25,13 +25,13 @@ const HistoryList = ({ reservation, restaurants }) => {
             <LinearGradient
                 style={[styles.rectangleLineargradient, styles.groupIconLayout]}
                 locations={[0, 1]}
-                colors={["#000", "rgba(0, 0, 0, 0)"]}
+                colors={["#fff", "rgba(225, 225, 225, 225)"]}
             />
             <View style={[reservation.status === 'Pending' ? styles.rectangleViewPending : reservation.status === 'Declined' ? styles.rectangleViewRejected : reservation.status === 'Approved' ? styles.rectangleViewApproved : null, styles.iphone131412ChildLayout1]} />
             <Text style={[reservation.status === 'Pending' ? styles.pending : reservation.status === 'Declined' ? styles.rejected : reservation.status === 'Approved' ? styles.accepted : null, styles.rosemarysTypo]}>{reservation.status}</Text>
             <Text style={[styles.rosemarys, styles.rosemarysLayout]}>{restaurantName?.name}</Text>
             <Text style={[styles.text, styles.textPosition]}>{moment(reservation.date).format("MMM Do YY")}</Text>
-            <Text style={[styles.pm, styles.rosemarysTypo]}>{moment(reservation.time).utcOffset('-000').format('LT')}</Text>
+            <Text style={[styles.pm, styles.pmStyle]}>{moment(reservation.time).utcOffset('-000').format('LT')}</Text>
 
 
         </>
@@ -85,19 +85,28 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         position: "absolute",
     },
+    pmStyle: {
+        textAlign: "left",
+        lineHeight: 20,
+        position: "absolute",
+        color: Color.colorBlack
+
+    },
     rosemarysLayout: {
         height: 29,
         width: 149,
         fontSize: FontSize.size_6xl,
         alignItems: "center",
         display: "flex",
-        color: Color.colorWhite,
+        fontWeight: 'bold',
+        color: Color.colorBlack,
     },
     textPosition: {
         left: 22,
         textAlign: "left",
         lineHeight: 20,
         position: "absolute",
+        color: Color.colorBlack,
     },
     pm1Typo: {
         top: 341,
@@ -168,7 +177,7 @@ const styles = StyleSheet.create({
         top: 92,
         left: 0,
         width: 388,
-        backgroundColor: "transparent",
+        backgroundColor: "white",
 
     },
     rectangleViewRejected: {
@@ -201,22 +210,27 @@ const styles = StyleSheet.create({
         position: "absolute",
     },
     pending: {
-        top: 120,
+        top: 125,
         color: "#c0b54b",
         left: 290,
         lineHeight: 20,
+        fontSize: 17,
     },
     rejected: {
-        top: 120,
+        top: 125,
         color: "#c04b4b",
         left: 290,
         lineHeight: 20,
+        fontSize: 17,
+
     },
     accepted: {
-        top: 120,
+        top: 125,
         color: "#4bc06c",
         left: 290,
         lineHeight: 20,
+        fontSize: 17,
+
     },
     rosemarys: {
         top: 105,

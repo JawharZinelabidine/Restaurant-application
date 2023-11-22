@@ -30,6 +30,8 @@ const MessagesScreen = ({ route, navigation }) => {
     return restaurant.id === conversation.restaurantId;
   });
 
+  console.log(restaurantName)
+
 
   const getMessages = async () => {
     try {

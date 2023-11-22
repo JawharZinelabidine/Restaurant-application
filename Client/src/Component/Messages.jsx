@@ -33,7 +33,8 @@ const Messages = ({ message, restaurantImage }) => {
 
     return (
         <>
-            <View style={{ display: "flex" }}>
+
+            <View style={{ display: "flex", flexDirection: message.sender === 'restaurant' ? 'row' : 'row-reverse' }}>
                 {message.sender === 'restaurant' && (<Image
                     source={{ uri: restaurantImage.main_image }}
                     style={styles.image} />)}
@@ -51,11 +52,11 @@ const Messages = ({ message, restaurantImage }) => {
 
                     </View>
 
-
                 </View>
-
-                <Text style={message.sender === 'restaurant' ? styles.messageBottom : styles.myMessageBottom} className="messageBottom ">{moment(message.createdAt).fromNow()}</Text>
             </View>
+
+            <Text style={message.sender === 'restaurant' ? styles.messageBottom : styles.myMessageBottom} className="messageBottom ">{moment(message.createdAt).fromNow()}</Text>
+
         </>
 
     )
@@ -70,7 +71,10 @@ const styles = StyleSheet.create({
     messageBottom: {
         fontSize: 12,
         color: 'white',
-        marginLeft: 5
+        marginLeft: 5,
+        marginTop: 5,
+        marginBottom: 5
+
 
 
     },
@@ -78,7 +82,9 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         textAlign: 'right',
-        marginRight: 5
+        marginRight: 5,
+        marginTop: 5,
+        marginBottom: 5
 
     },
     messageTop: {
@@ -109,7 +115,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         padding: 10,
         borderRadius: 20,
-        maxWidth: '100%',
+        maxWidth: '80%',
         alignSelf: 'flex-end',
         overflow: 'hidden',
         borderWidth: 2,
@@ -120,7 +126,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         fontSize: 17,
         alignSelf: 'flex-end',
-
     },
     image: {
         width: 25,
@@ -135,8 +140,7 @@ const styles = StyleSheet.create({
         height: 25,
         borderRadius: 16,
         margin: 5,
-        alignSelf: 'flex-end',
-
+        alignSelf: 'flex-start',
 
     },
 

@@ -10,6 +10,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { setNotificationBadge } from "../../src/features/notificationSlice";
 import { setToken } from "../../src/features/loggedinSlice.js";
 import * as SecureStore from 'expo-secure-store';
+import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux'
 
 const Upcoming = () => {
@@ -72,6 +73,7 @@ const Upcoming = () => {
 
       removeNotificationBadge();
     }
+  
   }, [isFocused]);
 
   const sortedReservations = upcomingReservations
@@ -80,34 +82,23 @@ const Upcoming = () => {
 
 
   return (
-    <View style={styles.container}>
-      {sortedReservations.length > 0 && (
-        <ScrollView
-          style={styles.constainer2}
-          contentContainerStyle={styles.scrollViewContent}
-        >
-          {sortedReservations.map((reservation) => (
-            <View key={reservation.id} style={styles.card}>
-              <UpcomingList
-                reservation={reservation}
-                restaurants={restaurants}
-              ></UpcomingList>
-            </View>
-          ))}
-        </ScrollView>
-      )}
-      {!sortedReservations.length && token && (
-        <View style={styles.loginMessage}>
-
-          <Text style={styles.loginMessageText}>No upcoming reservations yet</Text>
-        </View>
-      )}
-      {!sortedReservations.length && !token && (
-        <View style={styles.loginMessage}>
-
-          <Text style={styles.loginMessageText}>Log in to see your upcoming reservations!</Text>
-        </View>
-      )}
+    <View style={styles.container}
+  
+    >
+       <StatusBar style="light" />
+      <ScrollView
+        style={styles.constainer2}
+        contentContainerStyle={styles.scrollViewContent}
+      >
+        {sortedReservations.map((reservation) => (
+          <View key={reservation.id} style={styles.card}>
+            <UpcomingList
+              reservation={reservation}
+              restaurants={restaurants}
+            ></UpcomingList>
+          </View>
+        ))}
+      </ScrollView>
       <View style={styles.topedite}></View>
     </View>
   );

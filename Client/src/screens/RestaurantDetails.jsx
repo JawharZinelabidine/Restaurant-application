@@ -75,7 +75,8 @@ export default function RestaurantDetails({ route }) {
     rating,
     latitude,
     longtitude,
-    accountType
+    accountType,
+    ownerId
   } = route.params.restaurant;
   const navigation = useNavigation();
 
@@ -259,7 +260,7 @@ export default function RestaurantDetails({ route }) {
   };
 
   const conversation = { restaurantId: id }
-  const restaurants = [{ id: id, name: name, main_image: main_image }]
+  const restaurants = [{ id: id, name: name, main_image: main_image, ownerId: ownerId }]
 
 
 
@@ -338,7 +339,7 @@ export default function RestaurantDetails({ route }) {
                 rating={rating} starSize={50} enableHalfStar={true} starStyle={{ width: 30 }} onChange={() => { return }} enableSwiping={false} />
             </View>
           )}
-          <Text style={styles.openingHours}>{`${moment(opening_time).utcOffset("-000").format("LT")} - ${moment(closing_time).utcOffset("-000").format("LT")}`}</Text>
+          <Text style={styles.openingHours}>{`${moment(opening_time).format("LT")} - ${moment(closing_time).format("LT")}`}</Text>
           <View style={styles.categoryContainer}>
             <Text style={styles.category}>{spaced}</Text>
           </View>
@@ -550,6 +551,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#333",
     marginBottom: 8,
+    maxWidth: '60%'
   },
   categoryContainer: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",

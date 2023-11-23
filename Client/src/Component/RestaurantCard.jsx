@@ -26,8 +26,8 @@ export default function RestaurantCard({ restaurant, onPress }) {
   }
 
   const now = moment().utcOffset("120");
-  const open = moment(opening_time).utcOffset("-000");
-  const close = moment(closing_time).utcOffset("-000");
+  const open = moment(opening_time);
+  const close = moment(closing_time);
 
   const isOpen = (openingTime, closingTime) => {
     const currentTime = moment(now).format('HH:mm');

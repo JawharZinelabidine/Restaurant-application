@@ -30,7 +30,6 @@ const MessagesScreen = ({ route, navigation }) => {
     return restaurant.id === conversation.restaurantId;
   });
 
-  console.log(restaurantName)
 
 
   const getMessages = async () => {
@@ -51,7 +50,7 @@ const MessagesScreen = ({ route, navigation }) => {
     e.preventDefault()
 
     socket.current.emit('sendMessage', {
-      receiverId: conversation.restaurantId,
+      receiverId: restaurantName.ownerId,
       text: newMessage
     })
 
@@ -59,7 +58,6 @@ const MessagesScreen = ({ route, navigation }) => {
     try {
 
       const { data } = await axios.post(`http://${apiUrl}:3000/api/messages/customer/${conversation.restaurantId}`, { message: newMessage })
-      console.log(data)
       setMessages([...messages, data])
       setNewMessage('')
 
@@ -89,7 +87,7 @@ const MessagesScreen = ({ route, navigation }) => {
   useEffect(() => {
 
 
-    arrivalMessage && conversation.restaurantId === arrivalMessage.id &&
+    arrivalMessage && restaurantName.ownerId === arrivalMessage.id &&
       setMessages((prev) => [...prev, arrivalMessage]);
 
   }, [arrivalMessage])

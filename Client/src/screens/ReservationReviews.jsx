@@ -97,7 +97,7 @@ export default function ReservationReviews({ navigation }) {
             {!pending.length && token && (
                 <View style={styles.loginMessage}>
 
-                    <Text style={styles.loginMessageText}>You don't have currently any reservations to review.</Text>
+                    <Text style={styles.loginMessageText}>You currently have no reservations to review.</Text>
                 </View>
             )}
             {!pending.length && !token && (

@@ -16,7 +16,7 @@ const UpcomingList = ({ reservation, restaurants }) => {
       <LinearGradient
         style={[styles.rectangleLineargradient, styles.groupIconLayout]}
         locations={[0, 1]}
-        colors={["#000", "rgba(0, 0, 0, 0)"]}
+        colors={["#fff", "rgba(225, 225, 225, 225)"]}
       />
 
       <View
@@ -47,7 +47,7 @@ const UpcomingList = ({ reservation, restaurants }) => {
       <Text style={[styles.text, styles.textPosition]}>
         {moment(reservation.date).format("MMM Do YY")}
       </Text>
-      <Text style={[styles.pm, styles.rosemarysTypo]}>
+      <Text style={[styles.pm, styles.pmStyle]}>
         {moment(reservation.time).utcOffset("-000").format("LT")}
       </Text>
     </>
@@ -86,6 +86,8 @@ const styles = StyleSheet.create({
     width: 6,
     borderBottomRightRadius: Border.br_6xl,
     borderTopRightRadius: Border.br_6xl,
+    fontSize: FontSize.size_6xl,
+    fontWeight: 'bold'
   },
   iphone131412ChildLayout: {
     height: 94,
@@ -96,6 +98,14 @@ const styles = StyleSheet.create({
     textAlign: "left",
     lineHeight: 20,
     position: "absolute",
+
+  },
+  pmStyle: {
+    textAlign: "left",
+    lineHeight: 20,
+    position: "absolute",
+    color: Color.colorBlack
+
   },
   rosemarysLayout: {
     height: 29,
@@ -103,13 +113,16 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_6xl,
     alignItems: "center",
     display: "flex",
-    color: Color.colorWhite,
+    fontWeight: 'bold',
+
+    color: Color.colorBlack,
   },
   textPosition: {
     left: 22,
     textAlign: "left",
     lineHeight: 20,
     position: "absolute",
+    color: Color.colorBlack
   },
   pm1Typo: {
     top: 341,
@@ -180,19 +193,24 @@ const styles = StyleSheet.create({
     top: 92,
     left: 0,
     width: 388,
-    backgroundColor: "transparent",
+    backgroundColor: "white",
   },
   rectangleViewApproved: {
     top: 114,
     backgroundColor: "#4bc06c",
     left: 1,
     position: "absolute",
+    fontWeight: 'bold',
+
   },
   rectangleViewPending: {
     top: 114,
     backgroundColor: "#d3d71e",
     left: 1,
     position: "absolute",
+    fontWeight: 'bold',
+    fontSize: FontSize.size_6xl,
+
   },
   iphone131412Child1: {
     top: 292,
@@ -206,16 +224,18 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   pending: {
-    top: 120,
+    top: 125,
     color: "#c0b54b",
     left: 290,
     lineHeight: 20,
+    fontSize: 17,
   },
   accepted: {
-    top: 120,
+    top: 125,
     color: "#4bc06c",
     left: 290,
     lineHeight: 20,
+    fontSize: 17,
   },
   rosemarys: {
     top: 105,
@@ -231,7 +251,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_6xl,
     alignItems: "center",
     display: "flex",
-    color: Color.colorWhite,
+    color: Color.colorBlack,
   },
   text: {
     top: 144,

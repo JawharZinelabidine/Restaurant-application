@@ -1,28 +1,36 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
+import StarRating from 'react-native-star-rating-widget';
+
+
 const ReviewDisplay = ({ review }) => {
 
 
+  const altProfileImage = require('../assets/images/icons8-customer-50.png')
 
   return (
     <View style={styles.reviewContainer}>
       {review.title && (<View>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-
           <View style={styles.reviewDetails}>
-            <Text style={styles.reviewLabel}>Title:</Text>
-            <Text >{review.title}</Text>
+            <Image
+              source={review.image ? review.image : altProfileImage}
+              style={styles.myImage} />
+            <Text style={{ fontWeight: '500' }}>{review.name}</Text>
+
           </View>
           <View style={styles.cardRating}>
-            <AntDesign name="star" size={20} color="gold" />
-            <Text style={styles.cardRatingText}>{review.rating}</Text>
+            <StarRating
+              rating={review.rating} starSize={30} enableHalfStar={true} starStyle={{ width: 15 }}
+              onChange={() => { return }} enableSwiping={false} />
           </View>
         </View>
-        <View style={styles.reviewDetails}>
-          <Text style={styles.reviewLabel}>Guest:</Text>
-          <Text style={styles.reviewText}>{review.name}</Text>
 
+
+        <View style={styles.reviewDetails}>
+          <Text style={styles.reviewLabel}>Title:</Text>
+          <Text >{review.title}</Text>
         </View>
         <Text style={styles.reviewBody}>{review.body}</Text>
       </View>)}
@@ -48,6 +56,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+
   },
   reviewTitle: {
     fontSize: 18,
@@ -83,6 +92,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 6
+  },
+  myImage: {
+    width: 25,
+    height: 25,
+    borderRadius: 16,
+    marginRight: 5
   },
 });
 

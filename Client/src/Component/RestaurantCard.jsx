@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import moment from "moment";
+import StarRating from 'react-native-star-rating-widget';
 
 
 
@@ -25,8 +26,8 @@ export default function RestaurantCard({ restaurant, onPress }) {
   }
 
   const now = moment().utcOffset("120");
-  const open = moment(opening_time).utcOffset("-000");
-  const close = moment(closing_time).utcOffset("-000");
+  const open = moment(opening_time);
+  const close = moment(closing_time);
 
   const isOpen = (openingTime, closingTime) => {
     const currentTime = moment(now).format('HH:mm');
@@ -57,12 +58,23 @@ export default function RestaurantCard({ restaurant, onPress }) {
 
           )}
         </View>
+        {!rating && (
+          <View style={styles.cardNoRating}>
+            <StarRating
+              rating={rating} starSize={22} maxStars={1} onChange={() => { return }} enableSwiping={false} />
+            <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
+          </View>
+        )}
+        {rating > 0 && (
+          <View style={styles.cardRating}>
+            <StarRating
+              rating={rating} starSize={22} enableHalfStar={true} starStyle={{ width: 10 }} onChange={() => { return }} enableSwiping={false} />
+          </View>
+        )}
         <Text style={styles.cardCategory}>{spaced}</Text>
         {formattedDistance && <Text style={styles.cardDistance}>{formattedDistance}</Text>}
-        <View style={styles.cardRating}>
-          <AntDesign name="star" size={20} color="gold" />
-          <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
-        </View>
+
+
         <View style={styles.cardStatus}>
           <AntDesign name="clockcircle" size={14} color={isCurrentlyOpen ? "green" : "red"} />
           <Text style={isCurrentlyOpen ? styles.cardOpen : styles.cardClosed}>{isCurrentlyOpen ? 'Open' : 'Closed'}</Text>
@@ -107,15 +119,18 @@ const styles = StyleSheet.create({
 
 
   },
+  cardNoRating: {
+    flexDirection: 'row',
+    right: 9,
+  },
   cardRating: {
     flexDirection: 'row',
-    alignItems: 'center',
-    top: 20
+    right: 9,
   },
 
   cardRatingText: {
     color: 'gray',
-    marginLeft: 5,
+
   },
   cardStatus: {
     flexDirection: 'row',

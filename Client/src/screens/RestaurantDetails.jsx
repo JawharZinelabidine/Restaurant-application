@@ -28,6 +28,7 @@ import ReviewModal from "./ReviewModal.jsx";
 import { useEffect } from "react";
 import RestaurantMap from "../Component/RestaurantMap.jsx";
 import * as SecureStore from 'expo-secure-store';
+import StarRating from 'react-native-star-rating-widget';
 
 export default function RestaurantDetails({ route }) {
   const customer = store.getState().customer;
@@ -64,6 +65,7 @@ export default function RestaurantDetails({ route }) {
     id,
     name,
     description,
+    main_image,
     menu_images,
     opening_time,
     closing_time,
@@ -73,7 +75,8 @@ export default function RestaurantDetails({ route }) {
     rating,
     latitude,
     longtitude,
-    accountType
+    accountType,
+    ownerId
   } = route.params.restaurant;
   const navigation = useNavigation();
 
@@ -257,7 +260,7 @@ export default function RestaurantDetails({ route }) {
   };
 
   const conversation = { restaurantId: id }
-  const restaurants = [{ id: id, name: name }]
+  const restaurants = [{ id: id, name: name, main_image: main_image, ownerId: ownerId }]
 
 
 
@@ -291,6 +294,14 @@ export default function RestaurantDetails({ route }) {
           <AntDesign name="left" size={24} color="white" />
         </Text>
       </TouchableOpacity>
+      {accountType === 'PREMIUM' && (
+        <TouchableOpacity
+          style={styles.chatButton}
+          onPress={() => handleButtonPress(conversation, restaurants, token)}
+        >
+          <AntDesign name="message1" size={35} color="white" />
+        </TouchableOpacity>
+      )}
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -313,24 +324,28 @@ export default function RestaurantDetails({ route }) {
             </TouchableOpacity>
 
           </View>
-          <TouchableOpacity
-            style={styles.chatButton}
-            onPress={() => handleButtonPress(conversation, restaurants, token)}
-          >
-            <Text style={styles.chatText}>Message us!</Text>
-          </TouchableOpacity>
 
-          <View style={styles.cardRating}>
-            <AntDesign name="star" size={30} color="gold" />
-            <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
-          </View>
-          <Text style={styles.openingHours}>{`${moment(opening_time).utcOffset("-000").format("LT")} - ${moment(closing_time).utcOffset("-000").format("LT")}`}</Text>
+
+          {!rating && (
+            <View style={styles.cardRating}>
+              <StarRating
+                rating={rating} starSize={50} maxStars={1} onChange={() => { return }} enableSwiping={false} />
+              <Text style={styles.cardRatingText}>{rating ? rating : 'Not rated'}</Text>
+            </View>
+          )}
+          {rating > 0 && (
+            <View style={styles.cardRating}>
+              <StarRating
+                rating={rating} starSize={50} enableHalfStar={true} starStyle={{ width: 30 }} onChange={() => { return }} enableSwiping={false} />
+            </View>
+          )}
+          <Text style={styles.openingHours}>{`${moment(opening_time).format("LT")} - ${moment(closing_time).format("LT")}`}</Text>
           <View style={styles.categoryContainer}>
             <Text style={styles.category}>{spaced}</Text>
           </View>
           <View style={styles.locationContainer}>
             <Entypo name="location-pin" style={styles.icon} color={"red"} />
-            <Text style={styles.openingHours}>{City}</Text>
+            <Text style={styles.city}>{City}</Text>
           </View>
           <Text style={styles.description}>{description}</Text>
         </View>
@@ -349,6 +364,7 @@ export default function RestaurantDetails({ route }) {
               review={{
                 title: highestReview?.review_title,
                 name: highestCustomer?.fullname,
+                image: highestCustomer?.profilePic,
                 body: highestReview?.review_body,
                 rating: highestReview?.rating,
               }}
@@ -357,6 +373,7 @@ export default function RestaurantDetails({ route }) {
               review={{
                 title: lowestReview?.review_title,
                 name: lowestCustomer?.fullname,
+                image: lowestCustomer?.profilePic,
                 body: lowestReview?.review_body,
                 rating: lowestReview?.rating,
               }}
@@ -375,11 +392,12 @@ export default function RestaurantDetails({ route }) {
         )}
 
         {reviews.length === 2 && (
-          <View style={{ display: 'flex', flexDirection: 'column', marginTop: 50 }}>
+          <View style={{ display: 'flex', flexDirection: 'column', marginTop: 50, gap: 10 }}>
             <ReviewDisplay
               review={{
                 title: highestReview?.review_title,
                 name: highestCustomer?.fullname,
+                image: highestCustomer?.profilePic,
                 body: highestReview?.review_body,
                 rating: highestReview?.rating,
               }}
@@ -388,6 +406,7 @@ export default function RestaurantDetails({ route }) {
               review={{
                 title: lowestReview?.review_title,
                 name: lowestCustomer?.fullname,
+                image: lowestCustomer?.profilePic,
                 body: lowestReview?.review_body,
                 rating: lowestReview?.rating,
               }}
@@ -400,6 +419,7 @@ export default function RestaurantDetails({ route }) {
               review={{
                 title: reviews[0]?.review_title,
                 name: onlyCustomer?.fullname,
+                image: onlyCustomer?.profilePic,
                 body: reviews[0]?.review_body,
                 rating: reviews[0]?.rating,
               }}
@@ -531,6 +551,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#333",
     marginBottom: 8,
+    maxWidth: '60%'
   },
   categoryContainer: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -539,11 +560,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 16,
     alignSelf: "flex-start",
+    right: 10
+
   },
   category: {
     color: "#333",
     fontSize: 16,
+    fontWeight: '500',
+
   },
+  openingHours: {
+    bottom: 20,
+    fontWeight: 'bold'
+
+  },
+  city: {
+
+    fontWeight: 'bold'
+
+  },
+
   description: {
     color: "#666",
     marginBottom: 16,
@@ -629,12 +665,16 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   chatButton: {
-    borderRadius: 16,
-    backgroundColor: "#F00",
-    paddingVertical: 8,
-    paddingHorizontal: 24,
-    width: Display.setWidth(40),
-    left: 220
+    borderRadius: 8,
+    backgroundColor: 'rgba(1, 1, 1, 0.3)',
+    justifyContent: 'center',
+    paddingLeft: 10,
+    paddingRight: 3,
+    width: 55,
+    height: 50,
+    position: "absolute",
+    top: 50,
+    left: 340,
   },
   chatText: {
     color: "#FFF",
@@ -662,7 +702,8 @@ const styles = StyleSheet.create({
   cardRating: {
     flexDirection: 'row',
     alignItems: 'center',
-    bottom: 18,
+    bottom: 20,
+    right: 13
 
   },
   map: {

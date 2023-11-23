@@ -29,7 +29,7 @@ const ReservationReviewList = ({ reservation, restaurants, onPress }) => {
             <LinearGradient
                 style={[styles.rectangleLineargradient, styles.groupIconLayout]}
                 locations={[0, 1]}
-                colors={["#000", "rgba(0, 0, 0, 0)"]}
+                colors={["#fff", "rgba(225, 225, 225, 225)"]}
             />
 
             <Text style={[styles.rosemarys, styles.rosemarysLayout]}>{restaurantName?.name}</Text>
@@ -105,6 +105,8 @@ const styles = StyleSheet.create({
         textAlign: "left",
         lineHeight: 20,
         position: "absolute",
+        color: Color.colorBlack,
+
     },
     rosemarysLayout: {
         height: 29,
@@ -112,13 +114,18 @@ const styles = StyleSheet.create({
         fontSize: FontSize.size_6xl,
         alignItems: "center",
         display: "flex",
-        color: Color.colorWhite,
+        fontWeight: 'bold',
+        color: Color.colorBlack,
     },
     textPosition: {
         left: 22,
         textAlign: "left",
         lineHeight: 20,
         position: "absolute",
+        color: Color.colorBlack,
+        fontSize: FontSize.size_6xl,
+
+
     },
     pm1Typo: {
         top: 341,
@@ -189,7 +196,7 @@ const styles = StyleSheet.create({
         top: 92,
         left: 0,
         width: 388,
-        backgroundColor: "transparent",
+        backgroundColor: "white",
 
     },
     rectangleView: {

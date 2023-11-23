@@ -114,12 +114,15 @@ export default function Conversations() {
 
             >
                 {conversations.map((conversation, index) => (
-                    <View key={index} style={styles.card}
-                    >
+                    <>
+                        <View key={index} style={styles.card}
+                        >
 
-                        <ConversationList conversation={conversation} restaurants={restaurants}
-                            onPress={(conversation) => handleButtonPress(conversation, restaurants, token)} ></ConversationList>
-                    </View>
+                            <ConversationList conversation={conversation} restaurants={restaurants}
+                                onPress={(conversation) => handleButtonPress(conversation, restaurants, token)} ></ConversationList>
+                        </View>
+
+                    </>
                 ))}
 
 
@@ -157,7 +160,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.primaryBlackHex,
-        
+
 
 
     },
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.DARK_ONE,
         marginTop: -150,
-        
+
 
     },
     topedite: {

@@ -7,14 +7,33 @@ import { useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import { setLoggedin } from '../features/loggedinSlice';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
+import { AntDesign, Entypo } from "@expo/vector-icons";
 
 export default function CustomerProfile({ navigation }) {
   const dispatch = useDispatch();
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const altProfileImage = require('../assets/images/icons8-customer-50.png')
+
+  const imagePath = userData?.profilePic ? { uri: userData?.profilePic } : require('../assets/images/icons8-customer-50.png');
+
+
+  const fetchUserData = async () => {
+    const token = await SecureStore.getItemAsync('token');
+    try {
+      const response = await axios.get(`http://${apiUrl}:3000/api/customers/profile/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUserData(response.data);
+      dispatch(setLoggedin(true));
+    } catch (error) {
+      navigation.navigate('LoginScreen');
+      console.error('Error fetching user data:', error);
+    }
+  };
 
 
   const pickImage = async () => {
@@ -32,18 +51,22 @@ export default function CustomerProfile({ navigation }) {
       setLoading(true);
 
       try {
-        const fileContent = await FileSystem.readAsStringAsync(result.assets[0].uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
+
         const formData = new FormData();
-        formData.append("profilePic", fileContent);
-        console.log(formData)
-        await customAxios.put(`http://${apiUrl}:3000/api/customers/profilePic`, formData, {
-          uri: image,
+        formData.append("profilePic", {
+          uri: result.assets[0].uri,
           type: "image/jpeg",
-          name: "profile-image.jpg",
+          name: "profilePic.jpg",
         });
-        await fetchUserData()
+        console.log(formData)
+        const { data } = await customAxios.put(`http://${apiUrl}:3000/api/customers/profilePic`, formData, {
+
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+        );
+        fetchUserData()
         setLoading(false);
 
       }
@@ -58,24 +81,9 @@ export default function CustomerProfile({ navigation }) {
 
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = await SecureStore.getItemAsync('token');
-      try {
-        const response = await axios.get(`http://${apiUrl}:3000/api/customers/profile/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
 
-        setUserData(response.data);
-        dispatch(setLoggedin(true));
-      } catch (error) {
-        navigation.navigate('LoginScreen');
-        console.error('Error fetching user data:', error);
-      }
-    };
+    fetchUserData()
 
-    fetchUserData();
   }, []);
 
 
@@ -84,13 +92,21 @@ export default function CustomerProfile({ navigation }) {
     <View style={styles.container}>
 
       <StatusBar style="light" />
-
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={styles.backText}>
+          <AntDesign name="left" size={24} color="white" />
+        </Text>
+      </TouchableOpacity>
       {userData ? (
         <View style={styles.profile}>
           <View style={styles.userImageContainer}>
+
             <Image
-              source={userData.profilePic ? userData.profilePic : altProfileImage}
-              style={styles.userImage}
+              source={imagePath}
+              style={userData.profilePic ? styles.userImage : styles.altUserImage}
             />
           </View>
 
@@ -129,6 +145,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'black', // Adjust the background color as needed
     alignItems: 'center'
 
+  },
+  backButton: {
+    borderRadius: 8,
+    backgroundColor: "#F00",
+    padding: 12,
+    width: 50,
+    height: 50,
+    position: "absolute",
+    top: 50,
+    left: 20,
   },
   loading: {
     ...StyleSheet.absoluteFillObject,
@@ -175,11 +201,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: 'center'
   },
+  altUserImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+    top: 7
+  },
   userImage: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    top: 6
+    top: 0
   },
   userDetails: {
     alignItems: 'center',

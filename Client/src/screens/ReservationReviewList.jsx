@@ -5,6 +5,7 @@ import { Color, FontSize, Border } from "../../GlobalStyles";
 import { Display } from "../utils";
 import moment from 'moment'
 import React from 'react'
+import { AntDesign } from '@expo/vector-icons';
 
 
 
@@ -24,15 +25,20 @@ const ReservationReviewList = ({ reservation, restaurants, onPress }) => {
     return (
 
 
-        <TouchableOpacity onPress={handleButtonPress}>
+        <TouchableOpacity onPress={handleButtonPress} >
 
             <LinearGradient
                 style={[styles.rectangleLineargradient, styles.groupIconLayout]}
                 locations={[0, 1]}
                 colors={["#fff", "rgba(225, 225, 225, 225)"]}
             />
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
 
-            <Text style={[styles.rosemarys, styles.rosemarysLayout]}>{restaurantName?.name}</Text>
+                <Text style={[styles.rosemarys, styles.rosemarysLayout]}>{restaurantName?.name}</Text>
+                <AntDesign name="star" size={25} color="#FFC000" style={styles.icon} />
+
+            </View>
+
             <Text style={[styles.text, styles.textPosition]}>{moment(reservation.date).format("MMM Do YY")}</Text>
             <Text style={[styles.pm, styles.rosemarysTypo]}>{moment(reservation.time).utcOffset('-000').format('LT')}</Text>
 
@@ -56,6 +62,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.DARK_ONE,
         marginTop: -150,
+
+    },
+    icon: {
+        top: 105,
+        lineHeight: 25,
 
     },
     topedite: {
@@ -113,7 +124,6 @@ const styles = StyleSheet.create({
         width: 149,
         fontSize: FontSize.size_6xl,
         alignItems: "center",
-        display: "flex",
         fontWeight: 'bold',
         color: Color.colorBlack,
     },
@@ -235,7 +245,6 @@ const styles = StyleSheet.create({
         left: 23,
         textAlign: "left",
         lineHeight: 20,
-        position: "absolute",
     },
     rosemarys1: {
         top: 302,

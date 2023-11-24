@@ -10,7 +10,6 @@ import { useNavigation } from '@react-navigation/native';
 const Messages = ({ message, restaurantImage }) => {
 
     const [myImage, setMyImage] = useState('')
-    const altProfileImage = require('../assets/images/icons8-customer-50.png')
     const navigation = useNavigation();
 
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -27,6 +26,9 @@ const Messages = ({ message, restaurantImage }) => {
         }
     }
 
+    const imagePath = myImage ? { uri: myImage } : require('../assets/images/icons8-customer-50.png');
+
+
     useEffect(() => {
         fetchMyImage()
     }, [])
@@ -39,7 +41,7 @@ const Messages = ({ message, restaurantImage }) => {
                     source={{ uri: restaurantImage.main_image }}
                     style={styles.image} />)}
                 {message.sender === 'customer' && (<Image
-                    source={myImage ? myImage : altProfileImage}
+                    source={imagePath}
                     style={styles.myImage} />)}
                 <View style={message.sender === 'restaurant' ? styles.message : styles.myMessage}   >
 

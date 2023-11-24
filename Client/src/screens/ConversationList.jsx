@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import axios from '../../services/axiosInterceptor';
 import { useIsFocused } from '@react-navigation/native';
 import moment from "moment";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const ConversationList = ({ conversation, restaurants, onPress }) => {
@@ -66,9 +67,14 @@ const ConversationList = ({ conversation, restaurants, onPress }) => {
                 locations={[0, 1]}
                 colors={["#fff", "rgba(225, 225, 225, 225)"]}
             />
-            <Text style={[styles.restaurantName, styles.restaurantNameLayout]}>{restaurantName?.name}</Text>
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                <Text style={[styles.restaurantName, styles.restaurantNameLayout]}>{restaurantName?.name}</Text>
+                <MaterialCommunityIcons name="message" size={24} color="red" style={styles.icon} />
+
+            </View>
             <Text style={[styles.lastMessageDate, styles.lastMessageDateLayout]}>{moment(latestMessageDate).fromNow()}</Text>
-            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>{latestMessage.slice(0, 30)}...</Text>
+            <Text style={[styles.lastMessage, styles.lastMessageLayout]}>{latestMessage.length >= 30 ? `${latestMessage.slice(0, 30)}...` : latestMessage}</Text>
 
 
 
@@ -109,14 +115,17 @@ const styles = StyleSheet.create({
         left: 23,
         textAlign: "left",
         lineHeight: 20,
-        position: "absolute",
+    },
+    icon: {
+        top: 105,
+        lineHeight: 20,
+
     },
     restaurantNameLayout: {
         height: 29,
         width: 149,
         fontSize: FontSize.size_6xl,
         alignItems: "center",
-        display: "flex",
         fontWeight: 'bold',
         color: Color.colorBlack,
     },

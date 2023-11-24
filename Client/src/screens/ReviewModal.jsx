@@ -46,7 +46,7 @@ const ReviewModal = ({ isVisible, reviews, onClose, customers }) => {
                 </View>
                 <View style={styles.reviewDetails}>
                   <Image
-                    source={latestCustomer(review.customerId)?.profilePic ? latestCustomer(review.customerId)?.profilePic : altProfileImage}
+                    source={latestCustomer(review.customerId)?.profilePic ? { uri: latestCustomer(review.customerId)?.profilePic } : altProfileImage}
                     style={styles.myImage} />
                   <Text style={styles.reviewAuthor}>{latestCustomer(review.customerId)?.fullname}</Text>
                 </View>
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 16,
     marginRight: 5,
+    backgroundColor: 'black'
 
   },
   reviewContainer: {

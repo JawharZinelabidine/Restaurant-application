@@ -7,16 +7,19 @@ import StarRating from 'react-native-star-rating-widget';
 const ReviewDisplay = ({ review }) => {
 
 
-  const altProfileImage = require('../assets/images/icons8-customer-50.png')
+  const imagePath = review.image ? { uri: review.image } : require('../assets/images/icons8-customer-50.png');
+
 
   return (
     <View style={styles.reviewContainer}>
       {review.title && (<View>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={styles.reviewDetails}>
+
             <Image
-              source={review.image ? review.image : altProfileImage}
-              style={styles.myImage} />
+              source={imagePath}
+              style={review.image ? styles.myImage : styles.altImage} />
+
             <Text style={{ fontWeight: '500' }}>{review.name}</Text>
 
           </View>
@@ -71,6 +74,7 @@ const styles = StyleSheet.create({
   reviewDetails: {
     flexDirection: "row",
     marginBottom: 5,
+
   },
   reviewLabel: {
     fontWeight: "500",
@@ -97,8 +101,17 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     borderRadius: 16,
-    marginRight: 5
+    marginRight: 5,
   },
+  altImage: {
+    width: 25,
+    height: 25,
+    borderRadius: 16,
+    marginRight: 5,
+    backgroundColor: 'black',
+
+  },
+
 });
 
 export default ReviewDisplay;

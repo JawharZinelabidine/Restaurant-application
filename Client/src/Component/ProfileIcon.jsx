@@ -5,6 +5,7 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { useDispatch } from 'react-redux';
 import { setLoggedin } from '../features/loggedinSlice';
+import { useIsFocused } from "@react-navigation/native";
 
 
 
@@ -17,6 +18,7 @@ export default function ProfileIcon() {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const profile = () => {
     navigation.navigate("CustomerProfile")
   }
@@ -27,6 +29,7 @@ export default function ProfileIcon() {
 
 
   useEffect(() => {
+
     const fetchUserData = async () => {
       const token = await SecureStore.getItemAsync('token');
       if (token) {
@@ -42,11 +45,17 @@ export default function ProfileIcon() {
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
-      };
+      }
+      else {
+        setUserData(null)
+      }
     }
-    fetchUserData()
+    if (isFocused) {
 
-  }, []);
+      fetchUserData()
+    }
+
+  }, [isFocused]);
 
 
   return (

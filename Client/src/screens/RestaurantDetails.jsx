@@ -359,7 +359,14 @@ export default function RestaurantDetails({ route }) {
 
         </TouchableOpacity>
         {reviews.length > 2 && (
-          <View style={{ display: 'flex', flexDirection: 'column', marginTop: 50 }}>
+
+          <View style={{ display: 'flex', flexDirection: 'column', marginTop: 50, gap: 10 }}>
+            <TouchableOpacity onPress={toggleReviewModal}>
+
+              <Text style={styles.reviewAmount}>
+                {size > 1 ? `See ${size} more reviews!` : size === 1 ? `See ${size} more review!` : ''}
+              </Text>
+            </TouchableOpacity>
             <ReviewDisplay
               review={{
                 title: highestReview?.review_title,
@@ -381,12 +388,7 @@ export default function RestaurantDetails({ route }) {
 
 
             />
-            <TouchableOpacity onPress={toggleReviewModal}>
 
-              <Text style={styles.reviewAmount}>
-                {size > 1 ? `See ${size} more reviews!` : size === 1 ? `See ${size} more review!` : ''}
-              </Text>
-            </TouchableOpacity>
 
           </View>
         )}
@@ -529,9 +531,12 @@ const styles = StyleSheet.create({
   },
   reviewAmount: {
     fontSize: 17,
-    fontWeight: "400",
+    fontWeight: "700",
     marginTop: 10,
-    alignSelf: 'flex-start'
+    marginBottom: 10,
+    alignSelf: 'flex-end',
+    color: 'red'
+
   },
   imageSwiper: {
     height: Display.setHeight(100),

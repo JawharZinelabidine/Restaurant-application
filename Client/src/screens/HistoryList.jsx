@@ -212,14 +212,14 @@ const styles = StyleSheet.create({
     pending: {
         top: 125,
         color: "#c0b54b",
-        left: 290,
+        left: '78%',
         lineHeight: 20,
         fontSize: 17,
     },
     rejected: {
         top: 125,
         color: "#c04b4b",
-        left: 290,
+        left: '78%',
         lineHeight: 20,
         fontSize: 17,
 
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     accepted: {
         top: 125,
         color: "#4bc06c",
-        left: 290,
+        left: '78%',
         lineHeight: 20,
         fontSize: 17,
 

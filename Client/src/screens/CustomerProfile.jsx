@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
   },
   spinner: {
     borderWidth: 4,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-    borderTopColor: '#3498db',
+    borderColor: 'red',
+    borderTopColor: 'red',
     borderRadius: 50,
     width: 40,
     height: 40,

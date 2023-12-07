@@ -62,7 +62,6 @@ export default function LoginScreen({ navigation }) {
   async function registerForPushNotificationsAsync() {
     try {
       const { status } = await Notifications.requestPermissionsAsync()
-      console.log(status)
       if (status !== "granted") {
         console.log("Failed to get permission")
         return null
@@ -84,9 +83,8 @@ export default function LoginScreen({ navigation }) {
       const token = (await Notifications.getExpoPushTokenAsync({
         projectId: "c7b31030-5842-4db5-bc82-2aeecdaf9fd1",
       })).data
-      console.log(token)
       await axiosInt.put(`http://${apiUrl}:3000/api/customers/expo`, { token: token })
-      console.log('token added successfully', token)
+      console.log('token added successfully')
       navigation.navigate('Home');
 
 
@@ -132,7 +130,7 @@ export default function LoginScreen({ navigation }) {
       } catch (error) {
         console.log(error);
 
-        if (error.response.status === 412) {
+        if (error && error.response.status === 412) {
           setShowToast2(true);
           if (toastRef.current) {
             toastRef.current.show();
@@ -206,7 +204,7 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.header}>
           <Text style={styles.title}>
             Sign in to{" "}
-            <Text style={{ color: Colors.DEFAULT_RED }}>Rezervi</Text>
+            <Text style={{ color: Colors.DEFAULT_RED }}>RESERVI</Text>
           </Text>
 
           <Text style={styles.subtitle}>

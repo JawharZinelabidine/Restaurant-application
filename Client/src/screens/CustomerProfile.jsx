@@ -45,7 +45,6 @@ export default function CustomerProfile({ navigation }) {
       quality: 1,
     });
 
-    console.log(result);
 
     if (!result.canceled) {
       setLoading(true);
@@ -58,7 +57,6 @@ export default function CustomerProfile({ navigation }) {
           type: "image/jpeg",
           name: "profilePic.jpg",
         });
-        console.log(formData)
         const { data } = await customAxios.put(`http://${apiUrl}:3000/api/customers/profilePic`, formData, {
 
           headers: {

@@ -15,7 +15,6 @@ export default function SearchBar({ restaurant, filterData, setFilterData }) {
       console.log(searchTerm);
 
       setFilterData(newData);
-      console.log(newData);
     } else {
       setFilterData(restaurant);
     }
@@ -23,7 +22,7 @@ export default function SearchBar({ restaurant, filterData, setFilterData }) {
 
   return (
     <View style={styles.InputContainer}>
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity onPress={() => { }}>
         <AntDesign
           name="search1"
           size={24}

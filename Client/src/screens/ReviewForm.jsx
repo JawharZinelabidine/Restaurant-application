@@ -18,7 +18,6 @@ export default function ReviewForm({ route, navigation }) {
 
     const ratingCompleted = (Rating) => {
         setRating(Rating)
-        console.log(rating)
     }
 
 
@@ -45,7 +44,6 @@ export default function ReviewForm({ route, navigation }) {
         }
 
         try {
-            console.log(rating)
             await axios.put(`http://${apiUrl}:3000/api/restaurants/${restaurantId}/${id}`, { rating: rating })
             setShowToast2(true)
             if (toastRef.current) {

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "RESERVI",
-    "slug": "RESERVI",
+    "slug": "Client",
     "version": "1.0.0",
     "notification": {
       "icon": "./assets/logo.jpg",
@@ -34,7 +34,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "RESERVI.inc"
     },
     "web": {
       "favicon": "./assets/favicon.png"

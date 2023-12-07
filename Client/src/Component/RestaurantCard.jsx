@@ -22,7 +22,8 @@ export default function RestaurantCard({ restaurant, onPress }) {
   let formattedDistance = null;
   if (lat && lng) {
     const distance = calculateDistance(lat, lng, latitude, longtitude);
-    formattedDistance = distance < 1 ? `${Math.round(distance * 1000)} meters away` : `${distance.toFixed(0)} kilometers away`;
+
+    formattedDistance = distance < 1 ? `${Math.round(distance * 1000)} meters away` : distance > 0 && distance < 2 ? `${distance.toFixed(0)} kilometer away` : `${distance.toFixed(0)} kilometers away`;
   }
 
   const now = moment().utcOffset("120");
@@ -48,7 +49,6 @@ export default function RestaurantCard({ restaurant, onPress }) {
     <TouchableOpacity onPress={handleButtonPress}>
 
       <View style={styles.cardContainer}>
-
         <Image source={{ uri: main_image.trim() }} style={styles.cardImage} />
 
         <View style={styles.cardInfo}>

@@ -67,7 +67,6 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const handleSubmit = async () => {
-
     if (validator()) {
       try {
         const { data } = await axios.post(
@@ -76,7 +75,7 @@ const RegisterScreen = ({ navigation }) => {
         );
         navigation.navigate("VerificationCodeScreen");
 
-        console.log("User added successfully", data);
+        console.log("User added successfully");
         setShowToast2(true);
         if (toastRef.current) {
           toastRef.current.show();
@@ -135,7 +134,7 @@ const RegisterScreen = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>
-            Sign up for <Text style={{ color: Colors.DEFAULT_RED }}>MyApp</Text>
+            Sign up for <Text style={{ color: Colors.DEFAULT_RED }}>RESERVI</Text>
           </Text>
           <Text style={styles.subtitle}>
             Create a new account to access your portfolio and more

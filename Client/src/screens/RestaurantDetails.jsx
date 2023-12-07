@@ -56,7 +56,6 @@ export default function RestaurantDetails({ route }) {
 
   const toggleReviewModal = () => {
     if (reviews.length > 0) {
-      console.log('a')
       setIsReviewModalOpen(!isReviewModalOpen);
     }
   };
@@ -84,8 +83,40 @@ export default function RestaurantDetails({ route }) {
     setShowDateTime(false);
   };
 
+
+  const open = moment(opening_time);
+  const close = moment(closing_time);
+
+  const isOpen = (pickedTime, openingTime, closingTime) => {
+    const currentTime = moment(pickedTime).utcOffset("-000").format('HH:mm');
+    const opening = moment(openingTime).format('HH:mm');
+    const closing = moment(closingTime).format('HH:mm');
+    console.log(currentTime)
+    if (closing >= opening) {
+      return currentTime >= opening && currentTime <= closing;
+    } else {
+      return currentTime >= opening || currentTime <= closing;
+    }
+  };
+
+
+
+
+
+
   const makeReservation = async () => {
     try {
+      const isCurrentlyOpen = isOpen(reservation.time, opening_time, close);
+      if (!isCurrentlyOpen) {
+        setSpotsRemaining("Restaurant is closed on this time");
+        setShowToast(true);
+        if (toastRef.current) {
+          toastRef.current.show();
+        }
+
+        return
+      }
+
       const myReservation = await axios.post(
         `http://${apiUrl}:3000/api/reservations/${id}`,
         reservation
@@ -154,12 +185,14 @@ export default function RestaurantDetails({ route }) {
       console.log("Selected date:", currentDate);
       setReservation((inputs) => ({ ...inputs, [mode]: currentDate }));
       hideDateTime();
+
     } else hideDateTime();
   };
 
   const handleChange = (name, value) => {
     setReservation((inputs) => ({ ...inputs, [name]: value }));
   };
+
 
   const toggleForm = () => {
     if (token) {
@@ -274,6 +307,7 @@ export default function RestaurantDetails({ route }) {
 
 
 
+
   useEffect(() => {
 
     getReviews()
@@ -289,6 +323,14 @@ export default function RestaurantDetails({ route }) {
         <ToastMessage
           ref={toastRef}
           type="danger"
+          text={spotsRemaining}
+          timeout={5000}
+        />
+      )}
+      {showToast2 && (
+        <ToastMessage
+          ref={toastRef}
+          type="success"
           text={spotsRemaining}
           timeout={5000}
         />
@@ -506,7 +548,6 @@ export default function RestaurantDetails({ route }) {
                     confirmBtnText="Confirm"
                     display="default"
                     minimumDate={new Date()}
-
                     timeZoneName={"Africa/Tunis"}
                     timeZoneOffsetInMinutes={0}
                     onChange={handleDateChange}

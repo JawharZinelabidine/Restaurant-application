@@ -91,7 +91,7 @@ export default function ReviewForm({ route, navigation }) {
             )}
 
 
-            <Text>{restaurantName.name} would love your feedback!</Text>
+            <Text style={{ fontWeight: '500', fontSize: 20 }}>{restaurantName.name} would love your feedback!</Text>
 
             <AirbnbRating
                 showRating
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
 
-        marginTop: 170,
+        marginTop: 120,
         alignItems: 'center'
     },
     container2: {
@@ -158,8 +158,8 @@ const styles = StyleSheet.create({
         color: '#333',
         borderRadius: 8,
         top: 100,
-        width: 400,
-        margin: 'auto'
+        width: 340,
+
 
     },
     body: {
@@ -173,9 +173,10 @@ const styles = StyleSheet.create({
         color: '#333',
         borderRadius: 8,
         top: 100,
-        width: 400,
+        width: 340,
         marginTop: 20,
-        paddingBottom: 150
+        paddingBottom: 150,
+
 
 
 

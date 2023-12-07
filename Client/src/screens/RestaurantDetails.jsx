@@ -162,7 +162,17 @@ export default function RestaurantDetails({ route }) {
   };
 
   const toggleForm = () => {
-    setIsModalOpen(!isModalOpen);
+    if (token) {
+      console.log(token)
+      setIsModalOpen(!isModalOpen);
+    }
+    else {
+      setSpotsRemaining("You need to be logged in");
+      setShowToast(true);
+      if (toastRef.current) {
+        toastRef.current.show();
+      }
+    }
   };
 
   const toggleDateTime = (mode) => {
@@ -275,7 +285,14 @@ export default function RestaurantDetails({ route }) {
 
   return (
     <ScrollView style={styles.container}>
-
+      {showToast && (
+        <ToastMessage
+          ref={toastRef}
+          type="danger"
+          text={spotsRemaining}
+          timeout={5000}
+        />
+      )}
 
       <RestaurantDetailsSwiper extraImages={extra_images} />
       {showToast && (
@@ -550,6 +567,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 50,
     left: 20,
+    zIndex: 1
   },
   name: {
     fontSize: 36,
@@ -679,7 +697,7 @@ const styles = StyleSheet.create({
     height: 50,
     position: "absolute",
     top: 50,
-    left: 340,
+    left: '82%',
   },
   chatText: {
     color: "#FFF",

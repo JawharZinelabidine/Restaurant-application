@@ -53,7 +53,7 @@ const ToastMessage = forwardRef(({ type, text, description, timeout = 1000 }, re
                 <Animated.View style={{
                     flex: 1,
                     marginTop: 30,
-                    zIndex: 99,
+                    zIndex: 9999,
                     position: 'absolute',
                     // Center the toast vertically
                     width: '100%',

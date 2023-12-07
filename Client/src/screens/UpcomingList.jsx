@@ -226,14 +226,14 @@ const styles = StyleSheet.create({
   pending: {
     top: 125,
     color: "#c0b54b",
-    left: 290,
+    left: '78%',
     lineHeight: 20,
     fontSize: 17,
   },
   accepted: {
     top: 125,
     color: "#4bc06c",
-    left: 290,
+    left: '78%',
     lineHeight: 20,
     fontSize: 17,
   },

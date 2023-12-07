@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#333",
     marginBottom: 8,
+    maxWidth: '60%'
   },
   reviewBody: {
     color: "#666",

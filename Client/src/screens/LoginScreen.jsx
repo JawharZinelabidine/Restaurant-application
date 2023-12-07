@@ -288,6 +288,7 @@ const styles = StyleSheet.create({
     color: Colors.DEFAULT_WHITE,
     marginBottom: 6,
     textAlign: "center",
+    zIndex: 1
   },
   subtitle: {
     fontSize: 15,

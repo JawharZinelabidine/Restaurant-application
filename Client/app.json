@@ -1,8 +1,12 @@
 {
   "expo": {
-    "name": "Client",
-    "slug": "Client",
+    "name": "RESERVI",
+    "slug": "RESERVI",
     "version": "1.0.0",
+    "notification": {
+      "icon": "./assets/logo.jpg",
+      "name": "RESERVI"
+    },
     "plugins": [
       [
         "expo-image-picker",
@@ -12,7 +16,7 @@
       ]
     ],
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.jpg",
     "userInterfaceStyle": "light",
     "owner": "jawharzedd",
     "splash": {

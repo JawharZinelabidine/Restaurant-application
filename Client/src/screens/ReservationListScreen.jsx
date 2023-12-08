@@ -2,6 +2,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { Upcoming, History } from "../screens";
 import { Display } from "../utils";
 import { StyleSheet } from "react-native";
+import 'react-native-pager-view';
 
 const marginTopPercentage = 4;
 const marginTop = Display.setHeight(marginTopPercentage);
@@ -12,7 +13,7 @@ function MyTabs() {
   return (
     <Tab.Navigator style={styles.tabBarStyle} >
       <Tab.Screen name="Upcoming" component={Upcoming} />
-     
+
       <Tab.Screen name="History" component={History} />
     </Tab.Navigator>
   );
